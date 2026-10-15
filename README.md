@@ -23,33 +23,26 @@ tools/build.py     <- jana semula page HTML (pilihan, untuk tukar teks)
 
 Langkah ni guna Shell TrueNAS. Kau boleh guna **System > Shell** dalam UI TrueNAS, atau `ssh` dari Mac.
 
-### a) Buat token GitHub (sebab repo ni private)
-
-1. Buka github.com/settings/personal-access-tokens/new
-2. Nama: `truenas-johorstudio`. Repository access: **Only select repositories** > `johorstudio-website`
-3. Permissions > Repository permissions > **Contents: Read-only**
-4. Tekan Generate, kemudian salin token (bermula dengan `github_pat_...`)
-
-### b) Clone repo
+### a) Clone repo
 
 ```sh
 ssh admin@IP-TRUENAS
 sudo -i
 cd /mnt/ssd
-docker run --rm -v /mnt/ssd:/git alpine/git clone https://TOKEN@github.com/RafieRosliputra/johorstudio-website.git
+docker run --rm -v /mnt/ssd:/git alpine/git clone https://github.com/RafieRosliputra/johorstudio-website.git
 cd johorstudio-website
 ```
 
-Ganti `TOKEN` dengan token tadi. Kita guna `alpine/git` dalam Docker sebab TrueNAS tak semestinya ada `git`.
+Kita guna `alpine/git` dalam Docker sebab TrueNAS tak semestinya ada `git`.
 
-### c) Sediakan .env
+### b) Sediakan .env
 
 ```sh
 cp .env.example .env
 sed -i "s|^SILEX_SESSION_SECRET=.*|SILEX_SESSION_SECRET=$(openssl rand -base64 32)|" .env
 ```
 
-### d) Hidupkan website
+### c) Hidupkan website
 
 ```sh
 docker compose up -d web
