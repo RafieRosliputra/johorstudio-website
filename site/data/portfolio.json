@@ -1,0 +1,295 @@
+{
+ "_help": "Tambah gambar: letak fail .webp dalam img/gallery (dan versi kecil nama-sm.webp), kemudian tambah satu baris di sini. category: multicam, livestream, videography, photography, studio, convocation",
+ "items": [
+  {
+   "file": "bts-butterfly-operator-crowd",
+   "category": "multicam",
+   "caption": "Camera operator on stage, Butterfly 22nd Convocation, Trove Hotel JB"
+  },
+  {
+   "file": "bts-multiview-switcher-01",
+   "category": "multicam",
+   "caption": "Multiview switcher during an awards ceremony"
+  },
+  {
+   "file": "bts-adtec2026-camera-row",
+   "category": "multicam",
+   "caption": "Camera positions, ADTEC JTM 29th Convocation 2026"
+  },
+  {
+   "file": "bts-butterfly-two-operators-wide",
+   "category": "multicam",
+   "caption": "Two operators covering the stage and audience"
+  },
+  {
+   "file": "bts-graduation-hall-camera",
+   "category": "multicam",
+   "caption": "Floor camera at a school graduation"
+  },
+  {
+   "file": "bts-adtec2026-viewfinder",
+   "category": "multicam",
+   "caption": "Viewfinder on the stage camera, ADTEC JTM 2026"
+  },
+  {
+   "file": "bts-butterfly-gimbal-monitor",
+   "category": "multicam",
+   "caption": "Gimbal camera with field monitor"
+  },
+  {
+   "file": "bts-butterfly-control-room-mixer",
+   "category": "multicam",
+   "caption": "Control room overlooking the ballroom"
+  },
+  {
+   "file": "bts-adtec2026-operator",
+   "category": "multicam",
+   "caption": "Camera operator, ADTEC JTM 29th Convocation"
+  },
+  {
+   "file": "bts-team-photo-adtec2026",
+   "category": "multicam",
+   "caption": "Our crew at ADTEC JTM 29th Convocation 2026"
+  },
+  {
+   "file": "bts-ballroom-stage-lighting",
+   "category": "multicam",
+   "caption": "Ballroom stage before the event"
+  },
+  {
+   "file": "bts-outdoor-control-tent",
+   "category": "livestream",
+   "caption": "Outdoor control tent for a live broadcast"
+  },
+  {
+   "file": "bts-outdoor-camera-rain",
+   "category": "livestream",
+   "caption": "Shooting live in the rain"
+  },
+  {
+   "file": "bts-live-talkshow-screen",
+   "category": "livestream",
+   "caption": "Live talk show broadcast to Facebook"
+  },
+  {
+   "file": "bts-virtual-studio-live",
+   "category": "livestream",
+   "caption": "Virtual studio with a live Zoom panel"
+  },
+  {
+   "file": "bts-greenscreen-studio-01",
+   "category": "livestream",
+   "caption": "Green screen studio set up on site"
+  },
+  {
+   "file": "bts-control-room-2022",
+   "category": "livestream",
+   "caption": "Control room for a hybrid event"
+  },
+  {
+   "file": "bts-greenscreen-live-2022",
+   "category": "livestream",
+   "caption": "Green screen live presentation"
+  },
+  {
+   "file": "bts-live-operator-zoom",
+   "category": "livestream",
+   "caption": "Operator managing Zoom guests on air"
+  },
+  {
+   "file": "bts-kpj-livestream-01",
+   "category": "livestream",
+   "caption": "Healthcare talk, live stream set"
+  },
+  {
+   "file": "bts-kpj-livestream-02",
+   "category": "livestream",
+   "caption": "Healthcare talk, camera and monitor"
+  },
+  {
+   "file": "bts-multiview-switcher-02",
+   "category": "livestream",
+   "caption": "Multiview monitoring during a live event"
+  },
+  {
+   "file": "bts-butterfly-control-desk",
+   "category": "livestream",
+   "caption": "Control desk with monitors and audio"
+  },
+  {
+   "file": "bts-interview-setup",
+   "category": "videography",
+   "caption": "Interview set-up with key light"
+  },
+  {
+   "file": "bts-camera-operator-2022",
+   "category": "videography",
+   "caption": "Event videography, awards dinner"
+  },
+  {
+   "file": "bts-butterfly-shoulder-rig",
+   "category": "videography",
+   "caption": "Shoulder rig coverage, ballroom floor"
+  },
+  {
+   "file": "bts-butterfly-riser-camera",
+   "category": "videography",
+   "caption": "Long-lens camera on the riser"
+  },
+  {
+   "file": "bts-crew-camera-gimbal",
+   "category": "videography",
+   "caption": "Gimbal operator at the photobooth"
+  },
+  {
+   "file": "bts-crew-camera-stand",
+   "category": "videography",
+   "caption": "Camera crew in the ballroom"
+  },
+  {
+   "file": "bts-crew-camera-ops",
+   "category": "videography",
+   "caption": "Camera on a covered stand"
+  },
+  {
+   "file": "bts-crew-operator-headset",
+   "category": "livestream",
+   "caption": "Operators on comms during the show"
+  },
+  {
+   "file": "bts-crew-wireless-rx",
+   "category": "livestream",
+   "caption": "Wireless video receivers on site"
+  },
+  {
+   "file": "photo-event-award-ceremony",
+   "category": "photography",
+   "caption": "Award ceremony, state-level honours"
+  },
+  {
+   "file": "photo-event-symposium-speaker",
+   "category": "photography",
+   "caption": "Primary Care Symposium, DoubleTree JB"
+  },
+  {
+   "file": "photo-corporate-portrait-01",
+   "category": "photography",
+   "caption": "Corporate portrait"
+  },
+  {
+   "file": "photo-corporate-portrait-02",
+   "category": "photography",
+   "caption": "Corporate portrait"
+  },
+  {
+   "file": "photo-corporate-portrait-03",
+   "category": "photography",
+   "caption": "Executive portrait"
+  },
+  {
+   "file": "photo-corporate-portrait-04",
+   "category": "photography",
+   "caption": "Official portrait, police officer"
+  },
+  {
+   "file": "photo-corporate-portrait-05",
+   "category": "photography",
+   "caption": "Official portrait in baju Melayu"
+  },
+  {
+   "file": "photo-sports-motocross-01",
+   "category": "photography",
+   "caption": "Motocross, mid-air"
+  },
+  {
+   "file": "photo-sports-motocross-02",
+   "category": "photography",
+   "caption": "Motocross rider portrait"
+  },
+  {
+   "file": "studio-fashion-01",
+   "category": "studio",
+   "caption": "Fashion shoot"
+  },
+  {
+   "file": "studio-fashion-02",
+   "category": "studio",
+   "caption": "Fashion shoot"
+  },
+  {
+   "file": "studio-fashion-03",
+   "category": "studio",
+   "caption": "Fashion shoot"
+  },
+  {
+   "file": "studio-fashion-04",
+   "category": "studio",
+   "caption": "Fashion shoot, poolside"
+  },
+  {
+   "file": "studio-fashion-05",
+   "category": "studio",
+   "caption": "Fashion shoot, garden"
+  },
+  {
+   "file": "studio-fashion-06",
+   "category": "studio",
+   "caption": "Studio fashion, satin"
+  },
+  {
+   "file": "studio-fashion-07",
+   "category": "studio",
+   "caption": "Fashion shoot, outdoor"
+  },
+  {
+   "file": "studio-fashion-08",
+   "category": "studio",
+   "caption": "Lifestyle fashion shoot"
+  },
+  {
+   "file": "studio-beauty-01",
+   "category": "studio",
+   "caption": "Beauty close-up"
+  },
+  {
+   "file": "studio-corporate-01",
+   "category": "studio",
+   "caption": "Corporate studio portrait"
+  },
+  {
+   "file": "studio-outdoor-portrait-01",
+   "category": "studio",
+   "caption": "Outdoor portrait"
+  },
+  {
+   "file": "studio-product-01",
+   "category": "studio",
+   "caption": "Product, leather wallet"
+  },
+  {
+   "file": "studio-product-02",
+   "category": "studio",
+   "caption": "Product, lip gloss"
+  },
+  {
+   "file": "studio-product-03",
+   "category": "studio",
+   "caption": "Product, food"
+  },
+  {
+   "file": "convo-graduation-stage-01",
+   "category": "convocation",
+   "caption": "Convocation, on-stage scroll presentation"
+  },
+  {
+   "file": "school-class-photo-01",
+   "category": "convocation",
+   "caption": "Class photo, SMK Kulai Besar 2026"
+  },
+  {
+   "file": "school-class-photo-02",
+   "category": "convocation",
+   "caption": "Group photo, SMK Kulai Besar 2026"
+  }
+ ]
+}
