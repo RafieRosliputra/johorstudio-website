@@ -1,5 +1,5 @@
 {
- "_help": "Tambah gambar: letak fail .webp dalam img/gallery (dan versi kecil nama-sm.webp), kemudian tambah satu baris di sini. category: multicam, livestream, videography, photography, studio, convocation",
+ "_help": "Tambah gambar: letak name-sm.webp (720px), name.webp (1600px) dan name-full.webp (resolusi asal) dalam img/gallery, kemudian tambah satu baris di sini. 'full': true bila ada versi -full. category: multicam, livestream, videography, photography, studio, convocation",
  "items": [
   {
    "file": "bts-butterfly-operator-crowd",
@@ -57,6 +57,16 @@
    "caption": "Ballroom stage before the event"
   },
   {
+   "file": "bts-adtec2026-switcher-desk",
+   "category": "multicam",
+   "caption": "Live switching desk among the audience, ADTEC JTM 2026"
+  },
+  {
+   "file": "bts-uthm-hall-camera",
+   "category": "multicam",
+   "caption": "Stage camera framing the convocation"
+  },
+  {
    "file": "bts-outdoor-control-tent",
    "category": "livestream",
    "caption": "Outdoor control tent for a live broadcast"
@@ -80,6 +90,11 @@
    "file": "bts-greenscreen-studio-01",
    "category": "livestream",
    "caption": "Green screen studio set up on site"
+  },
+  {
+   "file": "bts-greenscreen-studio-02",
+   "category": "livestream",
+   "caption": "Studio set with LED wall and cameras"
   },
   {
    "file": "bts-control-room-2022",
@@ -117,6 +132,21 @@
    "caption": "Control desk with monitors and audio"
   },
   {
+   "file": "bts-crew-operator-headset",
+   "category": "livestream",
+   "caption": "Operators on comms during the show"
+  },
+  {
+   "file": "bts-crew-wireless-rx",
+   "category": "livestream",
+   "caption": "Wireless video receivers on site"
+  },
+  {
+   "file": "bts-talkshow-studio",
+   "category": "livestream",
+   "caption": "Talk show set ready for broadcast"
+  },
+  {
    "file": "bts-interview-setup",
    "category": "videography",
    "caption": "Interview set-up with key light"
@@ -152,144 +182,434 @@
    "caption": "Camera on a covered stand"
   },
   {
-   "file": "bts-crew-operator-headset",
-   "category": "livestream",
-   "caption": "Operators on comms during the show"
+   "file": "bts-crew-ballroom",
+   "category": "videography",
+   "caption": "Our videographer on the ballroom floor"
   },
   {
-   "file": "bts-crew-wireless-rx",
-   "category": "livestream",
-   "caption": "Wireless video receivers on site"
+   "file": "bts-factory-shoot",
+   "category": "videography",
+   "caption": "Corporate video shoot in a testing lab"
   },
   {
    "file": "photo-event-award-ceremony",
    "category": "photography",
-   "caption": "Award ceremony, state-level honours"
+   "caption": "Award ceremony, state-level honours",
+   "full": true,
+   "size": "3501×4667"
+  },
+  {
+   "file": "photo-event-award-ceremony-02",
+   "category": "photography",
+   "caption": "Award ceremony, state-level honours",
+   "full": true,
+   "size": "3501×4667"
   },
   {
    "file": "photo-event-symposium-speaker",
    "category": "photography",
-   "caption": "Primary Care Symposium, DoubleTree JB"
+   "caption": "Primary Care Symposium, DoubleTree JB",
+   "full": true,
+   "size": "4000×3000"
+  },
+  {
+   "file": "photo-event-symposium-hall",
+   "category": "photography",
+   "caption": "Symposium hall, DoubleTree JB",
+   "full": true,
+   "size": "4000×3000"
+  },
+  {
+   "file": "photo-event-speaker-perisind",
+   "category": "photography",
+   "caption": "Keynote speaker at a corporate launch",
+   "full": true,
+   "size": "2048×1365"
+  },
+  {
+   "file": "photo-event-mock-cheque",
+   "category": "photography",
+   "caption": "Sponsorship presentation",
+   "full": true,
+   "size": "2048×1365"
   },
   {
    "file": "photo-corporate-portrait-01",
    "category": "photography",
-   "caption": "Corporate portrait"
+   "caption": "Corporate portrait",
+   "full": true,
+   "size": "4000×6000"
+  },
+  {
+   "file": "photo-corporate-portrait-06",
+   "category": "photography",
+   "caption": "Corporate portrait, full length",
+   "full": true,
+   "size": "4000×6000"
+  },
+  {
+   "file": "photo-corporate-portrait-07",
+   "category": "photography",
+   "caption": "Portrait in team uniform",
+   "full": true,
+   "size": "4000×6000"
   },
   {
    "file": "photo-corporate-portrait-02",
    "category": "photography",
-   "caption": "Corporate portrait"
+   "caption": "Corporate portrait",
+   "full": true,
+   "size": "2048×2048"
   },
   {
    "file": "photo-corporate-portrait-03",
    "category": "photography",
-   "caption": "Executive portrait"
+   "caption": "Executive portrait",
+   "full": true,
+   "size": "1875×1875"
   },
   {
    "file": "photo-corporate-portrait-04",
    "category": "photography",
-   "caption": "Official portrait, police officer"
+   "caption": "Official portrait, police officer",
+   "full": true,
+   "size": "864×864"
   },
   {
    "file": "photo-corporate-portrait-05",
    "category": "photography",
-   "caption": "Official portrait in baju Melayu"
+   "caption": "Official portrait in baju Melayu",
+   "full": true,
+   "size": "4000×6000"
+  },
+  {
+   "file": "photo-corporate-portrait-08",
+   "category": "photography",
+   "caption": "Portrait in baju Melayu, low key",
+   "full": true,
+   "size": "1366×2048"
+  },
+  {
+   "file": "photo-corporate-portrait-09",
+   "category": "photography",
+   "caption": "Portrait on white",
+   "full": true,
+   "size": "1425×2048"
+  },
+  {
+   "file": "photo-corporate-portrait-10",
+   "category": "photography",
+   "caption": "Executive portrait, painted backdrop",
+   "full": true,
+   "size": "2333×3500"
   },
   {
    "file": "photo-sports-motocross-01",
    "category": "photography",
-   "caption": "Motocross, mid-air"
+   "caption": "Motocross, mid-air",
+   "full": true,
+   "size": "2780×3476"
+  },
+  {
+   "file": "photo-sports-motocross-03",
+   "category": "photography",
+   "caption": "Motocross, berm turn",
+   "full": true,
+   "size": "4606×3243"
   },
   {
    "file": "photo-sports-motocross-02",
    "category": "photography",
-   "caption": "Motocross rider portrait"
+   "caption": "Motocross rider portrait",
+   "full": true,
+   "size": "4415×3372"
+  },
+  {
+   "file": "photo-landscape-pier",
+   "category": "photography",
+   "caption": "Sunset at the pier, Johor",
+   "full": true,
+   "size": "6000×4000"
+  },
+  {
+   "file": "photo-landscape-waterfall",
+   "category": "photography",
+   "caption": "Waterfall, long exposure",
+   "full": true,
+   "size": "5910×3640"
+  },
+  {
+   "file": "photo-city-light-trails",
+   "category": "photography",
+   "caption": "City light trails at dusk",
+   "full": true,
+   "size": "2048×1365"
   },
   {
    "file": "studio-fashion-01",
    "category": "studio",
-   "caption": "Fashion shoot"
+   "caption": "Fashion shoot, hijab collection",
+   "full": true,
+   "size": "1766×2500"
+  },
+  {
+   "file": "studio-fashion-09",
+   "category": "studio",
+   "caption": "Fashion shoot, window light",
+   "full": true,
+   "size": "2500×2019"
   },
   {
    "file": "studio-fashion-02",
    "category": "studio",
-   "caption": "Fashion shoot"
+   "caption": "Fashion shoot, interior styling",
+   "full": true,
+   "size": "2500×2019"
+  },
+  {
+   "file": "studio-fashion-10",
+   "category": "studio",
+   "caption": "Fashion shoot, satin scarf",
+   "full": true,
+   "size": "1764×2500"
   },
   {
    "file": "studio-fashion-03",
    "category": "studio",
-   "caption": "Fashion shoot"
+   "caption": "Fashion shoot, pink scarf",
+   "full": true,
+   "size": "2500×2019"
   },
   {
-   "file": "studio-fashion-04",
+   "file": "studio-fashion-11",
    "category": "studio",
-   "caption": "Fashion shoot, poolside"
+   "caption": "Fashion shoot, corporate look",
+   "full": true,
+   "size": "1766×2500"
+  },
+  {
+   "file": "studio-fashion-12",
+   "category": "studio",
+   "caption": "Fashion shoot, rooftop garden",
+   "full": true,
+   "size": "1766×2500"
   },
   {
    "file": "studio-fashion-05",
    "category": "studio",
-   "caption": "Fashion shoot, garden"
+   "caption": "Fashion shoot, garden",
+   "full": true,
+   "size": "2500×2019"
+  },
+  {
+   "file": "studio-fashion-04",
+   "category": "studio",
+   "caption": "Fashion shoot, poolside",
+   "full": true,
+   "size": "1766×2500"
+  },
+  {
+   "file": "studio-fashion-13",
+   "category": "studio",
+   "caption": "Fashion shoot, golden hour",
+   "full": true,
+   "size": "1766×2500"
   },
   {
    "file": "studio-fashion-06",
    "category": "studio",
-   "caption": "Studio fashion, satin"
+   "caption": "Studio fashion, satin",
+   "full": true,
+   "size": "3500×2333"
   },
   {
    "file": "studio-fashion-07",
    "category": "studio",
-   "caption": "Fashion shoot, outdoor"
+   "caption": "Fashion shoot, Japanese garden",
+   "full": true,
+   "size": "2681×2048"
+  },
+  {
+   "file": "studio-fashion-14",
+   "category": "studio",
+   "caption": "Bridal collection, studio",
+   "full": true,
+   "size": "1980×2048"
+  },
+  {
+   "file": "studio-fashion-15",
+   "category": "studio",
+   "caption": "Studio fashion, pink backdrop",
+   "full": true,
+   "size": "2048×1365"
+  },
+  {
+   "file": "studio-fashion-16",
+   "category": "studio",
+   "caption": "Studio portrait, window light",
+   "full": true,
+   "size": "5000×4000"
+  },
+  {
+   "file": "studio-fashion-17",
+   "category": "studio",
+   "caption": "Studio fashion, green backdrop",
+   "full": true,
+   "size": "4456×3922"
+  },
+  {
+   "file": "studio-fashion-18",
+   "category": "studio",
+   "caption": "Studio fashion, low key",
+   "full": true,
+   "size": "3822×3669"
+  },
+  {
+   "file": "studio-fashion-19",
+   "category": "studio",
+   "caption": "Night fashion, bokeh",
+   "full": true,
+   "size": "2048×3072"
+  },
+  {
+   "file": "studio-fashion-20",
+   "category": "studio",
+   "caption": "Lifestyle, handbag collection",
+   "full": true,
+   "size": "2048×1365"
+  },
+  {
+   "file": "studio-fashion-21",
+   "category": "studio",
+   "caption": "Outdoor fashion, mosque architecture",
+   "full": true,
+   "size": "5355×3923"
   },
   {
    "file": "studio-fashion-08",
    "category": "studio",
-   "caption": "Lifestyle fashion shoot"
+   "caption": "Lifestyle fashion shoot",
+   "full": true,
+   "size": "3500×2333"
+  },
+  {
+   "file": "studio-fashion-22",
+   "category": "studio",
+   "caption": "Lifestyle fashion, two models",
+   "full": true,
+   "size": "3500×2333"
   },
   {
    "file": "studio-beauty-01",
    "category": "studio",
-   "caption": "Beauty close-up"
+   "caption": "Beauty close-up",
+   "full": true,
+   "size": "1151×2048"
+  },
+  {
+   "file": "studio-beauty-02",
+   "category": "studio",
+   "caption": "Black and white portrait",
+   "full": true,
+   "size": "4000×4288"
   },
   {
    "file": "studio-corporate-01",
    "category": "studio",
-   "caption": "Corporate studio portrait"
+   "caption": "Corporate studio portrait",
+   "full": true,
+   "size": "5304×7952"
   },
   {
    "file": "studio-outdoor-portrait-01",
    "category": "studio",
-   "caption": "Outdoor portrait"
+   "caption": "Outdoor portrait",
+   "full": true,
+   "size": "6000×4000"
   },
   {
    "file": "studio-product-01",
    "category": "studio",
-   "caption": "Product, leather wallet"
+   "caption": "Product, leather wallet",
+   "full": true,
+   "size": "2048×1365"
+  },
+  {
+   "file": "studio-product-04",
+   "category": "studio",
+   "caption": "Product with model, beauty drink",
+   "full": true,
+   "size": "2048×1365"
   },
   {
    "file": "studio-product-02",
    "category": "studio",
-   "caption": "Product, lip gloss"
+   "caption": "Product, lip gloss",
+   "full": true,
+   "size": "3876×4534"
+  },
+  {
+   "file": "studio-product-05",
+   "category": "studio",
+   "caption": "Product, lip gloss range",
+   "full": true,
+   "size": "3941×4290"
   },
   {
    "file": "studio-product-03",
    "category": "studio",
-   "caption": "Product, food"
+   "caption": "Product, food",
+   "full": true,
+   "size": "4000×5164"
+  },
+  {
+   "file": "studio-product-06",
+   "category": "studio",
+   "caption": "Product, food styling",
+   "full": true,
+   "size": "6180×6712"
   },
   {
    "file": "convo-graduation-stage-01",
    "category": "convocation",
-   "caption": "Convocation, on-stage scroll presentation"
+   "caption": "Convocation, on-stage scroll presentation",
+   "full": true,
+   "size": "4000×6000"
+  },
+  {
+   "file": "convo-graduation-stage-02",
+   "category": "convocation",
+   "caption": "Convocation, on-stage scroll presentation",
+   "full": true,
+   "size": "4000×6000"
   },
   {
    "file": "school-class-photo-01",
    "category": "convocation",
-   "caption": "Class photo, SMK Kulai Besar 2026"
+   "caption": "Class photo, SMK Kulai Besar 2026",
+   "full": true,
+   "size": "1800×1200"
   },
   {
    "file": "school-class-photo-02",
    "category": "convocation",
-   "caption": "Group photo, SMK Kulai Besar 2026"
+   "caption": "Group photo, SMK Kulai Besar 2026",
+   "full": true,
+   "size": "1800×1200"
+  },
+  {
+   "file": "school-class-photo-03",
+   "category": "convocation",
+   "caption": "Prefects board, SMK Kulai Besar 2026",
+   "full": true,
+   "size": "1800×1200"
+  },
+  {
+   "file": "school-class-photo-04",
+   "category": "convocation",
+   "caption": "Class photo, SMK Kulai Besar 2026",
+   "full": true,
+   "size": "1800×1200"
   }
  ]
 }

@@ -2,7 +2,7 @@
 Header and footer are shared, so contact details are changed in one place.
 Run:  python3 tools/build.py   (optional — the built pages are already in site/)
 """
-import pathlib, html
+import pathlib, html, json
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent / "site"
 WA = "https://wa.me/60127983745"
@@ -36,7 +36,7 @@ def page(file, title, desc, body, extra_head=""):
 <link rel="canonical" href="{canonical}">
 <meta property="og:title" content="{html.escape(title)}">
 <meta property="og:description" content="{html.escape(desc)}">
-<meta property="og:image" content="{SITE}/img/hero/hero-07-mcp-led-crowd.webp">
+<meta property="og:image" content="{SITE}/img/hero/hero-01.webp">
 <meta property="og:type" content="website">
 <link rel="icon" href="img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,12 +45,12 @@ def page(file, title, desc, body, extra_head=""):
 <link rel="stylesheet" href="css/style.css">
 {extra_head}
 </head>
-<body>
+<body class="page-{file.split('.')[0]}">
 <a class="skip" href="#main">Skip to content</a>
 <div class="raya-bar"><div class="wrap"><span>Raya photoshoot season is open at our Bandar Putra studio.</span><a href="https://booking.johorstudio.cc">Book a Raya slot</a></div></div>
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="index.html"><img src="img/logo-dark.png" alt="JohorStudio.com" width="131" height="46"></a>
+    <a class="brand" href="index.html"><img class="logo-dark" src="img/logo-dark.png" alt="JohorStudio.com" width="131" height="46"><img class="logo-light" src="img/logo-light.png" alt="" width="131" height="46"></a>
     <button class="menu-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
     <nav class="nav" id="nav" aria-label="Main">
 {nav}
@@ -95,6 +95,7 @@ def page(file, title, desc, body, extra_head=""):
     </div>
   </div>
 </footer>
+{LIGHTBOX}
 <a class="wa-float" href="{WA}" aria-label="WhatsApp JohorStudio.com">{WA_ICON}<span>WhatsApp</span></a>
 <script src="js/main.js" defer></script>
 </body>
@@ -108,19 +109,82 @@ def img(name, alt, folder="gallery", sm=True, cls="", lazy=True):
     return f'<img src="{src}" alt="{html.escape(alt)}"{" loading=\"lazy\"" if lazy else ""}{f" class=\"{cls}\"" if cls else ""}>'
 
 
+
+PORTFOLIO = {i["file"]: i for i in json.load(open(ROOT / "data" / "portfolio.json"))["items"]}
+
+def lb(name, cls=""):
+    """Thumbnail button that opens the lightbox (full resolution when available)."""
+    it = PORTFOLIO[name]
+    full = f' data-full="img/gallery/{name}-full.webp" data-size="{it["size"]}"' if it.get("full") else ""
+    return (f'<button type="button" class="lb-thumb {cls}" data-lightbox data-src="img/gallery/{name}.webp"{full} '
+            f'data-caption="{html.escape(it["caption"])}"><img src="img/gallery/{name}-sm.webp" alt="{html.escape(it["caption"])}" loading="lazy"></button>')
+
+def media(name, alt):
+    """Clickable (lightbox) unless it is a behind-the-scenes shot."""
+    return lb(name, "media") if name in PORTFOLIO else img(name, alt)
+
+LIGHTBOX = '<dialog class="lightbox" aria-label="Photo"><div class="lb-bar"><p class="lb-cap"></p><span class="lb-res"></span><button class="close" type="button">Close</button></div><div class="lb-stage"><img alt=""></div></dialog>'
+
 # ---------------- HOME ----------------
+FEATURED = ['studio-fashion-06', 'photo-corporate-portrait-02', 'studio-fashion-04', 'photo-sports-motocross-01', 'studio-product-01', 'convo-graduation-stage-01', 'studio-fashion-12', 'photo-landscape-pier', 'studio-fashion-18', 'photo-event-award-ceremony']
 HERO = [
-    ("hero-07-mcp-led-crowd", "Live camera on stage, Butterfly 22nd Convocation, Trove Hotel"),
-    ("hero-01-live-control-adtec2026", "Live switching desk, ADTEC JTM 29th Convocation 2026"),
-    ("hero-02-multicam-stage-adtec2026", "Stage camera, ADTEC JTM 29th Convocation 2026"),
-    ("hero-03-crew-ballroom", "Our crew on the ballroom floor"),
-    ("hero-04-corporate-symposium", "Primary Care Symposium, DoubleTree Johor Bahru"),
-    ("hero-05-fashion-studio", "Fashion shoot by JohorStudio.com"),
-    ("hero-06-motocross-action", "Motocross action photography"),
+ {
+  "name": "hero-01",
+  "caption": "Live camera on stage, Butterfly 22nd Convocation, Trove Hotel",
+  "pos": "72% 40%",
+  "mpos": "82% 40%"
+ },
+ {
+  "name": "hero-02",
+  "caption": "Studio fashion photography",
+  "pos": "45% 35%",
+  "mpos": "55% 30%"
+ },
+ {
+  "name": "hero-03",
+  "caption": "Live switching, ADTEC JTM 29th Convocation 2026",
+  "pos": "40% 50%",
+  "mpos": "55% 45%"
+ },
+ {
+  "name": "hero-04",
+  "caption": "Motorsport photography",
+  "pos": "45% 50%",
+  "mpos": "50% 35%"
+ },
+ {
+  "name": "hero-05",
+  "caption": "Our crew on the ballroom floor",
+  "pos": "58% 45%",
+  "mpos": "55% 40%"
+ },
+ {
+  "name": "hero-06",
+  "caption": "Fashion and lifestyle shoots",
+  "pos": "55% 35%",
+  "mpos": "50% 35%"
+ },
+ {
+  "name": "hero-07",
+  "caption": "Multicam coverage, ADTEC JTM 2026",
+  "pos": "50% 55%",
+  "mpos": "40% 55%"
+ },
+ {
+  "name": "hero-08",
+  "caption": "Award ceremonies and official portraits",
+  "pos": "50% 8%",
+  "mpos": "50% 30%"
+ }
 ]
-pgm = "\n".join(
-    f'<img src="img/hero/{n}.webp" data-thumb="img/hero/{n}-sm.webp" data-caption="{html.escape(c)}" alt="{html.escape(c)}"{" class=\"is-live\"" if i == 0 else " loading=\"lazy\""}>'
-    for i, (n, c) in enumerate(HERO))
+slides = "\n".join(
+    f'''<figure class="slide{" is-active" if i == 0 else ""}" aria-roledescription="slide" aria-label="{i+1} of {len(HERO)}">
+  <picture>
+    <source media="(max-aspect-ratio: 4/5)" srcset="img/hero/{h['name']}-m.webp">
+    <img src="img/hero/{h['name']}.webp" alt="{html.escape(h['caption'])}" style="--pos:{h['pos']};--mpos:{h['mpos']}"{' fetchpriority="high"' if i == 0 else ' loading="lazy"'} decoding="async">
+  </picture>
+</figure>''' for i, h in enumerate(HERO))
+dots = "".join(f'<button type="button" class="dot-btn" aria-label="Show slide {i+1}"{" aria-current=\"true\"" if i == 0 else ""}></button>' for i in range(len(HERO)))
 
 SERVICES = [
     ("multicam", "Multicamera production", "bts-multiview-switcher-01",
@@ -169,34 +233,32 @@ page("index.html",
      "JohorStudio.com | Multicam, livestream, photo and video in Johor",
      "Johor-based media team since 2014: multicamera production, livestreaming, videography, event and studio photography. Serving Kulai, Johor Bahru and all of Malaysia.",
      f"""
-<section class="hero">
-  <div class="wrap">
-    <div class="multiview" aria-label="Recent work">
-      <div class="pgm">
-        <span class="tag"><span class="dot"></span>Program</span>
-        {pgm}
-        <span class="caption"></span>
-      </div>
-      <ul class="pvw-list">
-        <li><button class="pvw" type="button"><img alt=""><span>Preview</span></button></li>
-        <li><button class="pvw" type="button"><img alt=""><span>Preview</span></button></li>
-        <li><button class="pvw" type="button"><img alt=""><span>Preview</span></button></li>
-      </ul>
-    </div>
-    <div class="hero-copy">
-      <div>
-        <h1>Your event, on every screen.</h1>
-        <p class="lead">JohorStudio.com is a professional digital media provider since 2014. We run the cameras, the switcher and the stream, and work hand in hand with you and your event organiser.</p>
-      </div>
+<section class="hero-full" aria-roledescription="carousel" aria-label="Featured work">
+  <div class="slides">
+{slides}
+  </div>
+  <div class="hero-shade" aria-hidden="true"></div>
+  <div class="hero-text">
+    <div class="wrap">
+      <h1>Your event, on every screen.</h1>
+      <p class="lead">Professional digital media provider since 2014. We run the cameras, the switcher and the stream, hand in hand with you and your event organiser.</p>
       <div class="actions">
-        <a class="btn" href="contact.html">Get a quotation</a>
-        <a class="btn btn-line" href="portfolio.html">See our work</a>
+        <a class="btn btn-light" href="contact.html">Get a quotation</a>
+        <a class="btn btn-ghost" href="portfolio.html">See our work</a>
+        <a class="btn btn-ghost" data-raya hidden href="https://booking.johorstudio.cc">Book a Raya photoshoot</a>
+      </div>
+      <div class="hero-controls">
+        <button type="button" class="hc-prev" aria-label="Previous slide">‹</button>
+        <div class="dots">{dots}</div>
+        <button type="button" class="hc-next" aria-label="Next slide">›</button>
+        <p class="hero-caption" aria-live="polite"></p>
       </div>
     </div>
   </div>
+  <a class="scroll-cue" href="#intro" aria-label="Scroll to content"><span></span></a>
 </section>
 
-<section class="section bg-white">
+<section class="section bg-white" id="intro">
   <div class="wrap">
     <dl class="facts">
       <div><dt>Since 2014</dt><dd>Twelve years covering events in Johor</dd></div>
@@ -217,6 +279,16 @@ page("index.html",
 </section>
 
 <section class="section bg-white">
+  <div class="wrap">
+    <div class="section-head"><h2>Photography</h2><a href="portfolio.html#studio">More photos</a></div>
+    <p class="muted" style="margin-top:-20px">Tap any photo to view it at full resolution.</p>
+    <div class="mosaic">
+      {"".join(lb(n) for n in FEATURED)}
+    </div>
+  </div>
+</section>
+
+<section class="section">
   <div class="wrap">
     <div class="section-head"><h2>Recent projects</h2><a href="projects.html">All projects</a></div>
     <div class="projects">
@@ -296,18 +368,18 @@ DETAIL = [
     ("videography", "Videography", ["bts-interview-setup", "bts-butterfly-shoulder-rig", "bts-butterfly-riser-camera"],
      "Event highlights, interviews and corporate video, shot and edited by the same team that runs your live production.",
      ["Same-day edit for closing ceremonies", "Interviews and testimonials", "Corporate and promotional video"]),
-    ("photography", "Event and corporate photography", ["photo-event-symposium-speaker", "photo-corporate-portrait-02", "photo-sports-motocross-01"],
+    ("photography", "Event and corporate photography", ["photo-event-award-ceremony-02", "photo-corporate-portrait-02", "photo-sports-motocross-01"],
      "Conferences, dinner functions, award ceremonies, sports and official portraits. Edited photos are delivered within one to three days through our private cloud.",
      ["Conferences and symposiums", "Dinner functions and award nights", "Official and corporate portraits", "Sports and motorsport"]),
     ("convocation", "Convocation and school photography", ["convo-graduation-stage-01", "school-class-photo-01", "school-class-photo-02"],
      "Scroll presentations on stage, a pop-up studio at the venue for families, and class and group photos for primary, secondary and tertiary institutions.",
      ["On-stage scroll moments", "Pop-up studio at your venue", "Class, prefect and club photos", "Prints in 4R, 8R and frames, or digital only"]),
-    ("studio", "Studio photography", ["studio-fashion-06", "studio-product-01", "studio-corporate-01"],
+    ("studio", "Studio photography", ["studio-fashion-12", "studio-product-01", "studio-fashion-15"],
      "Our studio in Bandar Putra, Kulai, is open by appointment for family and Raya portraits, corporate headshots, products, fashion and convocation shoots.",
      ["Family and Raya photoshoots", "Corporate headshots", "Product and fashion", "Convocation portraits"]),
 ]
 svc = "\n".join(f"""<article class="svc-detail" id="{k}">
-  <div class="svc-media">{"".join(img(i, t) for i in imgs)}</div>
+  <div class="svc-media">{"".join(media(i, t) for i in imgs)}</div>
   <div>
     <h2>{t}</h2>
     <p class="lead">{d}</p>
@@ -348,14 +420,13 @@ page("portfolio.html",
      f"""
 <section class="page-head"><div class="wrap">
   <h1>Portfolio</h1>
-  <p class="lead">Real jobs, real set-ups. Choose a service to filter.</p>
+  <p class="lead">Real jobs, real set-ups. Choose a service to filter, and tap a photo to see it at full resolution.</p>
 </div></section>
 <section class="wrap" style="padding-bottom:72px">
   <div class="filters" role="group" aria-label="Filter by service">
     {"".join(f'<button type="button" data-filter="{k}" aria-pressed="{"true" if k == "all" else "false"}">{t}</button>' for k, t in FILTERS)}
   </div>
   <div class="gallery"></div>
-  <dialog class="lightbox" aria-label="Photo"><button class="close" type="button">Close</button><img alt=""><p></p></dialog>
 </section>
 <section class="section bg-white"><div class="wrap">
   <div class="section-head"><h2>Video</h2><a href="{YT}">Our YouTube channel</a></div>
@@ -376,7 +447,7 @@ CASES = [
     ("adtec", "ADTEC JTM", "29th Convocation",
      [("Year", "2026"), ("Services", "Multicam, livestream")],
      "Multiple camera positions along the hall with a live switching desk among the audience, covering every graduate on stage.",
-     ["hero-01-live-control-adtec2026", "bts-adtec2026-camera-row", "bts-adtec2026-viewfinder", "bts-team-photo-adtec2026"]),
+     ["bts-adtec2026-switcher-desk", "bts-adtec2026-camera-row", "bts-adtec2026-viewfinder", "bts-team-photo-adtec2026"]),
     ("hospital", "Hospital Sultanah Aminah and Hospital Sultan Ismail", "Live medical streaming",
      [("Location", "Johor Bahru"), ("Services", "Livestream, procedure recording")],
      "Live broadcasts and recordings of medical procedures for training sessions, sending the theatre feed to the lecture hall and to online participants.", []),
@@ -392,7 +463,7 @@ cases = "\n".join(f"""<article class="case" id="{k}">
     <dl>{"".join(f"<dt>{a}</dt><dd>{b}</dd>" for a, b in meta)}</dl>
     <p>{d}</p>
   </div>
-  <div class="case-media">{"".join(img(i, t, folder="hero" if i.startswith("hero") else "gallery") for i in imgs)}</div>
+  <div class="case-media">{"".join(media(i, t) for i in imgs)}</div>
 </article>""" for k, c, t, meta, d, imgs in CASES)
 page("projects.html",
      "Projects | JohorStudio.com",

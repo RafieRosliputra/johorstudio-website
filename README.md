@@ -86,15 +86,18 @@ Tak perlu restart. nginx terus baca fail baru.
 
 ## 4. Tambah gambar portfolio sendiri (setiap bulan)
 
-1. Export gambar dalam format WebP:
-   - versi besar, sisi panjang 1600px: `nama-gambar.webp`
+1. Export gambar dalam format WebP (kualiti lebih kurang 80):
    - versi kecil, sisi panjang 720px: `nama-gambar-sm.webp`
-2. Letak kedua-dua fail dalam `site/img/gallery/`
+   - versi biasa, sisi panjang 1600px: `nama-gambar.webp`
+   - versi penuh, resolusi asal: `nama-gambar-full.webp` (tak perlu untuk gambar BTS)
+2. Letak fail-fail tu dalam `site/img/gallery/`
 3. Buka `site/data/portfolio.json` dan tambah satu baris di atas senarai:
 
 ```json
-{"file": "nama-gambar", "category": "multicam", "caption": "Penerangan ringkas dalam English"},
+{"file": "nama-gambar", "category": "studio", "caption": "Penerangan ringkas dalam English", "full": true, "size": "6000×4000"},
 ```
+
+Untuk gambar BTS, buang `"full"` dan `"size"`, supaya bila diklik ia cuma buka versi 1600px.
 
 `category` mesti salah satu dari: `multicam`, `livestream`, `videography`, `photography`, `convocation`, `studio`.
 
@@ -133,3 +136,7 @@ Butang dan jalur "Raya photoshoot" keluar secara automatik antara tarikh `start`
 - Gambar budak (tadika) belum dimasukkan. Bila muka dah ditukar guna AI, letak dalam `site/img/gallery/` dan tambah dalam `portfolio.json`.
 - Font: Archivo, dari Google Fonts.
 - Borang enquiry tak simpan apa-apa. Ia buka WhatsApp dengan maklumat yang client isi.
+
+## Slideshow halaman utama
+
+Gambar ada dalam `site/img/hero/`: `hero-01.webp` untuk laptop dan `hero-01-m.webp` untuk phone (boleh guna gambar portrait). Titik fokus, iaitu di mana orang berada dalam gambar, ditetapkan dalam `HERO` di `tools/build.py` (`pos` untuk laptop, `mpos` untuk phone, dalam peratus x dan y).
