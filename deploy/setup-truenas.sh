@@ -55,16 +55,12 @@ mc service.start cifs >/dev/null || true
 say "5/7 Building the website pages (first time takes 10 to 20 minutes)"
 docker run --rm -v "$REPO":/work -v "$UPLOADS":/uploads:ro -e UPLOADS=/uploads "$IMAGE" tools/projects.py
 
-say "6/7 Cloudflare Tunnel token"
+say "6/7 Cloudflare Tunnel"
+# johorstudio.com uses the existing "m10" tunnel (its routes point at 192.168.0.100:8080/8090/6805),
+# so this app only runs its own tunnel if a token is given:  TUNNEL_TOKEN=eyJ... bash /tmp/js.sh
 TOKEN_FILE=$BASE/.tunnel-token
-if [ -s "$TOKEN_FILE" ]; then
-  echo "using the token saved earlier ($TOKEN_FILE)"
-else
-  echo "Paste the Cloudflare Tunnel token (long text starting with eyJ), then press Enter."
-  echo "Leave empty and press Enter to skip; the site still works at http://192.168.0.100:8080"
-  read -r TOKEN || TOKEN=""
-  if [ -n "$TOKEN" ]; then umask 077; printf '%s' "$TOKEN" > "$TOKEN_FILE"; fi
-fi
+if [ -n "${TUNNEL_TOKEN:-}" ]; then (umask 077; printf '%s' "$TUNNEL_TOKEN" > "$TOKEN_FILE"); fi
+[ -s "$TOKEN_FILE" ] && echo "own tunnel: on" || echo "own tunnel: off (using the m10 tunnel)"
 SECRET_FILE=$BASE/.silex-secret
 [ -s "$SECRET_FILE" ] || (umask 077; openssl rand -base64 32 | tr -d '\n' > "$SECRET_FILE")
 
