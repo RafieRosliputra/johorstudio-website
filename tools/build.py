@@ -154,7 +154,7 @@ page("index.html",
       <div class="actions">
         <a class="btn btn-light" href="contact.html">Get a quotation</a>
         <a class="btn btn-ghost" href="portfolio.html">See our work</a>
-        <a class="btn btn-ghost" data-raya hidden href="{RAYA_URL}">Book a Raya photoshoot</a>
+        <a class="btn btn-ghost" data-raya hidden href="raya.html">Raya photoshoot</a>
       </div>
       <div class="hero-controls">
         <button type="button" class="hc-prev" aria-label="Previous slide">‹</button>
@@ -351,7 +351,7 @@ page("raya.html",
   <ol class="services">
     <li class="service" style="grid-template-columns:1fr"><div><h3>Sets for every group size</h3><p>Choose from our white classic set and our pastel panelled sets, with benches for seated family rows and plenty of floor for large families.</p></div></li>
     <li class="service" style="grid-template-columns:1fr"><div><h3>Formal and fun</h3><p>We start with the classic family line-up, then loosen up with candid, playful and couple shots so everyone gets a favourite.</p></div></li>
-    <li class="service" style="grid-template-columns:1fr"><div><h3>Book online</h3><p>Pick a date and time slot at <a href="{RAYA_URL}">bookings.johorstudio.cc</a>. Slots fill up quickly during Ramadan and the first weeks of Syawal.</p></div></li>
+    <li class="service" style="grid-template-columns:1fr"><div><h3>Book online</h3><p>Pick a date and time slot on our <a href="{RAYA_URL}">online booking page</a>. Slots fill up quickly during Ramadan and the first weeks of Syawal.</p></div></li>
   </ol>
 </div></section>
 <section class="wrap" style="padding-top:56px;padding-bottom:72px">
@@ -438,7 +438,7 @@ page("contact.html",
     <div><h3>WhatsApp or call</h3><p><a href="{WA}">{PHONE}</a></p></div>
     <div><h3>Email</h3><p><a href="mailto:{EMAIL}">{EMAIL}</a></p></div>
     <div><h3>Studio, by appointment</h3><p>{ADDRESS}</p><p><a href="{MAPS}">Open in Google Maps</a></p></div>
-    <div><h3>Raya photoshoot</h3><p><a href="{RAYA_URL}">bookings.johorstudio.cc</a></p></div>
+    <div><h3>Raya photoshoot</h3><p><a href="raya.html">Raya studio photoshoot</a></p></div>
     <iframe class="map" title="Studio location" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
       src="https://www.google.com/maps?q={ADDRESS.replace(' ', '+')}&output=embed"></iframe>
   </div>

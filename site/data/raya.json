@@ -1,6 +1,5 @@
 {
- "_help": "Butang booking raya keluar antara 'start' (awal Ramadan) dan 'end' (2 minggu selepas Hari Raya). Tarikh anggaran \u2014 semak dan betulkan setiap tahun.",
- "url": "https://bookings.johorstudio.cc",
+ "_help": "Jalur dan butang Raya (yang pergi ke page raya.html) keluar antara 'start' (awal Ramadan) dan 'end' (2 minggu selepas Hari Raya). Tarikh anggaran, semak dan betulkan setiap tahun. Link booking ada dalam RAYA_URL di tools/layout.py.",
  "seasons": [
   {
    "start": "2027-02-07",

@@ -29,9 +29,8 @@
       var today = new Date().toISOString().slice(0, 10);
       var on = cfg.seasons.some(function (s) { return today >= s.start && today <= s.end; });
       if (on) {
-        rayaBar.querySelectorAll("a").forEach(function (a) { a.href = cfg.url; });
         rayaBar.classList.add("is-on");
-        document.querySelectorAll("[data-raya]").forEach(function (el) { el.hidden = false; el.href = cfg.url; });
+        document.querySelectorAll("[data-raya]").forEach(function (el) { el.hidden = false; });
       }
     }).catch(function () {});
   }

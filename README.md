@@ -13,7 +13,7 @@ site/              <- website (inilah yang orang nampak)
   img/raya/        <- gambar page Raya (senarai dalam data/raya-gallery.json)
   data/portfolio.json  <- senarai gambar portfolio (tambah gambar di sini)
   data/videos.json     <- senarai video YouTube
-  data/raya.json       <- tarikh butang booking Raya
+  data/raya.json       <- tarikh jalur dan butang Raya
 nginx/default.conf <- tetapan server
 docker-compose.yml <- web + Silex + Cloudflare Tunnel
 tools/build.py     <- jana semula page HTML (pilihan, untuk tukar teks)
@@ -206,9 +206,11 @@ Page utama website ni ditulis dalam HTML biasa, bukan dalam Silex. Untuk tukar t
 
 ---
 
-## 6. Butang booking Raya
+## 6. Raya dan butang WhatsApp
 
-Butang dan jalur "Raya photoshoot" keluar secara automatik antara tarikh `start` (awal Ramadan) dan `end` (2 minggu selepas Raya) dalam `site/data/raya.json`. Tarikh tahun depan adalah anggaran, jadi semak setiap tahun.
+- Hanya page `raya.html` ada butang "Book a Raya slot", yang pergi ke https://bookings.johorstudio.cc/public. Link ni ditukar di `RAYA_URL` dalam `tools/layout.py`.
+- Jalur "Raya photoshoot" di atas setiap page, dan butang Raya di halaman utama, pergi ke page `raya.html`. Ia keluar secara automatik antara tarikh `start` (awal Ramadan) dan `end` (2 minggu selepas Raya) dalam `site/data/raya.json`. Tarikh tahun depan adalah anggaran, jadi semak setiap tahun.
+- Page lain guna borang enquiry (`contact.html`) atau WhatsApp. Butang WhatsApp buka chat dengan mesej "Hi Rafi" (tukar di `WA` dalam `tools/layout.py`). Borang enquiry pula hantar butiran yang client isi.
 
 ---
 
