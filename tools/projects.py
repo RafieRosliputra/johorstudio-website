@@ -61,7 +61,7 @@ except Exception:
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from layout import render, SITE, WA, WA_ICON  # noqa: E402
-from watermark import add_watermark, VERSION as WM_VERSION, main as watermark_site_photos  # noqa: E402
+from watermark import add_watermark, cap_pixels, VERSION as WM_VERSION, QUALITY as PHOTO_Q, main as watermark_site_photos  # noqa: E402
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
 SITE_DIR = REPO / "site"
@@ -71,10 +71,8 @@ REMOVED_FILE = OUT / ".removed.json"
 STAGING = OUT / ".staging"
 DONE = "_DONE"
 IMG_EXT = {".jpg", ".jpeg", ".png", ".webp", ".tif", ".tiff"} | ({".heic", ".heif"} if HEIC else set())
-SIZES = (("-sm", 720, 74), ("", 1600, 78))
-# preview (grid thumbnail): smaller file, about half the size of the old 720px version
-PREVIEW_SIDE, PREVIEW_Q, PREVIEW_VER = 600, 50, "p600-q50"
-FULL_MAX, FULL_Q = 6000, 82
+PREVIEW_SIDE = 600                                  # grid thumbnail
+PHOTO_VER = f"24mp-q{PHOTO_Q}"                      # change this and every photo is redone
 MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August",
           "September", "October", "November", "December"]
 MAIN_PAGES = ["", "services.html", "portfolio.html", "projects/", "raya.html", "about.html", "contact.html"]
@@ -215,51 +213,96 @@ def save_webp(im, path, maxside, q, icc):
     return im.size
 
 
-def process_photo(src, dest_dir, stem, full, cache, key):
+def process_photo(src, dest_dir, stem, full, cache, key, force=False):
     """Make the WebP versions of one photo. Returns (info, made_new)."""
     sig = file_sig(src)
     old = cache.get(key)
-    outs = [dest_dir / f"{stem}{suf}.webp" for suf, _, _ in SIZES] + ([dest_dir / f"{stem}-full.webp"] if full else [])
-    if (old and old.get("sig") == sig and old.get("full") == full and old.get("wm") == WM_VERSION
-            and all(o.exists() for o in outs)):
+    outs = [dest_dir / f"{stem}-sm.webp", dest_dir / f"{stem}.webp"] + ([dest_dir / f"{stem}-full.webp"] if full else [])
+    if (not force and old and old.get("sig") == sig and old.get("full") == full and old.get("wm") == WM_VERSION
+            and old.get("pv") == PHOTO_VER and all(o.exists() for o in outs)):
         return old, False
     with Image.open(src) as raw:
         icc = raw.info.get("icc_profile")
-        im = to_rgb(ImageOps.exif_transpose(raw))
+        im = cap_pixels(to_rgb(ImageOps.exif_transpose(raw)))
     w, h = im.size
-    info = {"sig": sig, "full": full, "w": w, "h": h, "wm": WM_VERSION}
-    # thumbnail (-sm) stays clean; the versions that open on click carry the logo
-    sw, sh = save_webp(im, dest_dir / f"{stem}-sm.webp", PREVIEW_SIDE, PREVIEW_Q, icc)
+    info = {"sig": sig, "full": full, "w": w, "h": h, "wm": WM_VERSION, "pv": PHOTO_VER}
+    # thumbnail stays clean; the versions that open on click carry the logo
+    sw, sh = save_webp(im, dest_dir / f"{stem}-sm.webp", PREVIEW_SIDE, PHOTO_Q, icc)
     info["sm"] = [sw, sh]
-    info["pv"] = PREVIEW_VER
     md = im.copy()
-    md.thumbnail((SIZES[1][1], SIZES[1][1]), Image.LANCZOS)
-    sw, sh = save_webp(add_watermark(md), dest_dir / f"{stem}.webp", SIZES[1][1], SIZES[1][2], icc)
+    md.thumbnail((1600, 1600), Image.LANCZOS)
+    sw, sh = save_webp(add_watermark(md), dest_dir / f"{stem}.webp", 1600, PHOTO_Q, icc)
     info["md"] = [sw, sh]
     if full:
-        big = im.copy()
-        if max(big.size) > FULL_MAX:
-            big.thumbnail((FULL_MAX, FULL_MAX), Image.LANCZOS)
-        fw, fh = save_webp(add_watermark(big), dest_dir / f"{stem}-full.webp", FULL_MAX, FULL_Q, icc)
+        fw, fh = save_webp(add_watermark(im), dest_dir / f"{stem}-full.webp", max(w, h), PHOTO_Q, icc)
         info["w"], info["h"] = fw, fh
     cache[key] = info
     return info, True
 
 
-def shrink_previews(img, items):
-    """Make the grid previews smaller. Works from the existing preview file, so no original is needed."""
-    for i in items:
-        if i.get("pv") == PREVIEW_VER:
-            continue
-        f = img / f"{i['stem']}-sm.webp"
-        if not f.exists():
+def find_original(m, i):
+    """The original file of one photo, if it still exists (upload _DONE folder or repo projects/)."""
+    up = uploads_dir()
+    origin = i.get("origin", m["source"]["origin"])
+    src = i.get("src", m["source"]["name"])
+    if origin == "uploads":
+        cands = [up / DONE / (i.get("done_as") or src), up / src] if up else []
+    else:
+        cands = [REPO / "projects" / src]
+    for d in cands:
+        f = d / i["name"]
+        if f.is_file():
+            return f
+    return None
+
+
+def recompress_existing(img, i):
+    """No original left: re-encode the saved files. The watermark is not added again."""
+    stem = i["stem"]
+    out = {}
+    for suffix, side in (("-full", None), ("", 1600), ("-sm", PREVIEW_SIDE)):
+        f = img / f"{stem}{suffix}.webp"
+        if not f.exists() or (suffix == "-full" and not i.get("full")):
             continue
         with Image.open(f) as im:
-            im = im.convert("RGB")
-            im.thumbnail((PREVIEW_SIDE, PREVIEW_SIDE), Image.LANCZOS)
-            im.save(f, "WEBP", quality=PREVIEW_Q, method=6)
-            i["sm"] = list(im.size)
-        i["pv"] = PREVIEW_VER
+            im = cap_pixels(im.convert("RGB"))
+            if side and max(im.size) > side:
+                im.thumbnail((side, side), Image.LANCZOS)
+            im.save(f, "WEBP", quality=PHOTO_Q, method=6)
+            out[suffix] = list(im.size)
+    if "-sm" in out:
+        i["sm"] = out["-sm"]
+    if "" in out:
+        i["md"] = out[""]
+    if "-full" in out:
+        i["w"], i["h"] = out["-full"]
+    i["pv"] = PHOTO_VER
+
+
+def refresh_site_photos(state, cache):
+    """Photos made before the current rule (24MP cap, WebP quality 50) are redone once.
+    Originals are used when they still exist; otherwise the saved files are re-encoded."""
+    changed = 0
+    for slug, m in state.items():
+        img = OUT / slug / "img"
+        todo = [i for i in m.get("items", []) if i.get("pv") != PHOTO_VER]
+        if not todo or not img.is_dir():
+            continue
+        for i in todo:
+            try:
+                src = find_original(m, i)
+                if src is not None:
+                    info, _ = process_photo(src, img, i["stem"], i["full"], cache, f"{slug}/{i['stem']}", force=True)
+                    i.update(info)
+                else:
+                    recompress_existing(img, i)
+                changed += 1
+            except Exception as err:
+                print(f"   ! {slug}/{i['name']}: {err}")
+        (OUT / slug / "meta.json").write_text(json.dumps(m, ensure_ascii=False, indent=1), encoding="utf-8")
+    if changed:
+        print(f"Photos updated to 24MP / quality {PHOTO_Q}: {changed}")
+    return changed
 
 
 def photo_files(folder):
@@ -403,7 +446,6 @@ def build_project(folder, origin, old, cache, slug=None):
                 continue
             new += made
             items.append({"stem": stem, "name": src.name, "src": folder.name, "origin": origin, **got})
-        shrink_previews(img, items)
         keep = {f"{i['stem']}{s}.webp" for i in items for s in ("-sm", "", "-full")}
         for f in img.iterdir():
             if f.name not in keep:
@@ -616,10 +658,7 @@ def publish():
                 problems.append(f"{folder.name}: published, but could not move to {DONE} ({err})")
                 print(f"   ! published, but could not move to {DONE}: {err}")
 
-    for slug, m in state.items():                      # smaller previews for projects published earlier
-        if any(i.get("pv") != PREVIEW_VER for i in m.get("items", [])) and (OUT / slug / "img").is_dir():
-            shrink_previews(OUT / slug / "img", m["items"])
-            (OUT / slug / "meta.json").write_text(json.dumps(m, ensure_ascii=False, indent=1), encoding="utf-8")
+    refresh_site_photos(state, cache)                  # photos made before the current rule
 
     cache = {k: v for k, v in cache.items() if k.split("/")[0] in state}
     CACHE_FILE.write_text(json.dumps(cache))

@@ -24,7 +24,18 @@ LOGO = REPO / "site" / "img" / "logo-light.png"   # white version of the logo
 WIDTH = 0.112          # logo width as a share of the photo's long side
 OPACITY = 0.85
 MIN_WIDTH = 70         # pixels
-VERSION = f"2-{WIDTH}-{OPACITY}"   # any change here re-watermarks everything
+QUALITY = 50           # WebP quality for every photo the site makes
+MAX_PIXELS = 24_000_000  # bigger photos are scaled down to this many pixels (about 6000 x 4000)
+VERSION = f"3-{WIDTH}-{OPACITY}-q{QUALITY}-{MAX_PIXELS}"   # any change here re-watermarks everything
+
+
+def cap_pixels(im):
+    """Scale an image down (keeping its shape) if it has more than MAX_PIXELS pixels."""
+    w, h = im.size
+    if w * h > MAX_PIXELS:
+        k = (MAX_PIXELS / (w * h)) ** 0.5
+        im = im.resize((int(w * k), int(h * k)), Image.LANCZOS)
+    return im
 
 _logo = None
 
@@ -86,9 +97,8 @@ def main():
                 continue
             with Image.open(src) as raw:
                 icc = raw.info.get("icc_profile")
-                big = max(raw.size) > 2000
-                out = add_watermark(raw)
-            kw = {"quality": 84 if big else 80, "method": 4}
+                out = add_watermark(cap_pixels(raw.convert("RGB")))
+            kw = {"quality": QUALITY, "method": 6}
             if icc:
                 kw["icc_profile"] = icc
             out.save(dst, "WEBP", **kw)
