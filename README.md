@@ -214,13 +214,7 @@ Butang dan jalur "Raya photoshoot" keluar secara automatik antara tarikh `start`
 
 ## Watermark gambar portfolio dan Raya
 
-Gambar dalam `site/img/gallery/` dan `site/img/raya/` sudah ada watermark. Kalau kau tambah gambar baru di situ, jalankan:
-
-```sh
-docker compose run --rm --entrypoint python publish tools/watermark.py
-```
-
-Ia hanya proses gambar yang belum ada watermark. Rekod ada dalam `site/img/.watermarked.json`, jangan padam fail ni, nanti gambar dapat watermark dua kali. Notis hak cipta yang keluar bila gambar dibuka penuh ditulis dalam `LEGAL` di `tools/layout.py`.
+Gambar dalam `site/img/gallery/` dan `site/img/raya/` sudah ada watermark. Kalau kau tambah atau tukar gambar di situ, `./publish.sh` (atau `./update.sh`) akan letak watermark secara automatik. Ia hanya proses gambar yang baru atau yang berubah. Rekod ada dalam `site/img/.watermarked.json`, jangan padam fail ni, nanti gambar dapat watermark dua kali. Notis hak cipta yang keluar bila gambar dibuka penuh ditulis dalam `LEGAL` di `tools/layout.py`.
 
 ## Nota
 

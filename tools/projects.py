@@ -47,7 +47,7 @@ except Exception:
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from layout import render, SITE, WA, WA_ICON  # noqa: E402
-from watermark import add_watermark, VERSION as WM_VERSION  # noqa: E402
+from watermark import add_watermark, VERSION as WM_VERSION, main as watermark_site_photos  # noqa: E402
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
 SITE_DIR = REPO / "site"
@@ -391,6 +391,8 @@ def sitemap(projects):
 # ---------------------------------------------------------------- main
 
 def main():
+    print("Watermarking portfolio and Raya photos (new ones only)")
+    watermark_site_photos()
     OUT.mkdir(parents=True, exist_ok=True)
     try:
         cache = json.loads(CACHE_FILE.read_text())
