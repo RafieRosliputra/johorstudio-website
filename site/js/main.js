@@ -86,7 +86,17 @@
     var cap = dlg.querySelector(".lb-cap"), res = dlg.querySelector(".lb-res");
     dlg.querySelector(".close").addEventListener("click", function () { dlg.close(); });
     dlg.addEventListener("close", function () { big.removeAttribute("src"); stage.classList.remove("is-zoomed"); });
-    big.addEventListener("click", function () { if (big.dataset.full === "1") stage.classList.toggle("is-zoomed"); });
+    // Click or tap the full-resolution photo to zoom in; the spot you touched becomes the centre
+    big.addEventListener("click", function (e) {
+      if (big.dataset.full !== "1") return;
+      if (stage.classList.contains("is-zoomed")) { stage.classList.remove("is-zoomed"); return; }
+      var r = big.getBoundingClientRect();
+      var fx = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+      var fy = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
+      stage.classList.add("is-zoomed");
+      stage.scrollLeft = fx * big.offsetWidth - stage.clientWidth / 2;
+      stage.scrollTop = fy * big.offsetHeight - stage.clientHeight / 2;
+    });
     // copyright: no right-click save or drag on the full-screen photo
     big.addEventListener("contextmenu", function (e) { e.preventDefault(); });
     big.addEventListener("dragstart", function (e) { e.preventDefault(); });

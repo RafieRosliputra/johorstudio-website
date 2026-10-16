@@ -1,898 +1,226 @@
 {
-"gallery/bts-adtec2026-camera-row.webp": {
-"sha": "ba59858582762c3a88c60652b3d6608e57e84695",
-"v": 1
-},
-"gallery/bts-adtec2026-operator.webp": {
-"sha": "6861d93e9d3bbe4155f082fae524e4cd0e4caf00",
-"v": 1
-},
-"gallery/bts-adtec2026-switcher-desk.webp": {
-"sha": "2e56a35401fedf158f7ea8d4248a868420b087d2",
-"v": 1
-},
-"gallery/bts-adtec2026-viewfinder.webp": {
-"sha": "b2e7a701922dd20f324aa3dc27e3bd86ed6adbef",
-"v": 1
-},
-"gallery/bts-ballroom-stage-lighting.webp": {
-"sha": "4029bf481312cf48549976bbad0e21b03bcf1fb6",
-"v": 1
-},
-"gallery/bts-butterfly-control-desk.webp": {
-"sha": "09b7f9dbf8c2b5555248d5c997eb48411b4e8155",
-"v": 1
-},
-"gallery/bts-butterfly-control-room-mixer.webp": {
-"sha": "ea7d10b33d81852f950cb0677b930e74c706dd15",
-"v": 1
-},
-"gallery/bts-butterfly-gimbal-monitor.webp": {
-"sha": "e8ca855c2afcbc9cff6c354a0fca64d0716d97dd",
-"v": 1
-},
-"gallery/bts-butterfly-operator-crowd.webp": {
-"sha": "52fe2d4dd611031d7e1d47292cdfd1154aaf99fc",
-"v": 1
-},
-"gallery/bts-butterfly-riser-camera.webp": {
-"sha": "003cd643943ae7579880c09365ab72fc3fc99ccb",
-"v": 1
-},
-"gallery/bts-butterfly-shoulder-rig.webp": {
-"sha": "11c24488316e3752679dc01807b62bcecd4b0cc4",
-"v": 1
-},
-"gallery/bts-butterfly-two-operators-wide.webp": {
-"sha": "753c81660f42f83571817da0ed03c6c8a404dadb",
-"v": 1
-},
-"gallery/bts-camera-operator-2022.webp": {
-"sha": "c2a18bfad02ec73afd1841d0cf8d198642b65271",
-"v": 1
-},
-"gallery/bts-control-room-2022.webp": {
-"sha": "5f9bcb72b4f82dcde06fbd434e090b5c1c14e042",
-"v": 1
-},
-"gallery/bts-crew-ballroom.webp": {
-"sha": "3ea6b10588f46c672b4c7e6162a0494c85d8c30c",
-"v": 1
-},
-"gallery/bts-crew-camera-gimbal.webp": {
-"sha": "872a2b128c7cfbd893073034d3d3988618947cb6",
-"v": 1
-},
-"gallery/bts-crew-camera-ops.webp": {
-"sha": "11d68235cfd998fdf6088303e41452c489c202b1",
-"v": 1
-},
-"gallery/bts-crew-camera-stand.webp": {
-"sha": "30b0fd2e29a434aac3d6aa7069189b80280c17a1",
-"v": 1
-},
-"gallery/bts-crew-operator-headset.webp": {
-"sha": "4d0a771596458337c44deb72bc1569cd81338179",
-"v": 1
-},
-"gallery/bts-crew-wireless-rx.webp": {
-"sha": "59180cfc62d042a73937454052aa233e63f6767e",
-"v": 1
-},
-"gallery/bts-factory-shoot.webp": {
-"sha": "6d4a9e3ebfca3eab65b703d1b79e1c91b063e7f9",
-"v": 1
-},
-"gallery/bts-graduation-hall-camera.webp": {
-"sha": "e6e4844c09032c31d1c5261ada199ffc0c818e1a",
-"v": 1
-},
-"gallery/bts-greenscreen-live-2022.webp": {
-"sha": "082a1bb037a501ecc1041cea670f270e1523d8f5",
-"v": 1
-},
-"gallery/bts-greenscreen-studio-01.webp": {
-"sha": "7d61152d2852bf598e57a856e5e505937dfa0f71",
-"v": 1
-},
-"gallery/bts-greenscreen-studio-02.webp": {
-"sha": "63f59b88d0baf06da9eab5335e4cd48a68ff25b4",
-"v": 1
-},
-"gallery/bts-interview-setup.webp": {
-"sha": "c8c7ad1c6aa6e213028f084abf29956dbc9706fc",
-"v": 1
-},
-"gallery/bts-kpj-livestream-01.webp": {
-"sha": "a8e748c2f94ed48766676a78ef49d45cffa28e5d",
-"v": 1
-},
-"gallery/bts-kpj-livestream-02.webp": {
-"sha": "020765f45095c1745bbbf72ec45d36a87549bbb3",
-"v": 1
-},
-"gallery/bts-live-operator-zoom.webp": {
-"sha": "3463a0ef8df792eb38bee80bde0ccac248e5e79f",
-"v": 1
-},
-"gallery/bts-live-talkshow-screen.webp": {
-"sha": "ecf8dc29e0712357e804138943f63ed280e781b6",
-"v": 1
-},
-"gallery/bts-multiview-switcher-01.webp": {
-"sha": "ca9e67d398142db7319449554239eec854c984d4",
-"v": 1
-},
-"gallery/bts-multiview-switcher-02.webp": {
-"sha": "c59a179c95a78ddc2e61edfaeff9e4bf234692a7",
-"v": 1
-},
-"gallery/bts-outdoor-camera-rain.webp": {
-"sha": "9077ec3d8faffbcb6fbd6ede7fe4edff7ee542ab",
-"v": 1
-},
-"gallery/bts-outdoor-control-tent.webp": {
-"sha": "311cd05b15f62ec751993c9020349805825652d3",
-"v": 1
-},
-"gallery/bts-talkshow-studio.webp": {
-"sha": "4562eccb718a516ad1fd299ae8186025b1d20882",
-"v": 1
-},
-"gallery/bts-team-photo-adtec2026.webp": {
-"sha": "69b1032dc54c9eb29039899077cfb510535cabf3",
-"v": 1
-},
-"gallery/bts-uthm-hall-camera.webp": {
-"sha": "d13e92f4317277f4e44fe0df8e582ae051d0c4bc",
-"v": 1
-},
-"gallery/bts-virtual-studio-live.webp": {
-"sha": "42d049635bf7db992e83e2657adfb4c53307d2f8",
-"v": 1
-},
-"gallery/convo-graduation-stage-01-full.webp": {
-"sha": "652238a8b5d9c9a4b21dda841eb875b118850660",
-"v": 1
-},
-"gallery/convo-graduation-stage-01.webp": {
-"sha": "bb64e0f8d125eeae442e03438292c924b589caa2",
-"v": 1
-},
-"gallery/convo-graduation-stage-02-full.webp": {
-"sha": "ab1de0abf93fc5fa39c2f73b8969a68687a7a894",
-"v": 1
-},
-"gallery/convo-graduation-stage-02.webp": {
-"sha": "e3a62fc4c31b2785545137a6714065500e5ea073",
-"v": 1
-},
-"gallery/photo-city-light-trails-full.webp": {
-"sha": "771d095caf93792bc9d7b04cc17b9fd93cb9891f",
-"v": 1
-},
-"gallery/photo-city-light-trails.webp": {
-"sha": "73d39576773c4ccfb5de24a8d4d3530e7f24d629",
-"v": 1
-},
-"gallery/photo-corporate-portrait-01-full.webp": {
-"sha": "8a52ff3940af3a4b5716de4f6d3559e69c98b1b9",
-"v": 1
-},
-"gallery/photo-corporate-portrait-01.webp": {
-"sha": "68a25382857c7d79c51f62afce39eb83a25cbb53",
-"v": 1
-},
-"gallery/photo-corporate-portrait-02-full.webp": {
-"sha": "295c201a59d7a21aaaa0d20c4cb1743438d63ab6",
-"v": 1
-},
-"gallery/photo-corporate-portrait-02.webp": {
-"sha": "384cfcb70ba0546c3f574142c7e8e5d4c840a2d6",
-"v": 1
-},
-"gallery/photo-corporate-portrait-03-full.webp": {
-"sha": "2f0a2a31d2a1e14f9130e61fb50a3fe0f7e2d36f",
-"v": 1
-},
-"gallery/photo-corporate-portrait-03.webp": {
-"sha": "51093e3962750074837e1c463bf05cfca844e236",
-"v": 1
-},
-"gallery/photo-corporate-portrait-04-full.webp": {
-"sha": "c4ee1613d915dd7385a4e538852c2b2d0bfdcd3e",
-"v": 1
-},
-"gallery/photo-corporate-portrait-04.webp": {
-"sha": "cbf5ba7e515569132490b666aa932e02e72f05c7",
-"v": 1
-},
-"gallery/photo-corporate-portrait-05-full.webp": {
-"sha": "44d817e8dc00577bccb177211e0e722a02ee62c1",
-"v": 1
-},
-"gallery/photo-corporate-portrait-05.webp": {
-"sha": "29f84ea4e7308b238039c18bbb910a67f444594c",
-"v": 1
-},
-"gallery/photo-corporate-portrait-06-full.webp": {
-"sha": "f82bde5465028a8ad2dcc50e08ab014cef866143",
-"v": 1
-},
-"gallery/photo-corporate-portrait-06.webp": {
-"sha": "36573b6d94334d318ebd85599087d96971c09b40",
-"v": 1
-},
-"gallery/photo-corporate-portrait-07-full.webp": {
-"sha": "e66f1b7c2eb2b5c2cc5aa9633022cbc9a2073315",
-"v": 1
-},
-"gallery/photo-corporate-portrait-07.webp": {
-"sha": "454432da3a603a73614056c86dda1a6d8b6e336c",
-"v": 1
-},
-"gallery/photo-corporate-portrait-08-full.webp": {
-"sha": "d2b449b52686dcf079cac8fb50a2d9c080839329",
-"v": 1
-},
-"gallery/photo-corporate-portrait-08.webp": {
-"sha": "0611bdc401c1401b5e3f303c244274155d96089d",
-"v": 1
-},
-"gallery/photo-corporate-portrait-09-full.webp": {
-"sha": "9e103e831a084ca4550c05ec07a4e5bd1dfa6725",
-"v": 1
-},
-"gallery/photo-corporate-portrait-09.webp": {
-"sha": "f9b09312c6a01aebca814d8148e43843fce87961",
-"v": 1
-},
-"gallery/photo-corporate-portrait-10-full.webp": {
-"sha": "8b03bc714aff2a50ff5e5532f570a371fa08eb37",
-"v": 1
-},
-"gallery/photo-corporate-portrait-10.webp": {
-"sha": "58162effa8c9df638c3030ee3ed83b3728d8984e",
-"v": 1
-},
-"gallery/photo-event-award-ceremony-02-full.webp": {
-"sha": "2820f6589e5c6bb1226938e0a5c060f1aebcb6c5",
-"v": 1
-},
-"gallery/photo-event-award-ceremony-02.webp": {
-"sha": "9bf14582f2f2333766779aef33eb9b85a0719ee3",
-"v": 1
-},
-"gallery/photo-event-award-ceremony-full.webp": {
-"sha": "b467433ec86667b2beec700e32bea54f81e51d06",
-"v": 1
-},
-"gallery/photo-event-award-ceremony.webp": {
-"sha": "22ef03a0c6ed720212fdbd9e517af7dd3c7fe402",
-"v": 1
-},
-"gallery/photo-event-mock-cheque-full.webp": {
-"sha": "818a9f0914ef424a207790c58ad3bb167ea342bc",
-"v": 1
-},
-"gallery/photo-event-mock-cheque.webp": {
-"sha": "11c9b182bd9d42c2f9c97f1534799d8b4d8b01aa",
-"v": 1
-},
-"gallery/photo-event-speaker-perisind-full.webp": {
-"sha": "9f6c15daacdf8f70f5fb15546fb56ecf306f3da0",
-"v": 1
-},
-"gallery/photo-event-speaker-perisind.webp": {
-"sha": "735295a36ee0c4aed40baf54e10a1dfd50e0dbee",
-"v": 1
-},
-"gallery/photo-event-symposium-hall-full.webp": {
-"sha": "7dad4162b4c560f588c4f9fbb5693c547f23c29a",
-"v": 1
-},
-"gallery/photo-event-symposium-hall.webp": {
-"sha": "a3334d9e063a2482872f4d4840dcfcdfdd2d174d",
-"v": 1
-},
-"gallery/photo-event-symposium-speaker-full.webp": {
-"sha": "643c01015daabb517a3f3d27ebd65552245997c3",
-"v": 1
-},
-"gallery/photo-event-symposium-speaker.webp": {
-"sha": "c4f9076be77a26ba823cac82bb8f27565d055a1b",
-"v": 1
-},
-"gallery/photo-landscape-pier-full.webp": {
-"sha": "37e27a959636b3244d7063a5b1318c8c65276fc2",
-"v": 1
-},
-"gallery/photo-landscape-pier.webp": {
-"sha": "103f1c1a1df32e9d19a46382fef3adf0de8b4683",
-"v": 1
-},
-"gallery/photo-landscape-waterfall-full.webp": {
-"sha": "7038bbdfd87ebee7f1777e81b242f990a44d2b3e",
-"v": 1
-},
-"gallery/photo-landscape-waterfall.webp": {
-"sha": "74b33487cd9e3822d3dd54b4f24e6f345bac881f",
-"v": 1
-},
-"gallery/photo-sports-motocross-01-full.webp": {
-"sha": "269ae0df56684aa128a186f7b54ad7f181f8f3da",
-"v": 1
-},
-"gallery/photo-sports-motocross-01.webp": {
-"sha": "773611da96a3662ba13b6cbd057c3345f397c089",
-"v": 1
-},
-"gallery/photo-sports-motocross-02-full.webp": {
-"sha": "e5ad83740c5710f7963ad20393ae9af4f1fe692b",
-"v": 1
-},
-"gallery/photo-sports-motocross-02.webp": {
-"sha": "64dcb5c04013440bd0b0417857e7b05894465abe",
-"v": 1
-},
-"gallery/photo-sports-motocross-03-full.webp": {
-"sha": "0eb0811fb99d702f8d241bdd880a5076640c1592",
-"v": 1
-},
-"gallery/photo-sports-motocross-03.webp": {
-"sha": "c9a6bdb5e8faae26e80ab713a58426e977d1b895",
-"v": 1
-},
-"gallery/school-class-photo-01-full.webp": {
-"sha": "fff617503e6903ec0c7292ce12ead18401dcbf92",
-"v": 1
-},
-"gallery/school-class-photo-01.webp": {
-"sha": "c1f4ea58f49cb631eba4c75d8fcf558ede4bb23c",
-"v": 1
-},
-"gallery/school-class-photo-02-full.webp": {
-"sha": "04cd9677b8edeb57f8725a8235dce5966ddd0a7e",
-"v": 1
-},
-"gallery/school-class-photo-02.webp": {
-"sha": "510da4a352980d01624210270f8c6b91cea1c2e6",
-"v": 1
-},
-"gallery/school-class-photo-03-full.webp": {
-"sha": "a4484121dcb4902b0c722563ebf7ae3ac7e7abf3",
-"v": 1
-},
-"gallery/school-class-photo-03.webp": {
-"sha": "934cefa8483da14ce5aecc08076be6919f74d071",
-"v": 1
-},
-"gallery/school-class-photo-04-full.webp": {
-"sha": "5904812b0a44c683b9125e9fced7be85a94d4466",
-"v": 1
-},
-"gallery/school-class-photo-04.webp": {
-"sha": "36e854a8d5dea53e9a58db4be09ef100f82b6a61",
-"v": 1
-},
-"gallery/studio-beauty-01-full.webp": {
-"sha": "ef1b31f2428fcd774ba271dd53dd5d496b9e7bc0",
-"v": 1
-},
-"gallery/studio-beauty-01.webp": {
-"sha": "67195c314a03dedce347fd545222e0dacbcf429c",
-"v": 1
-},
-"gallery/studio-beauty-02-full.webp": {
-"sha": "1f9b9899a42e92b83d3708911ed38cf99c45743b",
-"v": 1
-},
-"gallery/studio-beauty-02.webp": {
-"sha": "94d4d0b14ff8bd1f0846f2345068f0a237d8a435",
-"v": 1
-},
-"gallery/studio-corporate-01-full.webp": {
-"sha": "2624e4d98048f852fc38e633c553d995e8be8883",
-"v": 1
-},
-"gallery/studio-corporate-01.webp": {
-"sha": "71402ba292089482730c86e1a04c440fbbbf8821",
-"v": 1
-},
-"gallery/studio-fashion-01-full.webp": {
-"sha": "9d0b125ab3849d620aa12bc140902b49e8aee0da",
-"v": 1
-},
-"gallery/studio-fashion-01.webp": {
-"sha": "205bb437a49611de70813bbc04ee95af25e11074",
-"v": 1
-},
-"gallery/studio-fashion-02-full.webp": {
-"sha": "e61438cef465a0477b9e659069853ca527547ff3",
-"v": 1
-},
-"gallery/studio-fashion-02.webp": {
-"sha": "63f6a41c1baf8a7ef9ccd6cd78c648634dc9d848",
-"v": 1
-},
-"gallery/studio-fashion-03-full.webp": {
-"sha": "1213238bbf1a83db97ac207562e1372c590a6dea",
-"v": 1
-},
-"gallery/studio-fashion-03.webp": {
-"sha": "07dd355ff94cf3094f788790a8cc5ee89bae7342",
-"v": 1
-},
-"gallery/studio-fashion-04-full.webp": {
-"sha": "bb0c0a0482657ba51387c1898eac29ae750c5eb4",
-"v": 1
-},
-"gallery/studio-fashion-04.webp": {
-"sha": "294fb947026a5589a79e8a74f2d519ba3cc90f10",
-"v": 1
-},
-"gallery/studio-fashion-05-full.webp": {
-"sha": "7e2c5439df8fdaf9e3ddf41d88df202cdea4aaca",
-"v": 1
-},
-"gallery/studio-fashion-05.webp": {
-"sha": "0ac0dbbd64b10a39a4e57719a7b7d57aba70c0b9",
-"v": 1
-},
-"gallery/studio-fashion-06-full.webp": {
-"sha": "250ddffad40f0059c314e562f86ca57e48da83e8",
-"v": 1
-},
-"gallery/studio-fashion-06.webp": {
-"sha": "d6597d3d0faec0940873bbcb5d7bcad75919e6c6",
-"v": 1
-},
-"gallery/studio-fashion-07-full.webp": {
-"sha": "7273102eec23ef5331b42288e20787fd6d3f7f73",
-"v": 1
-},
-"gallery/studio-fashion-07.webp": {
-"sha": "b8ce67ab61a59f61e85bf04b66d86baf937494ca",
-"v": 1
-},
-"gallery/studio-fashion-08-full.webp": {
-"sha": "694dc14e6633cc1ad16575c1b666b8e122f22921",
-"v": 1
-},
-"gallery/studio-fashion-08.webp": {
-"sha": "720e1513f6bda7e3acdb66ff0ab0fce823024ecd",
-"v": 1
-},
-"gallery/studio-fashion-09-full.webp": {
-"sha": "35dddfc54d971fa52fd4b6c9ffbac97d235af92e",
-"v": 1
-},
-"gallery/studio-fashion-09.webp": {
-"sha": "4cd27eea65291c2941f84d96679f7332e80c88cf",
-"v": 1
-},
-"gallery/studio-fashion-10-full.webp": {
-"sha": "eb9d656398a29a5e384e4ae07fe59ff35835d7d9",
-"v": 1
-},
-"gallery/studio-fashion-10.webp": {
-"sha": "f659aaafc981cdc0712956c3032617e3b2c7e7a7",
-"v": 1
-},
-"gallery/studio-fashion-11-full.webp": {
-"sha": "908057f5154696dae35a8b985c41b85aa705e01e",
-"v": 1
-},
-"gallery/studio-fashion-11.webp": {
-"sha": "aefea2dd700f6bf91bae55b3ad13400ba392e0d3",
-"v": 1
-},
-"gallery/studio-fashion-12-full.webp": {
-"sha": "d0fb3d8e8b41912e38c9351cb9f86a4c592542c4",
-"v": 1
-},
-"gallery/studio-fashion-12.webp": {
-"sha": "c2edc4c6306702e7f91ce6cda269e118992462a0",
-"v": 1
-},
-"gallery/studio-fashion-13-full.webp": {
-"sha": "ef33f51b4396b8a357e13d1657eba7bbfd5ec638",
-"v": 1
-},
-"gallery/studio-fashion-13.webp": {
-"sha": "8ae6fab0b18e53400f77b22c53b980de6fd75ae9",
-"v": 1
-},
-"gallery/studio-fashion-14-full.webp": {
-"sha": "b693dea24417db32f704d6ea2e9e68d200f69aef",
-"v": 1
-},
-"gallery/studio-fashion-14.webp": {
-"sha": "c675082061af89d8d0424402019f1d51ff09fcd7",
-"v": 1
-},
-"gallery/studio-fashion-15-full.webp": {
-"sha": "4c7b20c767a3b4142c47ffeed62ad69ae47afa09",
-"v": 1
-},
-"gallery/studio-fashion-15.webp": {
-"sha": "95260fcda1c2db0c937d8228c45ae3d0193aa438",
-"v": 1
-},
-"gallery/studio-fashion-16-full.webp": {
-"sha": "c78140323b7d110a75c735882c4eb6da3db51009",
-"v": 1
-},
-"gallery/studio-fashion-16.webp": {
-"sha": "0acc8fc3b19c7962b07c80d8182ae8ed903a6d99",
-"v": 1
-},
-"gallery/studio-fashion-17-full.webp": {
-"sha": "29e5f2f78c716b9005b48f6a885d1125570cd8be",
-"v": 1
-},
-"gallery/studio-fashion-17.webp": {
-"sha": "4cbddc5d1373d32b5f24de6bf16cbb51d9c74524",
-"v": 1
-},
-"gallery/studio-fashion-18-full.webp": {
-"sha": "2e72cc743b8b6ef35513b44136b6d4d2481c3410",
-"v": 1
-},
-"gallery/studio-fashion-18.webp": {
-"sha": "455917182123eb0b116a80825ea0fd8210024621",
-"v": 1
-},
-"gallery/studio-fashion-19-full.webp": {
-"sha": "e8f6f5df17fdf7cb90948de8c50bd9227b08c1f2",
-"v": 1
-},
-"gallery/studio-fashion-19.webp": {
-"sha": "5f715656d25d8c269f4cd5d9a1342fe9bb9d717e",
-"v": 1
-},
-"gallery/studio-fashion-20-full.webp": {
-"sha": "ce1de54b285b8654401be9e74e5714435b59e27b",
-"v": 1
-},
-"gallery/studio-fashion-20.webp": {
-"sha": "64eeb2f6fbfd4f16f67cf058b26a324501193ae0",
-"v": 1
-},
-"gallery/studio-fashion-21-full.webp": {
-"sha": "a6c1d26d5e0d4846c6d5785c2cff9d45ecb9dd35",
-"v": 1
-},
-"gallery/studio-fashion-21.webp": {
-"sha": "43ff5494a1ddd5bfcf876c47cb093acd6096233f",
-"v": 1
-},
-"gallery/studio-fashion-22-full.webp": {
-"sha": "4c0be721e59eb55642c356fdcb6e32ce00c8b5c9",
-"v": 1
-},
-"gallery/studio-fashion-22.webp": {
-"sha": "3964c77a45b865b07bc27f635f4b5024c62e6edb",
-"v": 1
-},
-"gallery/studio-outdoor-portrait-01-full.webp": {
-"sha": "cf4d500efcd30124995547e34e161df2a3bd3bcb",
-"v": 1
-},
-"gallery/studio-outdoor-portrait-01.webp": {
-"sha": "7c1c4dfefcd81a4341c21a25ec9e95cb1ad5e0a0",
-"v": 1
-},
-"gallery/studio-product-01-full.webp": {
-"sha": "8146874161598af62fc2f8f46334bfeb6034f8ca",
-"v": 1
-},
-"gallery/studio-product-01.webp": {
-"sha": "d7377d5ea60876752f76c801186d9ff0cbf965cb",
-"v": 1
-},
-"gallery/studio-product-02-full.webp": {
-"sha": "686ee241655bb6f6f948dcd44db40521f8d0e662",
-"v": 1
-},
-"gallery/studio-product-02.webp": {
-"sha": "3e443229b5d2b7cee7e3e3f775b613b09394aee5",
-"v": 1
-},
-"gallery/studio-product-03-full.webp": {
-"sha": "0f394377492cc677fccd86d622b3909595214d0f",
-"v": 1
-},
-"gallery/studio-product-03.webp": {
-"sha": "0412240526ec190d9d439d6c3cdefbb81e6a154c",
-"v": 1
-},
-"gallery/studio-product-04-full.webp": {
-"sha": "b828a6797ddbc765ab9e6ea5f23d6c413d4974e7",
-"v": 1
-},
-"gallery/studio-product-04.webp": {
-"sha": "4931fa80f5f1162ef1123b851d29103deb292c56",
-"v": 1
-},
-"gallery/studio-product-05-full.webp": {
-"sha": "79d34cd0765c67ec7f8d564a157d920b7c623ea9",
-"v": 1
-},
-"gallery/studio-product-05.webp": {
-"sha": "280096a117820baa0a195232285c17cf0dd2846e",
-"v": 1
-},
-"gallery/studio-product-06-full.webp": {
-"sha": "c5a272704ee6e23400866da7d89a6cf061782bcd",
-"v": 1
-},
-"gallery/studio-product-06.webp": {
-"sha": "0d4ad6062f6a19c494e581844d3ad0625abe24a0",
-"v": 1
-},
-"raya/raya-studio-01-full.webp": {
-"sha": "3083f5fb12098bc32450df3f84178cba018ebf73",
-"v": 1
-},
-"raya/raya-studio-01.webp": {
-"sha": "c07f4d659d40ad352a1df773dca29aaec536b0a9",
-"v": 1
-},
-"raya/raya-studio-02-full.webp": {
-"sha": "39ce66bb033860f41c8ee8ecb97030e21d22fad2",
-"v": 1
-},
-"raya/raya-studio-02.webp": {
-"sha": "c9c900ce02bb4c3124c506d129b9b1d025981dec",
-"v": 1
-},
-"raya/raya-studio-03-full.webp": {
-"sha": "e131a597c7240b7814aa41f8f9309ec01d8df262",
-"v": 1
-},
-"raya/raya-studio-03.webp": {
-"sha": "51065ab12efc65b6858cbd36f8ce16e255af7e71",
-"v": 1
-},
-"raya/raya-studio-04-full.webp": {
-"sha": "5374a6e9f03f855aaa31295a7b4156bba98a277a",
-"v": 1
-},
-"raya/raya-studio-04.webp": {
-"sha": "26dc498558af89aa7f93074bcf5446de69e7c320",
-"v": 1
-},
-"raya/raya-studio-05-full.webp": {
-"sha": "8dfc0ab8ee4fbb5c1618f0168dc9611cc2e58684",
-"v": 1
-},
-"raya/raya-studio-05.webp": {
-"sha": "f919c463b9452e88c91af80057a70644a49c1039",
-"v": 1
-},
-"raya/raya-studio-06-full.webp": {
-"sha": "9d967a3907af7d517c8bfa2a83cbec9375d953d8",
-"v": 1
-},
-"raya/raya-studio-06.webp": {
-"sha": "ec49887cdc80dcd8fea7b9a4de0f248b8640f7e5",
-"v": 1
-},
-"raya/raya-studio-07-full.webp": {
-"sha": "0992783cdacda2356247f83ad73883290e88ef89",
-"v": 1
-},
-"raya/raya-studio-07.webp": {
-"sha": "70f2ddd47bc5b94f4d47b83821e5d4b15e128dab",
-"v": 1
-},
-"raya/raya-studio-08-full.webp": {
-"sha": "cd8dfc72123bd6c1ae899ac71b45cf5bc6511dd7",
-"v": 1
-},
-"raya/raya-studio-08.webp": {
-"sha": "f51183043fc46fafc6187b7a8e1fb2caac6f0ac8",
-"v": 1
-},
-"raya/raya-studio-09-full.webp": {
-"sha": "c85597ab1c3719f45123872918ceb147e45ce609",
-"v": 1
-},
-"raya/raya-studio-09.webp": {
-"sha": "efed6bc99a0329f1a774b99bfe367556da79c8c7",
-"v": 1
-},
-"raya/raya-studio-10-full.webp": {
-"sha": "3dfebe547f085c8a27fbabfdd60fd25cca59b8f7",
-"v": 1
-},
-"raya/raya-studio-10.webp": {
-"sha": "5fd7e311be1de7d7e40fee721c4fc218689dd86b",
-"v": 1
-},
-"raya/raya-studio-11-full.webp": {
-"sha": "61e4d4181325cfc1fb04182e3fd339aa874a002b",
-"v": 1
-},
-"raya/raya-studio-11.webp": {
-"sha": "af46277c29992357c5f98a1d48acf7da3d13a0cf",
-"v": 1
-},
-"raya/raya-studio-12-full.webp": {
-"sha": "ef8fd68052cc358ccd8824ebb94b09f397d2dc7e",
-"v": 1
-},
-"raya/raya-studio-12.webp": {
-"sha": "32e41ae8737205d90a9c6f2105ade004c91bb678",
-"v": 1
-},
-"raya/raya-studio-13-full.webp": {
-"sha": "9a04f6244971db18631863067657ce1054af09d4",
-"v": 1
-},
-"raya/raya-studio-13.webp": {
-"sha": "9d7297b3524e136982973dc5732f6a1c2c3f42d2",
-"v": 1
-},
-"raya/raya-studio-14-full.webp": {
-"sha": "80cae0b80e2dcce9f9251b79399a99475957339f",
-"v": 1
-},
-"raya/raya-studio-14.webp": {
-"sha": "7549401047732b0bd5668db77e4af8d6fd82aae0",
-"v": 1
-},
-"raya/raya-studio-15-full.webp": {
-"sha": "0a651a70627115f639f2f6806a1fffc36ac95a38",
-"v": 1
-},
-"raya/raya-studio-15.webp": {
-"sha": "0ccaff8e890caf9f6c33c8a0f638c04f90d4bc58",
-"v": 1
-},
-"raya/raya-studio-16-full.webp": {
-"sha": "95bc7a897b44535cce6b2959f830349124fba667",
-"v": 1
-},
-"raya/raya-studio-16.webp": {
-"sha": "49c7c5c0b8552fad8106525f873b0c8999c4f6ea",
-"v": 1
-},
-"raya/raya-studio-17-full.webp": {
-"sha": "8a5c52a993784e52ba691365b932c8ed6a253969",
-"v": 1
-},
-"raya/raya-studio-17.webp": {
-"sha": "19ec7f2b9fe5a3e3a9d8d78df0b7e1ef36fda6e9",
-"v": 1
-},
-"raya/raya-studio-18-full.webp": {
-"sha": "75c66fae4276ce94b9f3180d174146886124b726",
-"v": 1
-},
-"raya/raya-studio-18.webp": {
-"sha": "020dec4531878766b596766bb8fc103f3145aee4",
-"v": 1
-},
-"raya/raya-studio-19-full.webp": {
-"sha": "e98c6aae208664eb39c79dea7228b920c34eb5fb",
-"v": 1
-},
-"raya/raya-studio-19.webp": {
-"sha": "2d277302714eb100092882a2de29c17f28d882df",
-"v": 1
-},
-"raya/raya-studio-20-full.webp": {
-"sha": "5fc5aa67d5b6e5c76b264f635ebaf4ca8f0cabd5",
-"v": 1
-},
-"raya/raya-studio-20.webp": {
-"sha": "b3cd1b756d9ca50b9f669128b236bb9ad60360ea",
-"v": 1
-},
-"raya/raya-studio-21-full.webp": {
-"sha": "ead3e863596b67c97b6342337640d9605e8e113d",
-"v": 1
-},
-"raya/raya-studio-21.webp": {
-"sha": "00099ed00e59f03294436b09d6b31a38e7abe13a",
-"v": 1
-},
-"raya/raya-studio-22-full.webp": {
-"sha": "9ff3da7f54e5835371182b39659fcffca5bf2e34",
-"v": 1
-},
-"raya/raya-studio-22.webp": {
-"sha": "32d57fb5d0a9c52e766cbf7204727ec0518751f2",
-"v": 1
-},
-"raya/raya-studio-23-full.webp": {
-"sha": "0e80c22008dc335d14a97b77c4118325786dd7e8",
-"v": 1
-},
-"raya/raya-studio-23.webp": {
-"sha": "1dac129acf7bdceb3bf5fb6c64c53edd9b151580",
-"v": 1
-},
-"raya/raya-studio-24-full.webp": {
-"sha": "beda07297119b2ec10eaaa29e6628960394eb25d",
-"v": 1
-},
-"raya/raya-studio-24.webp": {
-"sha": "45ca491ff19c5ae3bf9988085583d162f35818c7",
-"v": 1
-},
-"raya/raya-studio-25-full.webp": {
-"sha": "bf17313f4c4e62d4dff266389c63bd69c4ac2bc7",
-"v": 1
-},
-"raya/raya-studio-25.webp": {
-"sha": "6773b10857bb4c72e7075435e070a9434ffb207d",
-"v": 1
-},
-"raya/raya-studio-26-full.webp": {
-"sha": "a5165044f4056bc49be8aed1f7eb29a5ce4e9259",
-"v": 1
-},
-"raya/raya-studio-26.webp": {
-"sha": "6674c953b6e15fcecf7c0a3799427b0f6aef9462",
-"v": 1
-},
-"raya/raya-studio-27-full.webp": {
-"sha": "d056a1451513e192fa3d51dafa04f56db9defd15",
-"v": 1
-},
-"raya/raya-studio-27.webp": {
-"sha": "a20677f7209b7ad13e7261761167c921a9f48c3a",
-"v": 1
-},
-"raya/raya-studio-28-full.webp": {
-"sha": "bdf68caaeb4be14d611bddc8c5ff72aa70669af2",
-"v": 1
-},
-"raya/raya-studio-28.webp": {
-"sha": "862bbcb1c1fbc6a9da1a4f42e1ba4be1bc396b5b",
-"v": 1
-},
-"raya/raya-studio-29-full.webp": {
-"sha": "2fc52872b207327cfdee6eb07cdb6be2c46c60a3",
-"v": 1
-},
-"raya/raya-studio-29.webp": {
-"sha": "39e2cecf1e99cff6dfd00db37939b235e3e0cd74",
-"v": 1
-},
-"raya/raya-studio-30-full.webp": {
-"sha": "ceca609c3bb871d21111b9f63b255e33f85a82c4",
-"v": 1
-},
-"raya/raya-studio-30.webp": {
-"sha": "bc4b1a5deeea9d76d18472ee7b595e7922239696",
-"v": 1
-},
-"raya/raya-studio-31-full.webp": {
-"sha": "360d87dc6835fc52cb9385ff2b3126e60b2cbedb",
-"v": 1
-},
-"raya/raya-studio-31.webp": {
-"sha": "485ac47b755332437bdd6f819940907b668d0242",
-"v": 1
-},
-"raya/raya-studio-32-full.webp": {
-"sha": "a6dfa3d47febdf3ed872a1510f941f22f4406d93",
-"v": 1
-},
-"raya/raya-studio-32.webp": {
-"sha": "45cd259baff3a84b60b2484e727a88090b539f9f",
-"v": 1
-},
-"raya/raya-studio-33-full.webp": {
-"sha": "93ba8c72691fa78ab7e1731eb66340dd82192510",
-"v": 1
-},
-"raya/raya-studio-33.webp": {
-"sha": "2d477d44cc29451af5214a9640c7c9041197603b",
-"v": 1
-}
+"gallery/bts-adtec2026-camera-row.webp": "9b9ccc4337e095f63779322931c79828e0a9d1cd:2-0.112-0.85",
+"gallery/bts-adtec2026-operator.webp": "107fefd51d925cd000ef942add923d91a1d74326:2-0.112-0.85",
+"gallery/bts-adtec2026-switcher-desk.webp": "e2741b3300b9d7e709d95425136f88c34db665ba:2-0.112-0.85",
+"gallery/bts-adtec2026-viewfinder.webp": "73be935be06b9458eae0b9368379a0f4d5adce50:2-0.112-0.85",
+"gallery/bts-ballroom-stage-lighting.webp": "8317976471aa9a810145e490e2353a0c5b1f0f5c:2-0.112-0.85",
+"gallery/bts-butterfly-control-desk.webp": "12bb741fc7b0bf47412540393ee0d225273d967d:2-0.112-0.85",
+"gallery/bts-butterfly-control-room-mixer.webp": "9b876bbbeec526167c0f63c85e4ac306fa7e25ab:2-0.112-0.85",
+"gallery/bts-butterfly-gimbal-monitor.webp": "42e8e45ddad4dc2a594410c8779b5abbe9d19a2b:2-0.112-0.85",
+"gallery/bts-butterfly-operator-crowd.webp": "5b6c298766dd6b7a6a019c9afbdc8ae610b41bfb:2-0.112-0.85",
+"gallery/bts-butterfly-riser-camera.webp": "ecafe0bd8f6de407efa49976ff001f412a02634b:2-0.112-0.85",
+"gallery/bts-butterfly-shoulder-rig.webp": "9c9e4f83c885ad80a535e55e3522ebac9f370b9a:2-0.112-0.85",
+"gallery/bts-butterfly-two-operators-wide.webp": "ff137b2fab42991b93158d41c79233e9fd915380:2-0.112-0.85",
+"gallery/bts-camera-operator-2022.webp": "60f6f41768ba2f935596bf1d631082d885be9974:2-0.112-0.85",
+"gallery/bts-control-room-2022.webp": "22f037bbe5e7336232d201e6e73e8b91dea4bf2b:2-0.112-0.85",
+"gallery/bts-crew-ballroom.webp": "ceab2b316dc66d10232d58003823db80a4a9ba16:2-0.112-0.85",
+"gallery/bts-crew-camera-gimbal.webp": "b24fe6761192a75e0284dd1fd89480eaafc882ac:2-0.112-0.85",
+"gallery/bts-crew-camera-ops.webp": "c3ada4bbab6489e0e676c1dabb963fad60d90b9b:2-0.112-0.85",
+"gallery/bts-crew-camera-stand.webp": "96f6a37f5eeadc04694ec1f6afce40c934e442f9:2-0.112-0.85",
+"gallery/bts-crew-operator-headset.webp": "4dc73e4907d81785b05a59d56c7b89a6592edb5e:2-0.112-0.85",
+"gallery/bts-crew-wireless-rx.webp": "cb2a8976023c73ea0651d173017c3cc51f39abc5:2-0.112-0.85",
+"gallery/bts-factory-shoot.webp": "3585bf9158edbb08e320849609e837009cec0ffc:2-0.112-0.85",
+"gallery/bts-graduation-hall-camera.webp": "c83e98432f50564d390b368325d3c9747ff277b4:2-0.112-0.85",
+"gallery/bts-greenscreen-live-2022.webp": "72da7c8e87a5e96c91134846ae44f54b944ed679:2-0.112-0.85",
+"gallery/bts-greenscreen-studio-01.webp": "5884b0fd0b385d529c6df959be0e2de3f8d3cf55:2-0.112-0.85",
+"gallery/bts-greenscreen-studio-02.webp": "61cc5283b94414f33f1714874d601132d0c88d08:2-0.112-0.85",
+"gallery/bts-interview-setup.webp": "b769fd29c0af3c9b2d140fc1e49c24cffe9cde15:2-0.112-0.85",
+"gallery/bts-kpj-livestream-01.webp": "e8ee6c12abb7e4619098e71f9d0a212fc259de36:2-0.112-0.85",
+"gallery/bts-kpj-livestream-02.webp": "ca20767b7ae90adb9c64fc408170b85325deae00:2-0.112-0.85",
+"gallery/bts-live-operator-zoom.webp": "4870b4110d9e23d23ca52c7e6d345c5ba49aa494:2-0.112-0.85",
+"gallery/bts-live-talkshow-screen.webp": "47a455be6059e46499c0e8e29ea63f55dbe320cb:2-0.112-0.85",
+"gallery/bts-multiview-switcher-01.webp": "86cfde68d481fb356b22ef41f6d80d1e37e7f515:2-0.112-0.85",
+"gallery/bts-multiview-switcher-02.webp": "c1a8fb7ae15e0c86fe9e784355ff46822eee700e:2-0.112-0.85",
+"gallery/bts-outdoor-camera-rain.webp": "5251039532273a96e1be8f5b66b82ae363656cb2:2-0.112-0.85",
+"gallery/bts-outdoor-control-tent.webp": "2e161621753410be4335ce7fc3526d99540a6c44:2-0.112-0.85",
+"gallery/bts-talkshow-studio.webp": "e63fe857a465b0897b476badd77b1207ce3de309:2-0.112-0.85",
+"gallery/bts-team-photo-adtec2026.webp": "977ee1275d5a89d44f466163ac8e4029dce337ed:2-0.112-0.85",
+"gallery/bts-uthm-hall-camera.webp": "2a3d2fad73c321a298ab05c5e02f32b0d16d388c:2-0.112-0.85",
+"gallery/bts-virtual-studio-live.webp": "9a5337630c805654dfbcf5dbf5f24ad3b0cd5f7d:2-0.112-0.85",
+"gallery/convo-graduation-stage-01-full.webp": "f3db28b84faef93e489a298909ae3838bbd517d2:2-0.112-0.85",
+"gallery/convo-graduation-stage-01.webp": "25cce19dfcb5947d396a66ece78a2040c66d2eeb:2-0.112-0.85",
+"gallery/convo-graduation-stage-02-full.webp": "faf3130c327d44a7fdad28287764a84fc6a49213:2-0.112-0.85",
+"gallery/convo-graduation-stage-02.webp": "32b71368a47508502b191f2b1863319534478e7a:2-0.112-0.85",
+"gallery/photo-city-light-trails-full.webp": "86bace05b210bcbfb4cf35e6f3442c86401da163:2-0.112-0.85",
+"gallery/photo-city-light-trails.webp": "d4c1a3c820fe551c48c4118ce4accdda04e637df:2-0.112-0.85",
+"gallery/photo-corporate-portrait-01-full.webp": "b95bb10aa13b8378a90b026aede4cd0477b633b4:2-0.112-0.85",
+"gallery/photo-corporate-portrait-01.webp": "4f26dd0de7ea386d8177ade22941ec3b3497ec41:2-0.112-0.85",
+"gallery/photo-corporate-portrait-02-full.webp": "1b4850c1a93319610808c6b01ed8639bd2df0b29:2-0.112-0.85",
+"gallery/photo-corporate-portrait-02.webp": "e38ab075741696ea74a0e0a2e76562c6df8b6ca8:2-0.112-0.85",
+"gallery/photo-corporate-portrait-03-full.webp": "48842d9d9b53457d398fef1f25ed77e8376de156:2-0.112-0.85",
+"gallery/photo-corporate-portrait-03.webp": "804c5290c1bbe2515b2b2675f066540b4eeabcfe:2-0.112-0.85",
+"gallery/photo-corporate-portrait-04-full.webp": "b52dfb9a92de79edca7f78ff3a6a9715cad0cfc3:2-0.112-0.85",
+"gallery/photo-corporate-portrait-04.webp": "6c914f7b68a372347f0f2b56ce8b5657c8758d76:2-0.112-0.85",
+"gallery/photo-corporate-portrait-05-full.webp": "75b3aed59e9e5fb8e7b410936745dad62b565fb8:2-0.112-0.85",
+"gallery/photo-corporate-portrait-05.webp": "5194fb4553bb09131ae2c0f664eb4c13d0d5d0a1:2-0.112-0.85",
+"gallery/photo-corporate-portrait-06-full.webp": "9da69825cda72c19631282b7ea49f17fef54a2db:2-0.112-0.85",
+"gallery/photo-corporate-portrait-06.webp": "2119c524c44bc3a4d8669980fc966dc1af2f9862:2-0.112-0.85",
+"gallery/photo-corporate-portrait-07-full.webp": "553b3a47202685fe3ab89915067f2763ec899e00:2-0.112-0.85",
+"gallery/photo-corporate-portrait-07.webp": "9c972cac71673c1238bfe7a7ecd1014b48ec0020:2-0.112-0.85",
+"gallery/photo-corporate-portrait-08-full.webp": "792da9fd6854c2fcb44f2dc51cd260cfdf3f0460:2-0.112-0.85",
+"gallery/photo-corporate-portrait-08.webp": "5de9672caa626df55b0396f55e179e0355359e3e:2-0.112-0.85",
+"gallery/photo-corporate-portrait-09-full.webp": "77bb61823a5398af32f08deac5b7af3cb0038026:2-0.112-0.85",
+"gallery/photo-corporate-portrait-09.webp": "6a226e7d283247388af52daf414cd72afb0d3838:2-0.112-0.85",
+"gallery/photo-corporate-portrait-10-full.webp": "79adf72566f70ba08734c2d9d33256069f491822:2-0.112-0.85",
+"gallery/photo-corporate-portrait-10.webp": "c421b207588fa5c8eae5de869092aaa88605c40f:2-0.112-0.85",
+"gallery/photo-event-award-ceremony-02-full.webp": "501802c6dc239c4e6b95c1d74c0dbe9cfde1ed2c:2-0.112-0.85",
+"gallery/photo-event-award-ceremony-02.webp": "ab75d067b370d3aa104004ce4fd5ebc5c9240de0:2-0.112-0.85",
+"gallery/photo-event-award-ceremony-full.webp": "956f54c7b3d438d9e742980f7c033d6558c19bd3:2-0.112-0.85",
+"gallery/photo-event-award-ceremony.webp": "d21e52e31cadf4c7492cadf100de681ee60444ce:2-0.112-0.85",
+"gallery/photo-event-mock-cheque-full.webp": "618129fda889fd25069d60d6799c3d76ed6bef78:2-0.112-0.85",
+"gallery/photo-event-mock-cheque.webp": "c271a0dd15c729f0610662e95b18d17ca8d90385:2-0.112-0.85",
+"gallery/photo-event-speaker-perisind-full.webp": "ad4ea4de5843170183f4754065b1b1bd5df5a650:2-0.112-0.85",
+"gallery/photo-event-speaker-perisind.webp": "4ce97e12db7dc76ab74c1d0c6fffb8624d44fb97:2-0.112-0.85",
+"gallery/photo-event-symposium-hall-full.webp": "7738a3260658e407fd0166ec84098dadf3479407:2-0.112-0.85",
+"gallery/photo-event-symposium-hall.webp": "181e7cae864480834622b4d01b1084eea3d2ede3:2-0.112-0.85",
+"gallery/photo-event-symposium-speaker-full.webp": "fcd2eba9f4397d4b51f344b90e1dc769f06871c6:2-0.112-0.85",
+"gallery/photo-event-symposium-speaker.webp": "e24eb0570f0b0d427f2e8ee8b5807939640b5c9b:2-0.112-0.85",
+"gallery/photo-landscape-pier-full.webp": "6f7327e5eb052ad42c4b46dddb9445327ce4b95d:2-0.112-0.85",
+"gallery/photo-landscape-pier.webp": "c847612661cd639686e35f8210c2cb6229c3e3c4:2-0.112-0.85",
+"gallery/photo-landscape-waterfall-full.webp": "f86b571187779dfe3ad5b701b02a82a0fc73fad7:2-0.112-0.85",
+"gallery/photo-landscape-waterfall.webp": "78f7367d204342c25c4a62cad4020683097fa79e:2-0.112-0.85",
+"gallery/photo-sports-motocross-01-full.webp": "b66b9950516bb47409c956502fb3370a6b3a08e9:2-0.112-0.85",
+"gallery/photo-sports-motocross-01.webp": "465966dc16947a323a094f04024571b7ee9f72a8:2-0.112-0.85",
+"gallery/photo-sports-motocross-02-full.webp": "cbe8adf60ec5348d895bd456106a34f3c2f75fdf:2-0.112-0.85",
+"gallery/photo-sports-motocross-02.webp": "917258c1ac7e59710c397a49a6c409d880f8f9cf:2-0.112-0.85",
+"gallery/photo-sports-motocross-03-full.webp": "a55616245f38a00d4bb7eb1adda671c8e1f462fb:2-0.112-0.85",
+"gallery/photo-sports-motocross-03.webp": "a4a5a4c19444884748a4032221d8ff1a8066035e:2-0.112-0.85",
+"gallery/school-class-photo-01-full.webp": "2755e0b1755553a347d7426f3a2d907e91e80d33:2-0.112-0.85",
+"gallery/school-class-photo-01.webp": "669fb7bcd8f2fc327559a3b66b73df0e4f15a505:2-0.112-0.85",
+"gallery/school-class-photo-02-full.webp": "e1f82acd26884589acf9cf820f3051bd6bd712ff:2-0.112-0.85",
+"gallery/school-class-photo-02.webp": "0141866e8d58d32b0ea78cd6416601f965ead336:2-0.112-0.85",
+"gallery/school-class-photo-03-full.webp": "711a3907682892c8441c0542e9be2e9edf785095:2-0.112-0.85",
+"gallery/school-class-photo-03.webp": "e40a4d5e1bc72b42528703e868d7e46b73175ad7:2-0.112-0.85",
+"gallery/school-class-photo-04-full.webp": "4ed5a9613ed39a6d9772919539ffa10bce4dabb3:2-0.112-0.85",
+"gallery/school-class-photo-04.webp": "7b8eafb829b5f95e6ea98887d3489c18435854ec:2-0.112-0.85",
+"gallery/studio-beauty-01-full.webp": "9680b7c25843257d6f76d127b30d1e58abd70d11:2-0.112-0.85",
+"gallery/studio-beauty-01.webp": "a89d803a414c10e81471f2925587060ca2e08e61:2-0.112-0.85",
+"gallery/studio-beauty-02-full.webp": "e078403502363c81b44d4d9790c9a778e2363413:2-0.112-0.85",
+"gallery/studio-beauty-02.webp": "6127a138291b406ed2dee9a7b2f6161e797be050:2-0.112-0.85",
+"gallery/studio-corporate-01-full.webp": "3a15c7e12cce8c90314c341891f0e02949ed0e5c:2-0.112-0.85",
+"gallery/studio-corporate-01.webp": "5105711c8f976a4603b7e79d99955f2dbe7e7b81:2-0.112-0.85",
+"gallery/studio-fashion-01-full.webp": "2f69793a8e4df0855c62eba3b87667821ce837ed:2-0.112-0.85",
+"gallery/studio-fashion-01.webp": "f8d0dea73d277f44ec5b7448c9f68d07f4b0fca6:2-0.112-0.85",
+"gallery/studio-fashion-02-full.webp": "c32bec840fc06e43fda7fcda99f0a13446d0c1e8:2-0.112-0.85",
+"gallery/studio-fashion-02.webp": "174c9e28334b6f237f317b0fa4af104cecc1777c:2-0.112-0.85",
+"gallery/studio-fashion-03-full.webp": "57ef0ed5ed2228dbf4a6b7c5752654a9f4d2fd0b:2-0.112-0.85",
+"gallery/studio-fashion-03.webp": "bf4d4d2ad3a2e57a6a17846fa18e61815b55b899:2-0.112-0.85",
+"gallery/studio-fashion-04-full.webp": "28231551853ec19e25810aa6caece535813cb73f:2-0.112-0.85",
+"gallery/studio-fashion-04.webp": "0cfb6241ad2f1c47469e6446c8e75e7e1ee8b3f8:2-0.112-0.85",
+"gallery/studio-fashion-05-full.webp": "62362e07c931af4cc4215dcdaf65a3e06f72d7cc:2-0.112-0.85",
+"gallery/studio-fashion-05.webp": "4df85d91bd89a098d72d6d27c66712c9dc83a0b9:2-0.112-0.85",
+"gallery/studio-fashion-06-full.webp": "f4a62d315cff12df0e289a24f14e82a66e944d97:2-0.112-0.85",
+"gallery/studio-fashion-06.webp": "49a7668ee452dc6090a87da63293e3a996646bec:2-0.112-0.85",
+"gallery/studio-fashion-07-full.webp": "8a0550fda5de1c0cc3527b29bdf3a8b40c2c290c:2-0.112-0.85",
+"gallery/studio-fashion-07.webp": "edef44375b69b8f1485783fbe8907bc8ab9f2e0e:2-0.112-0.85",
+"gallery/studio-fashion-08-full.webp": "827cb6c78f8315f1b6daeb5bfa5cbcaaeab863cd:2-0.112-0.85",
+"gallery/studio-fashion-08.webp": "60afe8468ab513bd731beb346ee1ac86d76a3951:2-0.112-0.85",
+"gallery/studio-fashion-09-full.webp": "8110d4209abd9c4d400bbd902bf3e01f72542b2f:2-0.112-0.85",
+"gallery/studio-fashion-09.webp": "3c4c264beb25d7211177faddc610c1b33c19d105:2-0.112-0.85",
+"gallery/studio-fashion-10-full.webp": "44198da1bb26e31241d87e05ca4245b036703cc0:2-0.112-0.85",
+"gallery/studio-fashion-10.webp": "f4916f567b833ccc588fce0c3f4d4c4554b73843:2-0.112-0.85",
+"gallery/studio-fashion-11-full.webp": "90e0519e4a9e2d952b197e63ee775a09b94bdbdd:2-0.112-0.85",
+"gallery/studio-fashion-11.webp": "d38dac3abcfeee6cdf0996030f958bdc2317a962:2-0.112-0.85",
+"gallery/studio-fashion-12-full.webp": "740e6909c5963dc01dd779fa9ff85f77b1158eef:2-0.112-0.85",
+"gallery/studio-fashion-12.webp": "9e698944c05a58d3e06f1b39d7758bc4d6e9be90:2-0.112-0.85",
+"gallery/studio-fashion-13-full.webp": "dace65022492ccdb69a63b210c57b147e612c4a9:2-0.112-0.85",
+"gallery/studio-fashion-13.webp": "7a001dfccca65efd5d3a152d27659d64258dd938:2-0.112-0.85",
+"gallery/studio-fashion-14-full.webp": "f6844f327505bf8d047e4c98624c6b15f1de41d3:2-0.112-0.85",
+"gallery/studio-fashion-14.webp": "152e0894aefbf864dbda60d49b539fb98ba2c240:2-0.112-0.85",
+"gallery/studio-fashion-15-full.webp": "723591e463d81fae77155bb03a51f456e4dc1b65:2-0.112-0.85",
+"gallery/studio-fashion-15.webp": "5a0194156ac288aa4123f3de8d5ab3cdf33d39bd:2-0.112-0.85",
+"gallery/studio-fashion-16-full.webp": "ab32b0688d5881ae5fdf98c998b4e246d9c54164:2-0.112-0.85",
+"gallery/studio-fashion-16.webp": "24c0c7cba79681476462394b4769faf28a67b596:2-0.112-0.85",
+"gallery/studio-fashion-17-full.webp": "93b3dcf984f947658ede9a24ae3dabc90f90df65:2-0.112-0.85",
+"gallery/studio-fashion-17.webp": "92567cb2b3eee979174ae6b62eb203411aa0ca12:2-0.112-0.85",
+"gallery/studio-fashion-18-full.webp": "c6ba0a28e5a265a614a36193f089dc9198283ee3:2-0.112-0.85",
+"gallery/studio-fashion-18.webp": "605926f2aa4250ab2982886d989f0f7542203758:2-0.112-0.85",
+"gallery/studio-fashion-19-full.webp": "30263183b168e4ce9e7d9ef3fada63eaae7c7f85:2-0.112-0.85",
+"gallery/studio-fashion-19.webp": "efbd66a74976cdfe1ecfd65507fdd52889a72c94:2-0.112-0.85",
+"gallery/studio-fashion-20-full.webp": "afa7c92092e596f4cfca0cb19908b264d80d00e0:2-0.112-0.85",
+"gallery/studio-fashion-20.webp": "27dd8c5e19a6fa41dfbdad1249eca50d8dd8f8e6:2-0.112-0.85",
+"gallery/studio-fashion-21-full.webp": "25e9541ae2daf852c6074b12f04fe39698154eb3:2-0.112-0.85",
+"gallery/studio-fashion-21.webp": "7b1db6ad982166f8d1dae17c9cf42712e10a9c96:2-0.112-0.85",
+"gallery/studio-fashion-22-full.webp": "283de4ba2d769daa3cb029d9a2f9ee7c9ea45584:2-0.112-0.85",
+"gallery/studio-fashion-22.webp": "b13648237ebbd1004d77f91c4309df2ca06758c4:2-0.112-0.85",
+"gallery/studio-outdoor-portrait-01-full.webp": "e2eea8dbb48eb18fa29b078e7fbb4cafdf790a90:2-0.112-0.85",
+"gallery/studio-outdoor-portrait-01.webp": "82b6695822b49ee08cc06db6bd9ced9edd621a21:2-0.112-0.85",
+"gallery/studio-product-01-full.webp": "b57e7682653b35fa2ee00fb83dd65117bc882233:2-0.112-0.85",
+"gallery/studio-product-01.webp": "07880e03290d0f67c0fba46781ea0ba1ba55e024:2-0.112-0.85",
+"gallery/studio-product-02-full.webp": "63170d13bf00bd405bf5436459929fb7d05e2374:2-0.112-0.85",
+"gallery/studio-product-02.webp": "32a464c65014e7e1a903e8d5142b012159462e76:2-0.112-0.85",
+"gallery/studio-product-03-full.webp": "6fb988055e551d33df300d1643bd53da84dd7ffc:2-0.112-0.85",
+"gallery/studio-product-03.webp": "f89b6463ff2a6c6fc9246213d6e8a0d35391de7c:2-0.112-0.85",
+"gallery/studio-product-04-full.webp": "087b702e6dcd7f6a7ea3617b3e8c8c9de21b02fd:2-0.112-0.85",
+"gallery/studio-product-04.webp": "0aa62dbc42278ded8e077f009c90f803d9b8ec3a:2-0.112-0.85",
+"gallery/studio-product-05-full.webp": "f449aa441d90c2ac8e1e5c01f15bf8c7542135e1:2-0.112-0.85",
+"gallery/studio-product-05.webp": "793126c850f10c3284b95b3931b7f0266e454dfe:2-0.112-0.85",
+"gallery/studio-product-06-full.webp": "c197067ebdbd3956f25b598081eb581402616ef3:2-0.112-0.85",
+"gallery/studio-product-06.webp": "7be66351c767cc51b63f197d5dbe1846d63bd691:2-0.112-0.85",
+"raya/raya-studio-01-full.webp": "eed551f63ecd28cd9bed2f00c5575e14a52b6b3d:2-0.112-0.85",
+"raya/raya-studio-01.webp": "34bac178cde6fe609d969eb7533c319332b9a62c:2-0.112-0.85",
+"raya/raya-studio-02-full.webp": "a820c77d9e58b4082c5bad173a2c1f0501e9124e:2-0.112-0.85",
+"raya/raya-studio-02.webp": "49456ee5c63b37d00a3984fd8d2918bed9eb2a25:2-0.112-0.85",
+"raya/raya-studio-03-full.webp": "5ded5936ebeb9448be34907497ad2cae2e2409c1:2-0.112-0.85",
+"raya/raya-studio-03.webp": "1ddb836404e749ec58e6da8b0b07bc03fe104fee:2-0.112-0.85",
+"raya/raya-studio-04-full.webp": "a03ea01165d05493488cc7dcaf2e4f6f276e59e8:2-0.112-0.85",
+"raya/raya-studio-04.webp": "af64d41d6c7ef2e449195e6e53f88c0bedb3ce05:2-0.112-0.85",
+"raya/raya-studio-05-full.webp": "d97a41baf2de7267d56d7fee2ea8d3cd33cf24eb:2-0.112-0.85",
+"raya/raya-studio-05.webp": "b86771a2880d307b0f94cc59375045c666bbcac5:2-0.112-0.85",
+"raya/raya-studio-06-full.webp": "713fb05c482a7eae6ddf6f3987b5543ac903a013:2-0.112-0.85",
+"raya/raya-studio-06.webp": "8d28a3081c4774d8095ac6b37e91695a000e6011:2-0.112-0.85",
+"raya/raya-studio-07-full.webp": "45ccb7d5701a9995b99c16010f94db999827d98a:2-0.112-0.85",
+"raya/raya-studio-07.webp": "edb6e2ebef126041185f64abefb1a31b9a5c46ee:2-0.112-0.85",
+"raya/raya-studio-08-full.webp": "830f5f5f75d9301892b63beca9061d0566cbf5cc:2-0.112-0.85",
+"raya/raya-studio-08.webp": "13207a15406bf34223bf62293a715622518dff06:2-0.112-0.85",
+"raya/raya-studio-09-full.webp": "62f7c6e159ee3334a93db1b588da292b544fc6cf:2-0.112-0.85",
+"raya/raya-studio-09.webp": "d5dcfc44b8eb0646702f51970bc902e7f4a44e4a:2-0.112-0.85",
+"raya/raya-studio-10-full.webp": "de1b9583307163d9d5b21f1fcf4fdcaf9efe99e4:2-0.112-0.85",
+"raya/raya-studio-10.webp": "2a7911bcf72de1e5a2b7820703d09630d693a2e8:2-0.112-0.85",
+"raya/raya-studio-11-full.webp": "7a948ab91024522eecfb2e19b03da6f84397fcc4:2-0.112-0.85",
+"raya/raya-studio-11.webp": "19062d93abc6ee03200926dee02690bf61932091:2-0.112-0.85",
+"raya/raya-studio-12-full.webp": "fe30de895a9e08acf151c643b8a7d36c91504430:2-0.112-0.85",
+"raya/raya-studio-12.webp": "6d5c29d896390e0f691ed2e349217ad08b21f10b:2-0.112-0.85",
+"raya/raya-studio-13-full.webp": "915c7326689c80a18233a41085ec5771999ab4b8:2-0.112-0.85",
+"raya/raya-studio-13.webp": "fc7e3e3efb900a222be23aa5e6e823e34a74027b:2-0.112-0.85",
+"raya/raya-studio-14-full.webp": "9dfc996aeaeb3f8af2facef656d2a9515b15bae3:2-0.112-0.85",
+"raya/raya-studio-14.webp": "aab2604ea915c0473415d69e55ace657c7c7ca0d:2-0.112-0.85",
+"raya/raya-studio-15-full.webp": "e4ad9a971ef6b97b1318f40c2c4c5c5d9b518d85:2-0.112-0.85",
+"raya/raya-studio-15.webp": "41c09b0f939949f2061a919f425ef04313127fc9:2-0.112-0.85",
+"raya/raya-studio-16-full.webp": "ecb47a7773bd17b9c6100ae7e10e1b2f251768aa:2-0.112-0.85",
+"raya/raya-studio-16.webp": "c30db20e2fe586d1ec1bd943aea1ce02c65d673f:2-0.112-0.85",
+"raya/raya-studio-17-full.webp": "9f24095597a670ad128b47dae8fa67b0815b5fb1:2-0.112-0.85",
+"raya/raya-studio-17.webp": "31e8cf13646e9a0d5ac5612b1842ff1a5449acae:2-0.112-0.85",
+"raya/raya-studio-18-full.webp": "051afff3fbac9d750e692a318eee05594430b22e:2-0.112-0.85",
+"raya/raya-studio-18.webp": "2fc5318a8f59b6a50131d0c10abdcaa3c809453a:2-0.112-0.85",
+"raya/raya-studio-19-full.webp": "9ece124a4a4b91e5ceddb744032f58d6190c196a:2-0.112-0.85",
+"raya/raya-studio-19.webp": "de335d77cde9ced35e6a014fc7a9872773c0ee87:2-0.112-0.85",
+"raya/raya-studio-20-full.webp": "ae465f96700430c4242933d9cad5888d4b38370c:2-0.112-0.85",
+"raya/raya-studio-20.webp": "df1afd70862ec0c7bce139e54bba9af7b9353928:2-0.112-0.85",
+"raya/raya-studio-21-full.webp": "ac3784ad38bb37ab1b90ed77bb949573ee985fd2:2-0.112-0.85",
+"raya/raya-studio-21.webp": "183521efc70ca6bd6e9e1e95964008efab47645c:2-0.112-0.85",
+"raya/raya-studio-22-full.webp": "a6bae73b3276ae6bf8b3cc0b65e29a487728cf81:2-0.112-0.85",
+"raya/raya-studio-22.webp": "c4c8587c5703415305bd73bfbf99185838c5d6eb:2-0.112-0.85",
+"raya/raya-studio-23-full.webp": "47bdd46e5051800089aac7dc2a7b6ee24d860fdd:2-0.112-0.85",
+"raya/raya-studio-23.webp": "14c106f30f6e85e5f76113752b44c57b4de549d7:2-0.112-0.85",
+"raya/raya-studio-24-full.webp": "652632b4f65ca5df87f6e8aa0b58ea381afa66c9:2-0.112-0.85",
+"raya/raya-studio-24.webp": "b8d390853e4c4419580128e9d595cb25b55c13a2:2-0.112-0.85",
+"raya/raya-studio-25-full.webp": "adac24d38f175e95053801e6527d461889c36264:2-0.112-0.85",
+"raya/raya-studio-25.webp": "d82e26bcfb442d2dc0ff32c54b0887d6c1fe480c:2-0.112-0.85",
+"raya/raya-studio-26-full.webp": "cf01c4270f4b758c0afbe8629215e52ce2c505d6:2-0.112-0.85",
+"raya/raya-studio-26.webp": "c3d9799f1810bf9ec9b169182df9f75d4e7519ef:2-0.112-0.85",
+"raya/raya-studio-27-full.webp": "691f815c7131ac22019ecd4657fb9d977d44177f:2-0.112-0.85",
+"raya/raya-studio-27.webp": "b4d67bb43ff27882dcffe3992d01a3cc87c97fdf:2-0.112-0.85",
+"raya/raya-studio-28-full.webp": "d34a3a6696a1feda0cecec995cdc2bf25614377a:2-0.112-0.85",
+"raya/raya-studio-28.webp": "6770845c2f2512cb696ea87579f1b483e678383d:2-0.112-0.85",
+"raya/raya-studio-29-full.webp": "4392076119e22d30717cbb5aded698d04d72a36c:2-0.112-0.85",
+"raya/raya-studio-29.webp": "d98b7b132fb10541aec75665b588a04d3ada8903:2-0.112-0.85",
+"raya/raya-studio-30-full.webp": "d33ca9efabdd498ae410d0b537014feda1670837:2-0.112-0.85",
+"raya/raya-studio-30.webp": "1afed8f3a5743acadd5c723ea793e09b515e7896:2-0.112-0.85",
+"raya/raya-studio-31-full.webp": "f50d55ad85cc3fa4271f44f40fc3a892c9596a48:2-0.112-0.85",
+"raya/raya-studio-31.webp": "6e45af826f77364f4b4c9a2d1516f090c222e5d0:2-0.112-0.85",
+"raya/raya-studio-32-full.webp": "bdbec344ef4eeb167301aeebe5389556cf6ff7a7:2-0.112-0.85",
+"raya/raya-studio-32.webp": "685a8626b52e5f35d91ec626af167bc60bda4efc:2-0.112-0.85",
+"raya/raya-studio-33-full.webp": "a620a407fa28fe4c240e76cd3e6ce8214b374e4d:2-0.112-0.85",
+"raya/raya-studio-33.webp": "33bb94fde9c55927de7812aaf3e7358dbbc6d45c:2-0.112-0.85"
 }

@@ -7,3 +7,9 @@ site/projects/
 site/data/projects.json
 site/sitemap.xml
 uploads/
+# watermarked copies, made from media/ by tools/watermark.py (runs in publish.sh)
+site/img/gallery/*.webp
+site/img/raya/*.webp
+!site/img/gallery/*-sm.webp
+!site/img/raya/*-sm.webp
+site/img/.watermarked.json

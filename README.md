@@ -171,7 +171,7 @@ Nota: preview di GitHub Pages hanya nampak folder dalam `projects/` repo. Folder
    - versi kecil, sisi panjang 720px: `nama-gambar-sm.webp`
    - versi biasa, sisi panjang 1600px: `nama-gambar.webp`
    - versi penuh, resolusi asal: `nama-gambar-full.webp` (tak perlu untuk gambar BTS)
-2. Letak fail-fail tu dalam `site/img/gallery/`
+2. Letak `nama-gambar-sm.webp` dalam `site/img/gallery/`, dan `nama-gambar.webp` serta `nama-gambar-full.webp` dalam `media/gallery/` (watermark diletak automatik bila `./publish.sh` dijalankan)
 3. Buka `site/data/portfolio.json` dan tambah satu baris di atas senarai:
 
 ```json
@@ -214,11 +214,13 @@ Butang dan jalur "Raya photoshoot" keluar secara automatik antara tarikh `start`
 
 ## Watermark gambar portfolio dan Raya
 
-Gambar dalam `site/img/gallery/` dan `site/img/raya/` sudah ada watermark. Kalau kau tambah atau tukar gambar di situ, `./publish.sh` (atau `./update.sh`) akan letak watermark secara automatik. Ia hanya proses gambar yang baru atau yang berubah. Rekod ada dalam `site/img/.watermarked.json`, jangan padam fail ni, nanti gambar dapat watermark dua kali. Notis hak cipta yang keluar bila gambar dibuka penuh ditulis dalam `LEGAL` di `tools/layout.py`.
+Gambar asal (tanpa logo) disimpan dalam `media/gallery/` dan `media/raya/`: versi 1600px `nama.webp` dan versi penuh `nama-full.webp`. Thumbnail `nama-sm.webp` kekal dalam `site/img/`. Bila `./publish.sh` atau `./update.sh` dijalankan, salinan berwatermark dibuat dalam `site/img/` secara automatik. Jangan letak gambar terus dalam `site/img/gallery/` kecuali thumbnail.
+
+Saiz dan kelutsinaran logo boleh diubah di `WIDTH` dan `OPACITY` dalam `tools/watermark.py`. Lepas ubah, jalankan `./publish.sh` dan semua gambar dibuat semula dari gambar asal. Notis hak cipta yang keluar bila gambar dibuka penuh ditulis dalam `LEGAL` di `tools/layout.py`.
 
 ## Nota
 
-- Gambar budak (tadika) belum dimasukkan. Bila muka dah ditukar guna AI, letak dalam `site/img/gallery/` dan tambah dalam `portfolio.json`.
+- Gambar budak (tadika) belum dimasukkan. Bila muka dah ditukar guna AI, letak macam langkah di bahagian 4 dan tambah dalam `portfolio.json`.
 - Font: Archivo, dari Google Fonts.
 - Borang enquiry tak simpan apa-apa. Ia buka WhatsApp dengan maklumat yang client isi.
 
