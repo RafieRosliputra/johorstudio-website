@@ -589,7 +589,7 @@ def publish():
             try:
                 done_as = move_to_done(folder)
                 for i in meta["items"]:
-                    if i.get("src") == folder.name:
+                    if i.get("src") == folder.name and "done_as" not in i:
                         i["done_as"] = done_as
                 (OUT / meta["slug"] / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
             except Exception as err:
