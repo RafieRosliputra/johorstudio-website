@@ -1,21 +1,33 @@
 #!/usr/bin/env python3
 """Publish project posts (like a blog) from folders of photos.
 
-Every folder becomes one project page:
+Where projects come from
+    1. New folders in the upload folder (UPLOADS, /uploads in Docker): only folders
+       directly in the root. Folders starting with "_" or "." and the "_DONE" folder
+       are ignored. After a folder is published it is moved into "_DONE".
+    2. projects/ in this repo: added once, when the project is not on the website yet.
 
-    projects/20261003 Sambutan Maulid Akbar/      <- folder name = date + title
-        project.md                                <- optional: title, date, location, description
-        IMG_0001.jpg  IMG_0002.jpg  ...           <- photos (jpg, png, webp, heic), shown in name order
+Every folder is one project page:
 
-Folders are read from projects/ in this repo and, if set, from the upload
-folder (UPLOADS environment variable; /uploads inside Docker). A folder in
-the upload folder with the same name as one in projects/ replaces it.
-Folders whose name starts with "_" are drafts and are skipped.
+    20261003 Sambutan Maulid Akbar/      <- folder name = date + title
+        project.md                       <- optional: title, date, location, client, services, cover, body
+        IMG_0001.jpg  IMG_0002.jpg  ...  <- photos (jpg, png, webp, heic), shown in name order
+
+Publishing only ADDS or UPDATES projects. Projects already on the website stay there
+even if their folder is gone. Projects are removed with --remove-project / --remove-photo,
+which move the original files into the upload folder as "_<folder name>".
+
+Each published project is stored in the website folder (site/projects/<slug>/meta.json),
+so the website does not depend on the source folders any more.
+
+If one folder fails, it is left where it is, the project on the website stays as it was,
+and the problem is listed at the end of the log.
 
 Generated (not stored in git):
     site/projects/index.html              the Projects page (all posts, newest first)
     site/projects/<slug>/index.html       one page per project
     site/projects/<slug>/img/*.webp       photos: -sm (720px), normal (1600px), -full (original size)
+    site/projects/<slug>/meta.json        everything needed to rebuild the project page
     site/data/projects.json               used by "Recent projects" on the home page
     site/sitemap.xml
 
@@ -25,6 +37,8 @@ thumbnails do not.
 
 On TrueNAS:  docker compose run --rm publish
 Elsewhere:   python3 tools/projects.py      (needs: pip install pillow)
+Remove:      python3 tools/projects.py --remove-project SLUG
+             python3 tools/projects.py --remove-photo SLUG PHOTO-STEM
 """
 import datetime
 import hashlib
@@ -53,31 +67,32 @@ REPO = pathlib.Path(__file__).resolve().parent.parent
 SITE_DIR = REPO / "site"
 OUT = SITE_DIR / "projects"
 CACHE_FILE = OUT / ".cache.json"
+REMOVED_FILE = OUT / ".removed.json"
+STAGING = OUT / ".staging"
+DONE = "_DONE"
 IMG_EXT = {".jpg", ".jpeg", ".png", ".webp", ".tif", ".tiff"} | ({".heic", ".heif"} if HEIC else set())
 SIZES = (("-sm", 720, 74), ("", 1600, 78))
 FULL_MAX, FULL_Q = 6000, 82
 MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August",
           "September", "October", "November", "December"]
 MAIN_PAGES = ["", "services.html", "portfolio.html", "projects/", "raya.html", "about.html", "contact.html"]
+SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,80}$")
 
 e = html.escape
 
 
-# ---------------------------------------------------------------- reading folders
+# ---------------------------------------------------------------- folders
 
-def sources():
-    dirs = [REPO / "projects"]
+def uploads_dir():
     up = os.environ.get("UPLOADS")
-    if up:
-        dirs.append(pathlib.Path(up))
-    found = {}
-    for d in dirs:
-        if not d.is_dir():
-            continue
-        for f in sorted(d.iterdir()):
-            if f.is_dir() and not f.name.startswith(("_", ".", "@")):
-                found[f.name] = f          # later folders (uploads) replace earlier ones
-    return list(found.values())
+    return pathlib.Path(up) if up else None
+
+
+def subfolders(d):
+    """Projects in a folder: subfolders only, skipping drafts, _DONE and hidden folders."""
+    if not d or not d.is_dir():
+        return []
+    return [f for f in sorted(d.iterdir()) if f.is_dir() and not f.name.startswith(("_", ".", "@"))]
 
 
 def natural_key(name):
@@ -198,10 +213,9 @@ def save_webp(im, path, maxside, q, icc):
     return im.size
 
 
-def process_photo(src, dest_dir, stem, full, cache):
-    """Make the WebP versions of one photo. Returns info for the page."""
+def process_photo(src, dest_dir, stem, full, cache, key):
+    """Make the WebP versions of one photo. Returns (info, made_new)."""
     sig = file_sig(src)
-    key = f"{dest_dir.parent.name}/{stem}"
     old = cache.get(key)
     outs = [dest_dir / f"{stem}{suf}.webp" for suf, _, _ in SIZES] + ([dest_dir / f"{stem}-full.webp"] if full else [])
     if (old and old.get("sig") == sig and old.get("full") == full and old.get("wm") == WM_VERSION
@@ -229,9 +243,32 @@ def process_photo(src, dest_dir, stem, full, cache):
     return info, True
 
 
-# ---------------------------------------------------------------- one project
+def photo_files(folder):
+    return sorted((p for p in folder.iterdir() if p.is_file() and p.suffix.lower() in IMG_EXT
+                   and not p.name.startswith(("._", "."))), key=lambda p: natural_key(p.name))
 
-def load_project(folder):
+
+def unique_stem(name, used):
+    base = slugify(pathlib.Path(name).stem, 60)
+    stem, n = base, 2
+    while stem in used:
+        stem, n = f"{base}-{n}", n + 1
+    return stem
+
+
+def pick_cover(p, items):
+    if not items:
+        return None
+    want = (p.get("cover") or "").lower()
+    for i in items:
+        if want and (i["name"].lower() == want or i["stem"] == slugify(pathlib.Path(want).stem, 60)):
+            return i
+    return items[0]
+
+
+# ---------------------------------------------------------------- reading a project folder
+
+def project_info(folder):
     meta, body = read_md(folder)
     fdate, fend, ftitle = from_folder_name(folder.name)
     title = meta.get("title") or ftitle
@@ -243,52 +280,134 @@ def load_project(folder):
             y, m, d1, d2 = int(sort[:4]), int(sort[5:7]), int(sort[8:]), int(esort[8:])
             if esort[:7] == sort[:7]:
                 label = f"{d1}–{d2} {MONTHS[m-1]} {y}"
-    photos = sorted((p for p in folder.iterdir() if p.is_file() and p.suffix.lower() in IMG_EXT
-                     and not p.name.startswith(("._", "."))), key=lambda p: natural_key(p.name))
     datekey = "".join(x for x in sort.split("-") if x != "00") if sort else ""
-    slug = slugify(f"{datekey} {title}")
     return {
-        "folder": folder, "slug": slug, "title": title, "sort": sort, "date": label,
-        "location": meta.get("location", ""), "client": meta.get("client", ""),
-        "services": meta.get("services", ""), "cover": meta.get("cover", ""),
-        "hidden": meta.get("hidden", "").lower() in ("true", "yes", "1"),
-        "body": body, "photos": photos,
+        "slug": slugify(f"{datekey} {title}"), "title": title, "sort": sort, "date": label,
+        "date_src": meta.get("date") or fdate, "location": meta.get("location", ""),
+        "client": meta.get("client", ""), "services": meta.get("services", ""),
+        "cover": meta.get("cover", ""), "hidden": meta.get("hidden", "").lower() in ("true", "yes", "1"),
+        "body": body,
     }
 
 
-def build_photos(p, cache):
-    dest = OUT / p["slug"] / "img"
-    dest.mkdir(parents=True, exist_ok=True)
-    used, items, new = set(), [], 0
-    for src in p["photos"]:
-        stem = slugify(src.stem, 60)
-        base, n = stem, 2
-        while stem in used:
-            stem, n = f"{base}-{n}", n + 1
-        used.add(stem)
-        full = not src.name.lower().startswith("bts")      # behind-the-scenes photos: no full size
-        try:
-            info, made = process_photo(src, dest, stem, full, cache)
-        except Exception as err:  # unreadable or unsupported file
-            print(f"   ! skipped {src.name}: {err}")
-            continue
-        new += made
-        items.append({"stem": stem, "name": src.name, **info})
-    keep = {f"{i['stem']}{s}.webp" for i in items for s in ("-sm", "", "-full")}
-    for f in dest.iterdir():
-        if f.name not in keep:
-            f.unlink()
-    return items, new
+# ---------------------------------------------------------------- stored projects
+
+def load_state():
+    """Every published project, read from site/projects/<slug>/meta.json."""
+    state = {}
+    if OUT.is_dir():
+        for d in sorted(OUT.iterdir()):
+            mf = d / "meta.json"
+            if d.is_dir() and mf.exists():
+                try:
+                    state[d.name] = json.loads(mf.read_text(encoding="utf-8"))
+                except Exception as err:
+                    print(f"! {d.name}: meta.json cannot be read ({err})")
+    return state
 
 
-def pick_cover(p, items):
-    if not items:
-        return None
-    want = p["cover"].lower()
-    for i in items:
-        if want and (i["name"].lower() == want or i["stem"] == slugify(pathlib.Path(want).stem, 60)):
-            return i
-    return items[0]
+def load_removed():
+    try:
+        return set(json.loads(REMOVED_FILE.read_text(encoding="utf-8")))
+    except Exception:
+        return set()
+
+
+def save_removed(removed):
+    OUT.mkdir(parents=True, exist_ok=True)
+    REMOVED_FILE.write_text(json.dumps(sorted(removed), ensure_ascii=False, indent=1), encoding="utf-8")
+
+
+def load_cache():
+    try:
+        return json.loads(CACHE_FILE.read_text())
+    except Exception:
+        return {}
+
+
+def swap(staging, final):
+    """Put the finished project in place. The old one is kept until the new one is in."""
+    trash = STAGING / (final.name + ".old")
+    if trash.exists():
+        shutil.rmtree(trash)
+    if final.exists():
+        final.rename(trash)
+    staging.rename(final)
+    if trash.exists():
+        shutil.rmtree(trash, ignore_errors=True)
+
+
+KEEP_TEXT = ("title", "sort", "date", "date_src", "location", "client", "services", "cover", "body")
+
+
+def find_existing(folder, state):
+    """A project already on the website that got its photos from a folder with this name."""
+    for slug, m in state.items():
+        if any(i.get("src") == folder.name and i.get("origin") == "uploads" for i in m.get("items", [])):
+            return slug
+    return None
+
+
+def build_project(folder, origin, old, cache, slug=None):
+    """Add or update one project from its folder. Returns (meta, number of new photos).
+    Raises if something goes wrong; the project on the website is then left as it was."""
+    info = project_info(folder)
+    slug = slug or info["slug"]
+    info["slug"] = slug
+    if old:                                             # a folder without project.md keeps the old text
+        for k in KEEP_TEXT:
+            if not info.get(k) and old.get(k):
+                info[k] = old[k]
+    final, staging = OUT / slug, STAGING / slug
+    STAGING.mkdir(parents=True, exist_ok=True)
+    if staging.exists():
+        shutil.rmtree(staging)
+    img = staging / "img"
+    img.mkdir(parents=True)
+    try:
+        if (final / "img").is_dir():                        # start from the photos already on the site
+            shutil.copytree(final / "img", img, dirs_exist_ok=True)
+        items = list(old.get("items", [])) if old else []
+        have = {i["name"] for i in items}
+        used = {i["stem"] for i in items}
+        new = 0
+        for src in photo_files(folder):
+            if src.name in have:
+                continue
+            stem = unique_stem(src.stem, used)
+            used.add(stem)
+            full = not src.name.lower().startswith("bts")      # behind-the-scenes photos: no full size
+            try:
+                got, made = process_photo(src, img, stem, full, cache, f"{slug}/{stem}")
+            except Exception as err:  # unreadable or unsupported file
+                print(f"   ! skipped {src.name}: {err}")
+                continue
+            new += made
+            items.append({"stem": stem, "name": src.name, "src": folder.name, "origin": origin, **got})
+        keep = {f"{i['stem']}{s}.webp" for i in items for s in ("-sm", "", "-full")}
+        for f in img.iterdir():
+            if f.name not in keep:
+                f.unlink()
+        meta = {**info, "items": items, "source": {"origin": origin, "name": folder.name}}
+        (staging / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
+    except Exception:
+        shutil.rmtree(staging, ignore_errors=True)
+        raise
+    swap(staging, final)
+    return meta, new
+
+
+def move_to_done(folder):
+    up = uploads_dir()
+    done = up / DONE
+    done.mkdir(exist_ok=True)
+    target = done / folder.name
+    n = 2
+    while target.exists():
+        target = done / f"{folder.name} ({n})"
+        n += 1
+    shutil.move(str(folder), str(target))
+    return target.name
 
 
 # ---------------------------------------------------------------- HTML
@@ -388,46 +507,31 @@ def sitemap(projects):
     return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{rows}\n</urlset>\n'
 
 
-# ---------------------------------------------------------------- main
-
-def main():
-    print("Watermarking portfolio and Raya photos (new ones only)")
-    watermark_site_photos()
+def render_site(state):
+    """Write every page and data file from the stored projects (not from the source folders)."""
     OUT.mkdir(parents=True, exist_ok=True)
-    try:
-        cache = json.loads(CACHE_FILE.read_text())
-    except Exception:
-        cache = {}
-    projects = [p for p in (load_project(f) for f in sources()) if not p["hidden"]]
-    seen = set()
-    for p in projects:                                 # make slugs unique
-        base, n = p["slug"], 2
-        while p["slug"] in seen:
-            p["slug"], n = f"{base}-{n}", n + 1
-        seen.add(p["slug"])
-    projects.sort(key=lambda p: (p["sort"] or "0000", p["title"].lower()), reverse=True)
-
-    print(f"Publishing {len(projects)} project(s){'' if HEIC else ' (HEIC photos not supported here)'}")
-    for p in projects:
-        p["items"], new = build_photos(p, cache)
-        p["cover_item"] = pick_cover(p, p["items"])
-        print(f" ✓ {p['title']}  —  {len(p['items'])} photos{f', {new} new' if new else ''}")
-        if 0 < len(p["items"]) < 10:
-            print(f"   note: only {len(p['items'])} photos (10 or more looks best)")
-
+    projects = sorted((p for p in state.values() if not p.get("hidden")),
+                      key=lambda p: (p["sort"] or "0000", p["title"].lower()), reverse=True)
+    projects = [dict(p, cover_item=pick_cover(p, p["items"])) for p in projects]
     for i, p in enumerate(projects):
         prev = projects[i - 1] if i > 0 else None
         nxt = projects[i + 1] if i + 1 < len(projects) else None
         (OUT / p["slug"] / "index.html").write_text(project_page(p, p["items"], prev, nxt), encoding="utf-8")
+    for slug, m in state.items():
+        if m.get("hidden") and (OUT / slug / "index.html").exists():
+            (OUT / slug / "index.html").unlink()
     (OUT / "index.html").write_text(index_page(projects), encoding="utf-8")
 
-    # remove pages of projects whose folder is gone
     for d in OUT.iterdir():
-        if d.is_dir() and d.name not in seen:
-            shutil.rmtree(d)
-    cache = {k: v for k, v in cache.items() if k.split("/")[0] in seen}
-    CACHE_FILE.write_text(json.dumps(cache))
+        if not d.is_dir() or d.name.startswith("."):
+            continue
+        if d.name not in state:
+            if (d / "meta.json").exists():
+                shutil.rmtree(d)
+            else:
+                print(f"! {d.name}: old page without data, not removed (publish its source folder again to fix)")
 
+    (SITE_DIR / "data").mkdir(exist_ok=True)
     data = [{
         "slug": p["slug"], "url": f"projects/{p['slug']}/", "title": p["title"], "date": p["date"],
         "sort": p["sort"], "location": p["location"], "client": p["client"], "services": p["services"],
@@ -435,11 +539,162 @@ def main():
         "cover": f"projects/{p['slug']}/img/{p['cover_item']['stem']}-sm.webp" if p["cover_item"] else None,
         "cover_md": f"projects/{p['slug']}/img/{p['cover_item']['stem']}.webp" if p["cover_item"] else None,
     } for p in projects]
-    (SITE_DIR / "data").mkdir(exist_ok=True)
     (SITE_DIR / "data" / "projects.json").write_text(json.dumps({"items": data}, indent=1, ensure_ascii=False), encoding="utf-8")
     (SITE_DIR / "sitemap.xml").write_text(sitemap(projects), encoding="utf-8")
-    print("Done. Open /projects/ on the website to check.")
+    return projects
+
+
+# ---------------------------------------------------------------- publish
+
+def publish():
+    print("Watermarking portfolio and Raya photos (new ones only)")
+    watermark_site_photos()
+    OUT.mkdir(parents=True, exist_ok=True)
+    cache = load_cache()
+    state = load_state()
+    removed = load_removed()
+
+    jobs = []
+    for f in subfolders(REPO / "projects"):
+        if f.name in removed:
+            continue                                    # removed by hand
+        try:
+            if project_info(f)["slug"] in state:
+                continue                                # already on the website
+        except Exception as err:
+            print(f"! {f.name}: {err}")
+            continue
+        jobs.append((f, "repo"))
+    for f in subfolders(uploads_dir()):
+        jobs.append((f, "uploads"))
+
+    print(f"{len(state)} project(s) on the website, {len(jobs)} folder(s) to check")
+    problems = []
+    for folder, origin in jobs:
+        print(f"→ {folder.name}")
+        try:
+            slug = find_existing(folder, state) if origin == "uploads" else None
+            slug = slug or project_info(folder)["slug"]
+            meta, new = build_project(folder, origin, state.get(slug), cache, slug=slug)
+        except Exception as err:
+            problems.append(f"{folder.name}: {err}")
+            print(f"   ! FAILED: {err}")
+            print("     Left in place. The project on the website is not changed.")
+            continue
+        state[meta["slug"]] = meta
+        print(f" ✓ {meta['title']}  —  {len(meta['items'])} photos{f', {new} new' if new else ''}")
+        if 0 < len(meta["items"]) < 10:
+            print(f"   note: only {len(meta['items'])} photos (10 or more looks best)")
+        if origin == "uploads":
+            try:
+                done_as = move_to_done(folder)
+                for i in meta["items"]:
+                    if i.get("src") == folder.name:
+                        i["done_as"] = done_as
+                (OUT / meta["slug"] / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
+            except Exception as err:
+                problems.append(f"{folder.name}: published, but could not move to {DONE} ({err})")
+                print(f"   ! published, but could not move to {DONE}: {err}")
+
+    cache = {k: v for k, v in cache.items() if k.split("/")[0] in state}
+    CACHE_FILE.write_text(json.dumps(cache))
+    projects = render_site(state)
+
+    if problems:
+        print(f"\n⚠ {len(problems)} problem(s):")
+        for p in problems:
+            print(f"  - {p}")
+    print(f"Done. {len(projects)} project(s) live. Open /projects/ on the website to check.")
+
+
+# ---------------------------------------------------------------- remove
+
+def write_draft_md(dest, meta):
+    mf = dest / "project.md"
+    if mf.exists():
+        return
+    lines = ["---", f"title: {meta['title']}"]
+    for key, val in (("date", meta.get("date_src")), ("location", meta.get("location")),
+                     ("client", meta.get("client")), ("services", meta.get("services")),
+                     ("cover", meta.get("cover"))):
+        if val:
+            lines.append(f"{key}: {val}")
+    lines.append("---")
+    mf.write_text("\n".join(lines) + "\n" + (meta.get("body") or "") + "\n", encoding="utf-8")
+
+
+def remove(slug, stem=None):
+    """Remove a whole project (stem=None) or one photo. Originals go to "_<folder name>"
+    in the upload folder; project.md keeps the text."""
+    state = load_state()
+    removed = load_removed()
+    meta = state.get(slug)
+    if not meta:
+        print(f"! Project '{slug}' is not on the website")
+        return 1
+    up = uploads_dir()
+    if up is None:
+        print("! UPLOADS is not set")
+        return 1
+    targets = [i for i in meta["items"] if stem is None or i["stem"] == stem]
+    if not targets:
+        print(f"! Photo '{stem}' not found in '{slug}'")
+        return 1
+
+    for i in targets:
+        src = i.get("src", meta["source"]["name"])
+        origin = i.get("origin", meta["source"]["origin"])
+        if origin == "uploads":
+            base = up / DONE / (i.get("done_as") or src)
+            if not base.is_dir():
+                base = up / src
+        else:
+            base = REPO / "projects" / src
+        dest = up / ("_" + src)
+        dest.mkdir(exist_ok=True)
+        if not (dest / "project.md").exists():
+            originals = sorted(base.glob("*.md")) if base.is_dir() else []
+            if originals:
+                shutil.copy2(originals[0], dest / "project.md")      # keep the original text as it was
+            else:
+                write_draft_md(dest, meta)
+        f = base / i["name"]
+        if f.is_file():
+            if origin == "uploads":
+                shutil.move(str(f), str(dest / f.name))
+            else:
+                shutil.copy2(f, dest / f.name)
+            print(f"  moved {f.name} -> {dest.name}/")
+        else:
+            print(f"  ! original {i['name']} not found (folder {src!r} is gone); website copy removed only")
+        if origin == "repo" and stem is None:
+            removed.add(src)
+
+    if stem is None:
+        shutil.rmtree(OUT / slug, ignore_errors=True)
+        state.pop(slug, None)
+        print(f"✓ Removed project: {meta['title']}")
+    else:
+        for s in ("-sm", "", "-full"):
+            f = OUT / slug / "img" / f"{stem}{s}.webp"
+            if f.exists():
+                f.unlink()
+        meta["items"] = [i for i in meta["items"] if i["stem"] != stem]
+        (OUT / slug / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
+        state[slug] = meta
+        print(f"✓ Removed photo {stem} from: {meta['title']}")
+    save_removed(removed)
+    render_site(state)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    args = sys.argv[1:]
+    if len(args) == 2 and args[0] == "--remove-project" and SLUG_RE.match(args[1]):
+        sys.exit(remove(args[1]))
+    if len(args) == 3 and args[0] == "--remove-photo" and SLUG_RE.match(args[1]) and SLUG_RE.match(args[2]):
+        sys.exit(remove(args[1], args[2]))
+    if args:
+        print("Usage: projects.py | --remove-project SLUG | --remove-photo SLUG STEM")
+        sys.exit(2)
+    publish()
