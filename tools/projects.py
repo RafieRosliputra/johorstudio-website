@@ -72,6 +72,8 @@ STAGING = OUT / ".staging"
 DONE = "_DONE"
 IMG_EXT = {".jpg", ".jpeg", ".png", ".webp", ".tif", ".tiff"} | ({".heic", ".heif"} if HEIC else set())
 SIZES = (("-sm", 720, 74), ("", 1600, 78))
+# preview (grid thumbnail): smaller file, about half the size of the old 720px version
+PREVIEW_SIDE, PREVIEW_Q, PREVIEW_VER = 600, 50, "p600-q50"
 FULL_MAX, FULL_Q = 6000, 82
 MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August",
           "September", "October", "November", "December"]
@@ -227,8 +229,9 @@ def process_photo(src, dest_dir, stem, full, cache, key):
     w, h = im.size
     info = {"sig": sig, "full": full, "w": w, "h": h, "wm": WM_VERSION}
     # thumbnail (-sm) stays clean; the versions that open on click carry the logo
-    sw, sh = save_webp(im, dest_dir / f"{stem}-sm.webp", SIZES[0][1], SIZES[0][2], icc)
+    sw, sh = save_webp(im, dest_dir / f"{stem}-sm.webp", PREVIEW_SIDE, PREVIEW_Q, icc)
     info["sm"] = [sw, sh]
+    info["pv"] = PREVIEW_VER
     md = im.copy()
     md.thumbnail((SIZES[1][1], SIZES[1][1]), Image.LANCZOS)
     sw, sh = save_webp(add_watermark(md), dest_dir / f"{stem}.webp", SIZES[1][1], SIZES[1][2], icc)
@@ -241,6 +244,22 @@ def process_photo(src, dest_dir, stem, full, cache, key):
         info["w"], info["h"] = fw, fh
     cache[key] = info
     return info, True
+
+
+def shrink_previews(img, items):
+    """Make the grid previews smaller. Works from the existing preview file, so no original is needed."""
+    for i in items:
+        if i.get("pv") == PREVIEW_VER:
+            continue
+        f = img / f"{i['stem']}-sm.webp"
+        if not f.exists():
+            continue
+        with Image.open(f) as im:
+            im = im.convert("RGB")
+            im.thumbnail((PREVIEW_SIDE, PREVIEW_SIDE), Image.LANCZOS)
+            im.save(f, "WEBP", quality=PREVIEW_Q, method=6)
+            i["sm"] = list(im.size)
+        i["pv"] = PREVIEW_VER
 
 
 def photo_files(folder):
@@ -384,6 +403,7 @@ def build_project(folder, origin, old, cache, slug=None):
                 continue
             new += made
             items.append({"stem": stem, "name": src.name, "src": folder.name, "origin": origin, **got})
+        shrink_previews(img, items)
         keep = {f"{i['stem']}{s}.webp" for i in items for s in ("-sm", "", "-full")}
         for f in img.iterdir():
             if f.name not in keep:
@@ -595,6 +615,11 @@ def publish():
             except Exception as err:
                 problems.append(f"{folder.name}: published, but could not move to {DONE} ({err})")
                 print(f"   ! published, but could not move to {DONE}: {err}")
+
+    for slug, m in state.items():                      # smaller previews for projects published earlier
+        if any(i.get("pv") != PREVIEW_VER for i in m.get("items", [])) and (OUT / slug / "img").is_dir():
+            shrink_previews(OUT / slug / "img", m["items"])
+            (OUT / slug / "meta.json").write_text(json.dumps(m, ensure_ascii=False, indent=1), encoding="utf-8")
 
     cache = {k: v for k, v in cache.items() if k.split("/")[0] in state}
     CACHE_FILE.write_text(json.dumps(cache))
