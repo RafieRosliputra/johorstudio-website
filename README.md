@@ -25,71 +25,43 @@ update.sh          <- tarik update dari GitHub + publish sekali gus
 
 ---
 
-## 1. Kali pertama: pasang di TrueNAS
+## 1. Di mana semuanya berada
 
-Langkah ni guna Shell TrueNAS. Kau boleh guna **System > Shell** dalam UI TrueNAS, atau `ssh` dari Mac.
+Website berjalan sebagai app `johorstudio` di TrueNAS (**Apps > Installed**). Semua fail ada dalam dataset `/mnt/ssd/website`:
 
-### a) Clone repo
-
-```sh
-ssh admin@IP-TRUENAS
-sudo -i
-cd /mnt/ssd
-docker run --rm -v /mnt/ssd:/git alpine/git clone https://github.com/RafieRosliputra/johorstudio-website.git
-cd johorstudio-website
+```
+/mnt/ssd/website/repo      <- repo ni (git clone)
+/mnt/ssd/website/uploads   <- folder projek kau (share SMB: smb://192.168.0.100/website-uploads)
+/mnt/ssd/website/silex     <- data Silex
 ```
 
-Kita guna `alpine/git` dalam Docker sebab TrueNAS tak semestinya ada `git`.
+| Alamat | Apa | Siapa boleh buka |
+|---|---|---|
+| https://johorstudio.com | Website | Semua orang |
+| https://webmaster.johorstudio.com | Panel webmaster: butang Publish dan Update | Email kau sahaja (Cloudflare Access) |
+| https://editor.johorstudio.com | Silex, untuk bina page baru | Email kau sahaja (Cloudflare Access) |
 
-### b) Sediakan .env
+Dalam rumah, alamat yang sama ada di `http://192.168.0.100:8080` (website), `:8090` (webmaster) dan `:6805` (Silex).
 
-```sh
-cp .env.example .env
-sed -i "s|^SILEX_SESSION_SECRET=.*|SILEX_SESSION_SECRET=$(openssl rand -base64 32)|" .env
-```
-
-### c) Hidupkan website
-
-```sh
-docker compose up -d web
-./publish.sh
-```
-
-`./publish.sh` jana page Projects. Kali pertama ambil masa beberapa minit sebab semua gambar ditukar ke WebP. Lepas tu, hanya gambar baru diproses.
-
-Buka `http://IP-TRUENAS:8080` dari laptop. Website patut keluar.
+Domain disambung melalui tunnel Cloudflare `m10` yang sedia ada (Zero Trust > Networks > Tunnels). Page yang dibina dalam Silex dan di-publish keluar di `johorstudio.com/pages/`.
 
 ---
 
-## 2. Sambung ke johorstudio.com (Cloudflare Tunnel, percuma)
+## 2. Pasang semula atau baiki
 
-1. Log masuk Cloudflare, pergi **Zero Trust > Networks > Tunnels > Create a tunnel**
-2. Pilih **Cloudflared**, beri nama `johorstudio`
-3. Bila keluar arahan install, salin **token** sahaja (rentetan panjang selepas `--token`)
-4. Letak dalam `.env`: `TUNNEL_TOKEN=token-tadi`
-5. Di Cloudflare, bahagian **Public Hostname**:
-   - Subdomain: kosong, Domain: `johorstudio.com`, Service: `HTTP` > `web:80`
-   - Tambah satu lagi untuk `www`, dengan service yang sama
-6. Hidupkan tunnel:
+Login ke TrueNAS (`ssh root@192.168.0.100`) dan jalankan:
 
 ```sh
-docker compose --profile tunnel up -d
+curl -fsSL https://raw.githubusercontent.com/RafieRosliputra/johorstudio-website/main/deploy/setup-truenas.sh -o /tmp/js.sh && bash /tmp/js.sh
 ```
 
-Buka https://johorstudio.com.
+Skrip ni selamat dijalankan berulang kali. Ia buat dataset, share SMB, tarik fail dari GitHub, bina image tools, jana page dan pasang atau kemas kini app `johorstudio`.
 
 ---
 
 ## 3. Update website (bila Claude dah push perubahan)
 
-```sh
-ssh admin@IP-TRUENAS
-sudo -i
-cd /mnt/ssd/johorstudio-website
-./update.sh
-```
-
-`update.sh` tarik perubahan dari GitHub, kemudian jana semula page Projects. Tak perlu restart. nginx terus baca fail baru.
+Buka https://webmaster.johorstudio.com dan tekan **Update from GitHub and publish**. Kalau tukar sesuatu dalam folder `tools/` (contohnya Dockerfile), jalankan skrip di bahagian 2.
 
 ---
 
@@ -97,18 +69,16 @@ cd /mnt/ssd/johorstudio-website
 
 Setiap folder = satu posting dalam page Projects. Kau boleh buat banyak folder sekali gus, kemudian jalankan satu arahan.
 
-### a) Sediakan folder upload (sekali sahaja)
+### a) Buka folder upload
 
-1. Dalam TrueNAS, buat dataset, contoh `/mnt/ssd/website-projects`
-2. Kongsi dataset tu melalui SMB (**Shares > Windows (SMB) Shares > Add**), supaya boleh buka dari Mac (Finder > Go > Connect to Server > `smb://IP-TRUENAS`)
-3. Dalam `.env`, pastikan `UPLOADS_DIR=/mnt/ssd/website-projects`
+Dari Mac: Finder > Go > Connect to Server > `smb://192.168.0.100/website-uploads`, login dengan user TrueNAS kau (bukan root).
 
 ### b) Buat satu folder untuk setiap projek
 
 Nama folder: **tarikh dan tajuk**. Tarikh dan tajuk diambil dari nama folder kalau `project.md` tak tulis.
 
 ```
-website-projects/
+website-uploads/
   20261103 Majlis Konvokesyen ABC/
     project.md
     IMG_0001.jpg
@@ -148,18 +118,13 @@ Semua baris dalam bahagian `---` adalah pilihan. `cover` ialah gambar untuk kad 
 
 ### d) Publish
 
-```sh
-ssh admin@IP-TRUENAS
-sudo -i
-cd /mnt/ssd/johorstudio-website
-./publish.sh
-```
+Buka https://webmaster.johorstudio.com dan tekan **Publish projects**. Panel tu juga senaraikan folder yang ada dan tunjuk log semasa publish berjalan.
 
-Semua folder dalam `website-projects` jadi posting baru, disusun ikut tarikh (terbaru dulu). Posting terbaru juga keluar di halaman utama bahagian "Recent projects". Untuk edit posting, ubah folder atau `project.md`, kemudian jalankan `./publish.sh` sekali lagi. Untuk buang posting, padam foldernya dan jalankan `./publish.sh`.
+Semua folder dalam `website-uploads` jadi posting baru, disusun ikut tarikh (terbaru dulu). Posting terbaru juga keluar di halaman utama bahagian "Recent projects". Untuk edit posting, ubah folder atau `project.md`, kemudian tekan **Publish projects** sekali lagi. Untuk buang posting, padam foldernya dan tekan **Publish projects**.
 
 Gambar yang terbuka bila diklik (1600px dan resolusi penuh) diletakkan logo JohorStudio.com di bucu kanan bawah secara automatik. Gambar kecil (thumbnail) tak ada watermark. Gambar asal dalam folder kau tak diubah.
 
-Folder dalam `projects/` (dalam repo) ialah projek yang Claude letak. Kalau kau buat folder dengan nama sama dalam `website-projects`, folder kau yang dipakai.
+Folder dalam `projects/` (dalam repo) ialah projek yang Claude letak. Kalau kau buat folder dengan nama sama dalam `website-uploads`, folder kau yang dipakai.
 
 Nota: preview di GitHub Pages hanya nampak folder dalam `projects/` repo. Folder dalam TrueNAS hanya keluar di johorstudio.com.
 
@@ -171,7 +136,7 @@ Nota: preview di GitHub Pages hanya nampak folder dalam `projects/` repo. Folder
    - versi kecil, sisi panjang 720px: `nama-gambar-sm.webp`
    - versi biasa, sisi panjang 1600px: `nama-gambar.webp`
    - versi penuh, resolusi asal: `nama-gambar-full.webp` (tak perlu untuk gambar BTS)
-2. Letak `nama-gambar-sm.webp` dalam `site/img/gallery/`, dan `nama-gambar.webp` serta `nama-gambar-full.webp` dalam `media/gallery/` (watermark diletak automatik bila `./publish.sh` dijalankan)
+2. Letak `nama-gambar-sm.webp` dalam `site/img/gallery/`, dan `nama-gambar.webp` serta `nama-gambar-full.webp` dalam `media/gallery/` (watermark diletak automatik bila kau tekan **Publish projects**)
 3. Buka `site/data/portfolio.json` dan tambah satu baris di atas senarai:
 
 ```json
@@ -194,13 +159,7 @@ Untuk video YouTube, tambah dalam `site/data/videos.json`:
 
 ## 5. Silex (editor visual)
 
-Silex dipasang untuk kau bina **page baru** (contohnya landing page promosi Raya) secara drag and drop. Ia hanya untuk rangkaian rumah (LAN), dan tak dibuka ke internet.
-
-```sh
-docker compose --profile editor up -d
-```
-
-Buka `http://IP-TRUENAS:6805`. Bila page siap, guna **Publish**. Hasilnya keluar dalam `silex-data/hosting/`. Salin fail HTML tu ke `site/` untuk jadikan sebahagian website.
+Silex untuk kau bina **page baru** (contohnya landing page promosi Raya) secara drag and drop. Buka https://editor.johorstudio.com (atau butang **Open Silex editor** di panel webmaster). Bila page siap, guna **Publish**. Page tu keluar di `johorstudio.com/pages/`.
 
 Page utama website ni ditulis dalam HTML biasa, bukan dalam Silex. Untuk tukar teks page utama, minta Claude, atau edit `tools/build.py` dan jalankan `python3 tools/build.py`.
 
@@ -216,9 +175,9 @@ Page utama website ni ditulis dalam HTML biasa, bukan dalam Silex. Untuk tukar t
 
 ## Watermark gambar portfolio dan Raya
 
-Gambar asal (tanpa logo) disimpan dalam `media/gallery/` dan `media/raya/`: versi 1600px `nama.webp` dan versi penuh `nama-full.webp`. Thumbnail `nama-sm.webp` kekal dalam `site/img/`. Bila `./publish.sh` atau `./update.sh` dijalankan, salinan berwatermark dibuat dalam `site/img/` secara automatik. Jangan letak gambar terus dalam `site/img/gallery/` kecuali thumbnail.
+Gambar asal (tanpa logo) disimpan dalam `media/gallery/` dan `media/raya/`: versi 1600px `nama.webp` dan versi penuh `nama-full.webp`. Thumbnail `nama-sm.webp` kekal dalam `site/img/`. Bila kau tekan **Publish projects** atau **Update**, salinan berwatermark dibuat dalam `site/img/` secara automatik. Jangan letak gambar terus dalam `site/img/gallery/` kecuali thumbnail.
 
-Saiz dan kelutsinaran logo boleh diubah di `WIDTH` dan `OPACITY` dalam `tools/watermark.py`. Lepas ubah, jalankan `./publish.sh` dan semua gambar dibuat semula dari gambar asal. Notis hak cipta yang keluar bila gambar dibuka penuh ditulis dalam `LEGAL` di `tools/layout.py`.
+Saiz dan kelutsinaran logo boleh diubah di `WIDTH` dan `OPACITY` dalam `tools/watermark.py`. Lepas ubah, tekan **Publish projects** dan semua gambar dibuat semula dari gambar asal. Notis hak cipta yang keluar bila gambar dibuka penuh ditulis dalam `LEGAL` di `tools/layout.py`.
 
 ## Nota
 
