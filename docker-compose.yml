@@ -2,6 +2,7 @@
 #   web     -> the public website            http://<truenas-ip>:8080
 #   silex   -> visual editor (LAN only)      http://<truenas-ip>:6805
 #   tunnel  -> Cloudflare Tunnel to johorstudio.com (needs TUNNEL_TOKEN in .env)
+#   publish -> turns project folders into project pages:  docker compose run --rm publish
 
 services:
   web:
@@ -38,3 +39,15 @@ services:
     depends_on: [web]
     restart: unless-stopped
     profiles: ["tunnel"]
+
+  # One-off job, not a running service:  docker compose run --rm publish
+  # Reads projects/ in this repo and the upload folder (UPLOADS_DIR in .env).
+  publish:
+    build: ./tools
+    image: johorstudio-publish
+    environment:
+      UPLOADS: /uploads
+    volumes:
+      - ./:/work
+      - ${UPLOADS_DIR:-./uploads}:/uploads:ro
+    profiles: ["tools"]

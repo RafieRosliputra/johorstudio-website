@@ -2,106 +2,16 @@
 Header and footer are shared, so contact details are changed in one place.
 Run:  python3 tools/build.py   (optional — the built pages are already in site/)
 """
-import pathlib, html, json
+import pathlib, html, json, sys
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from layout import (render, WA, PHONE, EMAIL, ADDRESS, COMPANY, MAPS, IG, TT, YT, SITE,
+                    RAYA_URL, WA_ICON, LIGHTBOX)
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent / "site"
-WA = "https://wa.me/60127983745"
-PHONE = "012-798 3745"
-EMAIL = "johorstudio@gmail.com"
-ADDRESS = "3038-A, Jln Merbau Satu, Bandar Putra, 81000 Kulai, Johor"
-COMPANY = "PROMEDIA CREATIVE SOLUTIONS (JR0113470-V)"
-MAPS = "https://maps.app.goo.gl/e5CBbhgkZm5Z6fnW8"
-IG = "https://instagram.com/johorstudio"
-TT = "https://www.tiktok.com/@johorstudio"
-YT = "https://www.youtube.com/@rafierosliputra"
-SITE = "https://johorstudio.com"
-
-WA_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7a2.8 2.8 0 0 0 1.8-1.3 2.3 2.3 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg>'
-
-NAV = [("index.html", "Home"), ("services.html", "Services"), ("portfolio.html", "Portfolio"),
-       ("projects.html", "Projects"), ("about.html", "About"), ("contact.html", "Contact")]
 
 
 def page(file, title, desc, body, extra_head=""):
-    nav = "\n".join(
-        f'<a href="{h}"{" aria-current=\"page\"" if h == file else ""}>{t}</a>' for h, t in NAV)
-    canonical = SITE + "/" + ("" if file == "index.html" else file)
-    out = f"""<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{html.escape(title)}</title>
-<meta name="description" content="{html.escape(desc)}">
-<link rel="canonical" href="{canonical}">
-<meta property="og:title" content="{html.escape(title)}">
-<meta property="og:description" content="{html.escape(desc)}">
-<meta property="og:image" content="{SITE}/img/hero/hero-01.webp">
-<meta property="og:type" content="website">
-<link rel="icon" href="img/favicon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-{extra_head}
-</head>
-<body class="page-{file.split('.')[0]}">
-<a class="skip" href="#main">Skip to content</a>
-<div class="raya-bar"><div class="wrap"><span>Raya photoshoot season is open at our Bandar Putra studio.</span><a href="https://booking.johorstudio.cc">Book a Raya slot</a></div></div>
-<header class="site-header">
-  <div class="wrap">
-    <a class="brand" href="index.html"><img class="logo-dark" src="img/logo-dark.png" alt="JohorStudio.com" width="131" height="46"><img class="logo-light" src="img/logo-light.png" alt="" width="131" height="46"></a>
-    <button class="menu-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
-    <nav class="nav" id="nav" aria-label="Main">
-{nav}
-<a class="btn" href="{WA}">{WA_ICON}WhatsApp us</a>
-    </nav>
-  </div>
-</header>
-<main id="main">
-{body}
-</main>
-<footer class="site-footer">
-  <div class="wrap">
-    <div class="footer-grid">
-      <div>
-        <img src="img/logo-light.png" alt="JohorStudio.com" width="154" height="54">
-        <p>Professional digital media provider since 2014. Photography, videography, multicamera production and livestreaming across Malaysia.</p>
-      </div>
-      <div>
-        <h3>Contact</h3>
-        <ul>
-          <li><a href="{WA}">WhatsApp {PHONE}</a></li>
-          <li><a href="tel:+60127983745">Call {PHONE}</a></li>
-          <li><a href="mailto:{EMAIL}">{EMAIL}</a></li>
-        </ul>
-      </div>
-      <div>
-        <h3>Studio</h3>
-        <p><a href="{MAPS}">{ADDRESS}</a><br>By appointment only</p>
-      </div>
-      <div>
-        <h3>Follow</h3>
-        <ul>
-          <li><a href="{IG}">Instagram</a></li>
-          <li><a href="{TT}">TikTok</a></li>
-          <li><a href="{YT}">YouTube</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="legal">
-      <span>© <span data-year>2026</span> JohorStudio.com, {COMPANY}</span>
-      <span>Serving Kulai, Johor Bahru, Pontian, Kota Tinggi, Kluang, Simpang Renggam and Batu Pahat</span>
-    </div>
-  </div>
-</footer>
-{LIGHTBOX}
-<a class="wa-float" href="{WA}" aria-label="WhatsApp JohorStudio.com">{WA_ICON}<span>WhatsApp</span></a>
-<script src="js/main.js" defer></script>
-</body>
-</html>
-"""
-    (ROOT / file).write_text(out, encoding="utf-8")
+    (ROOT / file).write_text(render(file, title, desc, body, extra_head=extra_head), encoding="utf-8")
 
 
 def img(name, alt, folder="gallery", sm=True, cls="", lazy=True):
@@ -123,7 +33,6 @@ def media(name, alt):
     """Clickable (lightbox) unless it is a behind-the-scenes shot."""
     return lb(name, "media") if name in PORTFOLIO else img(name, alt)
 
-LIGHTBOX = '<dialog class="lightbox" aria-label="Photo"><div class="lb-bar"><p class="lb-cap"></p><span class="lb-res"></span><button class="close" type="button">Close</button></div><div class="lb-stage"><img alt=""></div></dialog>'
 
 # ---------------- HOME ----------------
 FEATURED = ['studio-fashion-06', 'photo-corporate-portrait-02', 'studio-fashion-04', 'photo-sports-motocross-01', 'studio-product-01', 'convo-graduation-stage-01', 'studio-fashion-12', 'photo-landscape-pier', 'studio-fashion-18', 'photo-event-award-ceremony']
@@ -245,7 +154,7 @@ page("index.html",
       <div class="actions">
         <a class="btn btn-light" href="contact.html">Get a quotation</a>
         <a class="btn btn-ghost" href="portfolio.html">See our work</a>
-        <a class="btn btn-ghost" data-raya hidden href="https://booking.johorstudio.cc">Book a Raya photoshoot</a>
+        <a class="btn btn-ghost" data-raya hidden href="{RAYA_URL}">Book a Raya photoshoot</a>
       </div>
       <div class="hero-controls">
         <button type="button" class="hc-prev" aria-label="Previous slide">‹</button>
@@ -290,33 +199,9 @@ page("index.html",
 
 <section class="section">
   <div class="wrap">
-    <div class="section-head"><h2>Recent projects</h2><a href="projects.html">All projects</a></div>
-    <div class="projects">
-      <a class="project wide" href="projects.html#butterfly">
-        <figure>{img("bts-butterfly-operator-crowd", "Camera operator facing the audience at Trove Hotel")}</figure>
-        <p class="client">Butterfly Education Centre, Trove Hotel JB</p>
-        <h3>22nd Convocation, live to the LED wall</h3>
-      </a>
-      <a class="project text-only" href="projects.html#consal">
-        <figure><p>Livestream and multicam to LED for a regional library congress</p></figure>
-        <p class="client">CONSAL XIX, Kuala Lumpur 2025</p>
-        <h3>Southeast Asian librarians, live</h3>
-      </a>
-      <a class="project" href="projects.html#adtec">
-        <figure>{img("bts-adtec2026-camera-row", "Camera positions at ADTEC JTM convocation")}</figure>
-        <p class="client">ADTEC JTM, 2026</p>
-        <h3>29th Convocation coverage</h3>
-      </a>
-      <a class="project text-only" href="projects.html#hospital">
-        <figure><p>Live procedure broadcasts from theatre to lecture hall</p></figure>
-        <p class="client">Hospital Sultanah Aminah and Hospital Sultan Ismail</p>
-        <h3>Live medical streaming</h3>
-      </a>
-      <a class="project text-only" href="projects.html#petronas">
-        <figure><p>Livestream production for a corporate session</p></figure>
-        <p class="client">Petronas</p>
-        <h3>Corporate livestream</h3>
-      </a>
+    <div class="section-head"><h2>Recent projects</h2><a href="projects/">All projects</a></div>
+    <div class="projects" data-recent-projects="5">
+      <noscript><p><a href="projects/">See all our projects</a></p></noscript>
     </div>
   </div>
 </section>
@@ -436,47 +321,13 @@ page("portfolio.html",
 """)
 
 # ---------------- PROJECTS ----------------
-CASES = [
-    ("butterfly", "Butterfly Education Centre", "22nd Convocation, “Let's Hunt and Hop!”",
-     [("Venue", "Trove Hotel, Johor Bahru"), ("Date", "October 2026"), ("Services", "Multicam to LED, videography, photography")],
-     "A packed ballroom of families. Our operators worked the stage and the floor while the live feed played on the LED wall, so every parent could see their child up close.",
-     ["bts-butterfly-operator-crowd", "bts-butterfly-two-operators-wide", "bts-butterfly-control-room-mixer", "bts-butterfly-gimbal-monitor"]),
-    ("consal", "CONSAL XIX", "Congress of Southeast Asian Librarians",
-     [("Venue", "Kuala Lumpur"), ("Year", "2025"), ("Services", "Livestream, multicam to LED")],
-     "Our proudest regional project: livestreaming and live camera switching to the LED screens for delegates from across Southeast Asia.", []),
-    ("adtec", "ADTEC JTM", "29th Convocation",
-     [("Year", "2026"), ("Services", "Multicam, livestream")],
-     "Multiple camera positions along the hall with a live switching desk among the audience, covering every graduate on stage.",
-     ["bts-adtec2026-switcher-desk", "bts-adtec2026-camera-row", "bts-adtec2026-viewfinder", "bts-team-photo-adtec2026"]),
-    ("hospital", "Hospital Sultanah Aminah and Hospital Sultan Ismail", "Live medical streaming",
-     [("Location", "Johor Bahru"), ("Services", "Livestream, procedure recording")],
-     "Live broadcasts and recordings of medical procedures for training sessions, sending the theatre feed to the lecture hall and to online participants.", []),
-    ("petronas", "Petronas", "Corporate livestream",
-     [("Services", "Livestream")], "Livestream production for a Petronas corporate session.", []),
-    ("aata", "Asia Aeronautical Training Academy (AATA)", "Event photography",
-     [("Services", "Photography")], "Event photography for AATA.", []),
-]
-cases = "\n".join(f"""<article class="case" id="{k}">
-  <div>
-    <p class="muted" style="margin:0">{c}</p>
-    <h2>{t}</h2>
-    <dl>{"".join(f"<dt>{a}</dt><dd>{b}</dd>" for a, b in meta)}</dl>
-    <p>{d}</p>
-  </div>
-  <div class="case-media">{"".join(media(i, t) for i in imgs)}</div>
-</article>""" for k, c, t, meta, d, imgs in CASES)
-page("projects.html",
-     "Projects | JohorStudio.com",
-     "Selected projects: CONSAL XIX, Hospital Sultanah Aminah, Hospital Sultan Ismail, Petronas, ADTEC JTM, Butterfly Education Centre.",
-     f"""
-<section class="page-head"><div class="wrap">
-  <h1>Projects</h1>
-  <p class="lead">A few of the events we have produced, from regional congresses to hospital theatres.</p>
-</div></section>
-<div class="wrap" style="padding-bottom:72px">
-{cases}
-</div>
-""")
+# Project posts are generated by tools/projects.py into site/projects/.
+# projects.html only forwards old links there.
+(ROOT / "projects.html").write_text("""<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Projects | JohorStudio.com</title>
+<meta http-equiv="refresh" content="0; url=projects/"><link rel="canonical" href="https://johorstudio.com/projects/"></head>
+<body><p><a href="projects/">Projects</a></p></body></html>
+""", encoding="utf-8")
 
 # ---------------- ABOUT ----------------
 page("about.html",
@@ -549,7 +400,7 @@ page("contact.html",
     <div><h3>WhatsApp or call</h3><p><a href="{WA}">{PHONE}</a></p></div>
     <div><h3>Email</h3><p><a href="mailto:{EMAIL}">{EMAIL}</a></p></div>
     <div><h3>Studio, by appointment</h3><p>{ADDRESS}</p><p><a href="{MAPS}">Open in Google Maps</a></p></div>
-    <div><h3>Raya photoshoot</h3><p><a href="https://booking.johorstudio.cc">booking.johorstudio.cc</a></p></div>
+    <div><h3>Raya photoshoot</h3><p><a href="{RAYA_URL}">booking.johorstudio.cc</a></p></div>
     <iframe class="map" title="Studio location" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
       src="https://www.google.com/maps?q={ADDRESS.replace(' ', '+')}&output=embed"></iframe>
   </div>

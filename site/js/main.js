@@ -16,8 +16,10 @@
   // Year in footer
   document.querySelectorAll("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
 
+  // Pages inside projects/<name>/ set data-root="../../" so shared files are found
+  var ROOT = document.body.getAttribute("data-root") || "";
   function getJSON(url) {
-    return fetch(url, { cache: "no-cache" }).then(function (r) { if (!r.ok) throw new Error(url); return r.json(); });
+    return fetch(ROOT + url, { cache: "no-cache" }).then(function (r) { if (!r.ok) throw new Error(url); return r.json(); });
   }
 
   // Raya studio booking: shown only during the season set in data/raya.json
@@ -144,6 +146,41 @@
       b.addEventListener("click", function () {
         filter(b.dataset.filter);
         history.replaceState(null, "", b.dataset.filter === "all" ? location.pathname : "#" + b.dataset.filter);
+      });
+    });
+  }
+
+  // Home: recent projects from data/projects.json (made by tools/projects.py)
+  var recent = document.querySelector("[data-recent-projects]");
+  if (recent) {
+    var esc = function (t) { return String(t || "").replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    getJSON("data/projects.json").then(function (data) {
+      var n = parseInt(recent.getAttribute("data-recent-projects"), 10) || 5;
+      var list = data.items.slice(0, n);
+      if (!list.length) return;
+      recent.innerHTML = list.map(function (p, i) {
+        var wide = i === 0 && p.cover;
+        var fig = p.cover
+          ? '<figure><img src="' + ROOT + (wide ? p.cover_md : p.cover) + '" alt="' + esc(p.title) + '" loading="lazy"></figure>'
+          : '<figure><p>' + esc(p.summary || p.title) + '</p></figure>';
+        var who = [p.client, p.location, p.date].filter(Boolean).slice(0, 2).join(", ");
+        return '<a class="project' + (wide ? " wide" : "") + (p.cover ? "" : " text-only") + '" href="' + ROOT + p.url + '">' +
+          fig + '<p class="client">' + esc(who) + '</p><h3>' + esc(p.title) + '</h3></a>';
+      }).join("");
+    }).catch(function () {
+      recent.innerHTML = '<p><a href="' + ROOT + 'projects/">See all our projects</a></p>';
+    });
+  }
+
+  // Projects page: filter by year
+  var yf = document.querySelector("[data-year-filter]");
+  if (yf) {
+    var cards = document.querySelectorAll(".pj-card");
+    yf.querySelectorAll("button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var y = b.getAttribute("data-year");
+        yf.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+        cards.forEach(function (c) { c.hidden = !(y === "all" || c.getAttribute("data-year") === y); });
       });
     });
   }
