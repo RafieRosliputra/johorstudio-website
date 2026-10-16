@@ -157,6 +157,8 @@ cd /mnt/ssd/johorstudio-website
 
 Semua folder dalam `website-projects` jadi posting baru, disusun ikut tarikh (terbaru dulu). Posting terbaru juga keluar di halaman utama bahagian "Recent projects". Untuk edit posting, ubah folder atau `project.md`, kemudian jalankan `./publish.sh` sekali lagi. Untuk buang posting, padam foldernya dan jalankan `./publish.sh`.
 
+Gambar yang terbuka bila diklik (1600px dan resolusi penuh) diletakkan logo JohorStudio.com di bucu kanan bawah secara automatik. Gambar kecil (thumbnail) tak ada watermark. Gambar asal dalam folder kau tak diubah.
+
 Folder dalam `projects/` (dalam repo) ialah projek yang Claude letak. Kalau kau buat folder dengan nama sama dalam `website-projects`, folder kau yang dipakai.
 
 Nota: preview di GitHub Pages hanya nampak folder dalam `projects/` repo. Folder dalam TrueNAS hanya keluar di johorstudio.com.
@@ -209,6 +211,16 @@ Page utama website ni ditulis dalam HTML biasa, bukan dalam Silex. Untuk tukar t
 Butang dan jalur "Raya photoshoot" keluar secara automatik antara tarikh `start` (awal Ramadan) dan `end` (2 minggu selepas Raya) dalam `site/data/raya.json`. Tarikh tahun depan adalah anggaran, jadi semak setiap tahun.
 
 ---
+
+## Watermark gambar portfolio dan Raya
+
+Gambar dalam `site/img/gallery/` dan `site/img/raya/` sudah ada watermark. Kalau kau tambah gambar baru di situ, jalankan:
+
+```sh
+docker compose run --rm --entrypoint python publish tools/watermark.py
+```
+
+Ia hanya proses gambar yang belum ada watermark. Rekod ada dalam `site/img/.watermarked.json`, jangan padam fail ni, nanti gambar dapat watermark dua kali. Notis hak cipta yang keluar bila gambar dibuka penuh ditulis dalam `LEGAL` di `tools/layout.py`.
 
 ## Nota
 

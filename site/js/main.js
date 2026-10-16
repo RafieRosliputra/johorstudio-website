@@ -87,6 +87,9 @@
     dlg.querySelector(".close").addEventListener("click", function () { dlg.close(); });
     dlg.addEventListener("close", function () { big.removeAttribute("src"); stage.classList.remove("is-zoomed"); });
     big.addEventListener("click", function () { if (big.dataset.full === "1") stage.classList.toggle("is-zoomed"); });
+    // copyright: no right-click save or drag on the full-screen photo
+    big.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+    big.addEventListener("dragstart", function (e) { e.preventDefault(); });
     openLightbox = function (src, full, caption, size) {
       stage.classList.remove("is-zoomed");
       big.dataset.full = "0";

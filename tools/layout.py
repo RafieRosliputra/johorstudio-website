@@ -21,9 +21,14 @@ WA_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path
 NAV = [("index.html", "Home"), ("services.html", "Services"), ("portfolio.html", "Portfolio"),
        ("projects/", "Projects"), ("raya.html", "Raya"), ("about.html", "About"), ("contact.html", "Contact")]
 
-LIGHTBOX = ('<dialog class="lightbox" aria-label="Photo"><div class="lb-bar"><p class="lb-cap"></p>'
+LEGAL = ("© PROMEDIA CREATIVE SOLUTIONS (JR0113470-V). All photos on this website are our property and are "
+         "protected under the Copyright Act 1987. Copying, editing, reposting or using them without written "
+         "permission is prohibited, and we will take legal action to claim damages.")
+
+LIGHTBOX = ('<dialog class="lightbox" aria-label="Photo"><div class="lb-bar"><div class="lb-info"><p class="lb-cap"></p>'
+            f'<p class="lb-legal">{LEGAL}</p></div>'
             '<span class="lb-res"></span><button class="close" type="button">Close</button></div>'
-            '<div class="lb-stage"><img alt=""></div></dialog>')
+            '<div class="lb-stage"><img alt="" draggable="false"></div></dialog>')
 
 
 def render(current, title, desc, body, root="", path=None, og_image=None, body_class=None, extra_head=""):

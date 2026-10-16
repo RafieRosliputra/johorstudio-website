@@ -20,6 +20,8 @@ Generated (not stored in git):
     site/sitemap.xml
 
 Photos are converted only when new or changed, so running it again is quick.
+The 1600px and full-size versions get the logo watermark (tools/watermark.py);
+thumbnails do not.
 
 On TrueNAS:  docker compose run --rm publish
 Elsewhere:   python3 tools/projects.py      (needs: pip install pillow)
@@ -45,6 +47,7 @@ except Exception:
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from layout import render, SITE, WA, WA_ICON  # noqa: E402
+from watermark import add_watermark, VERSION as WM_VERSION  # noqa: E402
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
 SITE_DIR = REPO / "site"
@@ -201,22 +204,27 @@ def process_photo(src, dest_dir, stem, full, cache):
     key = f"{dest_dir.parent.name}/{stem}"
     old = cache.get(key)
     outs = [dest_dir / f"{stem}{suf}.webp" for suf, _, _ in SIZES] + ([dest_dir / f"{stem}-full.webp"] if full else [])
-    if old and old.get("sig") == sig and old.get("full") == full and all(o.exists() for o in outs):
+    if (old and old.get("sig") == sig and old.get("full") == full and old.get("wm") == WM_VERSION
+            and all(o.exists() for o in outs)):
         return old, False
     with Image.open(src) as raw:
         icc = raw.info.get("icc_profile")
         im = to_rgb(ImageOps.exif_transpose(raw))
     w, h = im.size
-    info = {"sig": sig, "full": full, "w": w, "h": h}
-    for suf, size, q in SIZES:
-        sw, sh = save_webp(im, dest_dir / f"{stem}{suf}.webp", size, q, icc)
-        info["sm" if suf else "md"] = [sw, sh]
+    info = {"sig": sig, "full": full, "w": w, "h": h, "wm": WM_VERSION}
+    # thumbnail (-sm) stays clean; the versions that open on click carry the logo
+    sw, sh = save_webp(im, dest_dir / f"{stem}-sm.webp", SIZES[0][1], SIZES[0][2], icc)
+    info["sm"] = [sw, sh]
+    md = im.copy()
+    md.thumbnail((SIZES[1][1], SIZES[1][1]), Image.LANCZOS)
+    sw, sh = save_webp(add_watermark(md), dest_dir / f"{stem}.webp", SIZES[1][1], SIZES[1][2], icc)
+    info["md"] = [sw, sh]
     if full:
-        if src.suffix.lower() == ".webp" and max(w, h) <= FULL_MAX:
-            shutil.copyfile(src, dest_dir / f"{stem}-full.webp")   # already WebP: keep as is
-        else:
-            fw, fh = save_webp(im, dest_dir / f"{stem}-full.webp", FULL_MAX, FULL_Q, icc)
-            info["w"], info["h"] = fw, fh
+        big = im.copy()
+        if max(big.size) > FULL_MAX:
+            big.thumbnail((FULL_MAX, FULL_MAX), Image.LANCZOS)
+        fw, fh = save_webp(add_watermark(big), dest_dir / f"{stem}-full.webp", FULL_MAX, FULL_Q, icc)
+        info["w"], info["h"] = fw, fh
     cache[key] = info
     return info, True
 
