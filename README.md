@@ -4,17 +4,23 @@ Website rasmi JohorStudio.com. Website ni statik (HTML, CSS dan JS sahaja), dihi
 
 ```
 site/              <- website (inilah yang orang nampak)
-  index.html, services.html, portfolio.html, projects.html, about.html, contact.html
+  index.html, services.html, portfolio.html, raya.html, about.html, contact.html
+  projects/        <- DIJANA oleh tools/projects.py (jangan edit, tak disimpan dalam git)
   css/style.css    <- warna dan font (tukar di bahagian :root)
   js/main.js
   img/hero/        <- gambar slideshow halaman utama
   img/gallery/     <- gambar portfolio
+  img/raya/        <- gambar page Raya (senarai dalam data/raya-gallery.json)
   data/portfolio.json  <- senarai gambar portfolio (tambah gambar di sini)
   data/videos.json     <- senarai video YouTube
   data/raya.json       <- tarikh butang booking Raya
 nginx/default.conf <- tetapan server
 docker-compose.yml <- web + Silex + Cloudflare Tunnel
 tools/build.py     <- jana semula page HTML (pilihan, untuk tukar teks)
+tools/projects.py  <- tukar folder projek jadi posting Projects
+projects/          <- folder projek yang Claude letak (setiap folder = satu posting)
+publish.sh         <- jalankan bila kau tambah folder projek baru
+update.sh          <- tarik update dari GitHub + publish sekali gus
 ```
 
 ---
@@ -46,7 +52,10 @@ sed -i "s|^SILEX_SESSION_SECRET=.*|SILEX_SESSION_SECRET=$(openssl rand -base64 3
 
 ```sh
 docker compose up -d web
+./publish.sh
 ```
+
+`./publish.sh` jana page Projects. Kali pertama ambil masa beberapa minit sebab semua gambar ditukar ke WebP. Lepas tu, hanya gambar baru diproses.
 
 Buka `http://IP-TRUENAS:8080` dari laptop. Website patut keluar.
 
@@ -77,10 +86,80 @@ Buka https://johorstudio.com.
 ssh admin@IP-TRUENAS
 sudo -i
 cd /mnt/ssd/johorstudio-website
-docker run --rm -v "$PWD":/git alpine/git pull
+./update.sh
 ```
 
-Tak perlu restart. nginx terus baca fail baru.
+`update.sh` tarik perubahan dari GitHub, kemudian jana semula page Projects. Tak perlu restart. nginx terus baca fail baru.
+
+---
+
+## Projects: tambah posting sendiri (macam blog)
+
+Setiap folder = satu posting dalam page Projects. Kau boleh buat banyak folder sekali gus, kemudian jalankan satu arahan.
+
+### a) Sediakan folder upload (sekali sahaja)
+
+1. Dalam TrueNAS, buat dataset, contoh `/mnt/ssd/website-projects`
+2. Kongsi dataset tu melalui SMB (**Shares > Windows (SMB) Shares > Add**), supaya boleh buka dari Mac (Finder > Go > Connect to Server > `smb://IP-TRUENAS`)
+3. Dalam `.env`, pastikan `UPLOADS_DIR=/mnt/ssd/website-projects`
+
+### b) Buat satu folder untuk setiap projek
+
+Nama folder: **tarikh dan tajuk**. Tarikh dan tajuk diambil dari nama folder kalau `project.md` tak tulis.
+
+```
+website-projects/
+  20261103 Majlis Konvokesyen ABC/
+    project.md
+    IMG_0001.jpg
+    IMG_0002.jpg
+    bts-kamera-01.jpg       <- nama bermula "bts" = gambar BTS, tiada versi resolusi penuh
+  20261115-16 Karnival Sukan XYZ/   <- acara 2 hari (15 hingga 16)
+    project.md
+    ...
+```
+
+- Gambar: JPG, PNG, WebP atau HEIC. Saiz asal pun boleh, skrip akan kecilkan dan tukar ke WebP.
+- Gambar keluar ikut susunan nama fail. Letak sekurang-kurangnya 10 gambar.
+- Folder yang namanya bermula dengan `_` dianggap draf dan tak dipaparkan.
+- Jangan masukkan gambar yang menampakkan muka budak dengan jelas, kecuali muka dah ditukar.
+
+### c) Isi `project.md`
+
+Salin contoh ni (ada juga dalam `tools/project-template.md`). Tulis dalam English.
+
+```
+---
+title: Majlis Konvokesyen ABC 2026
+date: 2026-11-03
+location: Dewan Besar, Kulai, Johor
+client: Kolej ABC
+services: Multicam, livestream, photography
+cover: IMG_0005.jpg
+---
+Tulis penerangan program di sini. Perenggan kosong = perenggan baru.
+
+**Teks tebal**, *teks condong*, dan senarai:
+- Item satu
+- Item dua
+```
+
+Semua baris dalam bahagian `---` adalah pilihan. `cover` ialah gambar untuk kad projek (kalau tiada, gambar pertama). Tambah `end: 2026-11-04` untuk acara lebih dari sehari, atau `hidden: yes` untuk sorok posting.
+
+### d) Publish
+
+```sh
+ssh admin@IP-TRUENAS
+sudo -i
+cd /mnt/ssd/johorstudio-website
+./publish.sh
+```
+
+Semua folder dalam `website-projects` jadi posting baru, disusun ikut tarikh (terbaru dulu). Posting terbaru juga keluar di halaman utama bahagian "Recent projects". Untuk edit posting, ubah folder atau `project.md`, kemudian jalankan `./publish.sh` sekali lagi. Untuk buang posting, padam foldernya dan jalankan `./publish.sh`.
+
+Folder dalam `projects/` (dalam repo) ialah projek yang Claude letak. Kalau kau buat folder dengan nama sama dalam `website-projects`, folder kau yang dipakai.
+
+Nota: preview di GitHub Pages hanya nampak folder dalam `projects/` repo. Folder dalam TrueNAS hanya keluar di johorstudio.com.
 
 ---
 

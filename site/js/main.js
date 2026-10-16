@@ -14,7 +14,7 @@
   }
 
   // Year in footer
-  document.querySelectorAll("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
+  document.querySelectorAll("[data-this-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
 
   // Pages inside projects/<name>/ set data-root="../../" so shared files are found
   var ROOT = document.body.getAttribute("data-root") || "";
@@ -111,7 +111,7 @@
   }
 
   // Portfolio gallery with filters
-  var gallery = document.querySelector(".gallery");
+  var gallery = document.querySelector(".gallery[data-portfolio]");
   if (gallery) {
     getJSON("data/portfolio.json").then(function (data) {
       data.items.forEach(function (it) {

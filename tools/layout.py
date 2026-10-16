@@ -103,7 +103,7 @@ def render(current, title, desc, body, root="", path=None, og_image=None, body_c
       </div>
     </div>
     <div class="legal">
-      <span>© <span data-year>2026</span> JohorStudio.com, {COMPANY}</span>
+      <span>© <span data-this-year>2026</span> JohorStudio.com, {COMPANY}</span>
       <span>Serving Kulai, Johor Bahru, Pontian, Kota Tinggi, Kluang, Simpang Renggam and Batu Pahat</span>
     </div>
   </div>

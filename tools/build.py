@@ -311,7 +311,7 @@ page("portfolio.html",
   <div class="filters" role="group" aria-label="Filter by service">
     {"".join(f'<button type="button" data-filter="{k}" aria-pressed="{"true" if k == "all" else "false"}">{t}</button>' for k, t in FILTERS)}
   </div>
-  <div class="gallery"></div>
+  <div class="gallery" data-portfolio></div>
 </section>
 <section class="section bg-white"><div class="wrap">
   <div class="section-head"><h2>Video</h2><a href="{YT}">Our YouTube channel</a></div>
@@ -328,6 +328,44 @@ page("portfolio.html",
 <meta http-equiv="refresh" content="0; url=projects/"><link rel="canonical" href="https://johorstudio.com/projects/"></head>
 <body><p><a href="projects/">Projects</a></p></body></html>
 """, encoding="utf-8")
+
+# ---------------- RAYA ----------------
+# Photos: site/img/raya/<file>-sm.webp, <file>.webp, <file>-full.webp, listed in site/data/raya-gallery.json
+RAYA_GALLERY = json.load(open(ROOT / "data" / "raya-gallery.json"))
+raya_thumbs = "\n".join(
+    f'<button type="button" class="lb-thumb" data-lightbox data-src="img/raya/{r["file"]}.webp" '
+    f'data-full="img/raya/{r["file"]}-full.webp" data-size="{r["size"]}" data-caption="Raya family photoshoot at our Bandar Putra studio">'
+    f'<img src="img/raya/{r["file"]}-sm.webp" width="{r["sm"][0]}" height="{r["sm"][1]}" alt="Raya family portrait in the JohorStudio.com studio"'
+    f'{" loading=\"lazy\"" if i > 5 else ""} decoding="async"></button>'
+    for i, r in enumerate(RAYA_GALLERY))
+page("raya.html",
+     "Raya Photoshoot Studio in Kulai, Johor | JohorStudio.com",
+     "Hari Raya family, couple and group photoshoots at the JohorStudio.com studio in Bandar Putra, Kulai. Book your Raya slot online.",
+     f"""
+<section class="page-head"><div class="wrap">
+  <h1>Raya studio photoshoot</h1>
+  <p class="lead">Family, couple and big group portraits in your Raya outfits, shot in our Bandar Putra studio with bright, even lighting and ready-made Raya sets.</p>
+  <div class="actions" style="margin-top:20px"><a class="btn" href="{RAYA_URL}">Book a Raya slot</a><a class="btn btn-line" href="{WA}">Ask on WhatsApp</a></div>
+</div></section>
+<section class="section bg-white"><div class="wrap">
+  <ol class="services">
+    <li class="service" style="grid-template-columns:1fr"><div><h3>Sets for every group size</h3><p>Choose from our white classic set and our pastel panelled sets, with benches for seated family rows and plenty of floor for large families.</p></div></li>
+    <li class="service" style="grid-template-columns:1fr"><div><h3>Formal and fun</h3><p>We start with the classic family line-up, then loosen up with candid, playful and couple shots so everyone gets a favourite.</p></div></li>
+    <li class="service" style="grid-template-columns:1fr"><div><h3>Book online</h3><p>Pick a date and time slot at <a href="{RAYA_URL}">booking.johorstudio.cc</a>. Slots fill up quickly during Ramadan and the first weeks of Syawal.</p></div></li>
+  </ol>
+</div></section>
+<section class="wrap" style="padding-top:56px;padding-bottom:72px">
+  <div class="section-head"><h2>Recent Raya sessions</h2></div>
+  <p class="muted">Real clients photographed in our studio. Tap a photo to view it at full resolution.</p>
+  <div class="gallery">
+{raya_thumbs}
+  </div>
+</section>
+<section class="cta-band"><div class="wrap">
+  <h2>Ready for your Raya photos?</h2>
+  <div class="actions"><a class="btn" href="{RAYA_URL}">Book a Raya slot</a><a class="btn btn-line" href="contact.html">Contact us</a></div>
+</div></section>
+""")
 
 # ---------------- ABOUT ----------------
 page("about.html",
