@@ -625,7 +625,7 @@ def write_draft_md(dest, meta):
 
 def remove(slug, stem=None):
     """Remove a whole project (stem=None) or one photo. Originals go to "_<folder name>"
-    in the upload folder; project.md keeps the text."""
+    in the upload folder; project.md keeps the text. Works for projects without photos too."""
     state = load_state()
     removed = load_removed()
     meta = state.get(slug)
@@ -637,15 +637,18 @@ def remove(slug, stem=None):
         print("! UPLOADS is not set")
         return 1
     targets = [i for i in meta["items"] if stem is None or i["stem"] == stem]
-    if not targets:
+    if stem is not None and not targets:
         print(f"! Photo '{stem}' not found in '{slug}'")
         return 1
 
-    for i in targets:
-        src = i.get("src", meta["source"]["name"])
-        origin = i.get("origin", meta["source"]["origin"])
+    if targets:
+        groups = [(i.get("origin", meta["source"]["origin"]), i.get("src", meta["source"]["name"]), i) for i in targets]
+    else:                                               # project without photos: only its folder and text
+        groups = [(meta["source"]["origin"], meta["source"]["name"], None)]
+
+    for origin, src, item in groups:
         if origin == "uploads":
-            base = up / DONE / (i.get("done_as") or src)
+            base = up / DONE / ((item or {}).get("done_as") or src)
             if not base.is_dir():
                 base = up / src
         else:
@@ -658,25 +661,28 @@ def remove(slug, stem=None):
                 shutil.copyfile(originals[0], dest / "project.md")      # keep the original text as it was
             else:
                 write_draft_md(dest, meta)
-        f = base / i["name"]
-        if f.is_file():
-            if origin == "uploads":
-                shutil.move(str(f), str(dest / f.name), copy_function=shutil.copyfile)
+        if item is not None:
+            f = base / item["name"]
+            if f.is_file():
+                if origin == "uploads":
+                    shutil.move(str(f), str(dest / f.name), copy_function=shutil.copyfile)
+                else:
+                    shutil.copyfile(f, dest / f.name)
+                print(f"  moved {f.name} -> {dest.name}/")
             else:
-                shutil.copyfile(f, dest / f.name)
-            print(f"  moved {f.name} -> {dest.name}/")
-        else:
-            print(f"  ! original {i['name']} not found (folder {src!r} is gone); website copy removed only")
+                print(f"  ! original {item['name']} not found (folder {src!r} is gone); website copy removed only")
         if origin == "repo" and stem is None:
             removed.add(src)
+        if origin == "uploads" and stem is None and item is None:
+            print(f"  note: text saved in {dest.name}/project.md")
 
     if stem is None:
         shutil.rmtree(OUT / slug, ignore_errors=True)
         state.pop(slug, None)
         print(f"✓ Removed project: {meta['title']}")
     else:
-        for s in ("-sm", "", "-full"):
-            f = OUT / slug / "img" / f"{stem}{s}.webp"
+        for s_ in ("-sm", "", "-full"):
+            f = OUT / slug / "img" / f"{stem}{s_}.webp"
             if f.exists():
                 f.unlink()
         meta["items"] = [i for i in meta["items"] if i["stem"] != stem]
