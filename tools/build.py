@@ -38,7 +38,7 @@ def media(name, alt):
 FEATURED = ['studio-fashion-06', 'photo-corporate-portrait-02', 'studio-fashion-04', 'photo-sports-motocross-01', 'studio-product-01', 'convo-graduation-stage-01', 'studio-fashion-12', 'photo-landscape-pier', 'studio-fashion-18', 'photo-event-award-ceremony']
 HERO = [
  {
-  "name": "hero-02",
+  "name": "hero-06",
   "caption": "Studio fashion photography",
   "pos": "45% 35%",
   "mpos": "55% 30%"
@@ -68,7 +68,7 @@ HERO = [
   "mpos": "55% 40%"
  },
  {
-  "name": "hero-06",
+  "name": "hero-02",
   "caption": "Fashion and lifestyle shoots",
   "pos": "55% 35%",
   "mpos": "50% 35%"
