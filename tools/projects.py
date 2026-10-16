@@ -406,7 +406,7 @@ def move_to_done(folder):
     while target.exists():
         target = done / f"{folder.name} ({n})"
         n += 1
-    shutil.move(str(folder), str(target))
+    shutil.move(str(folder), str(target), copy_function=shutil.copyfile)
     return target.name
 
 
@@ -655,15 +655,15 @@ def remove(slug, stem=None):
         if not (dest / "project.md").exists():
             originals = sorted(base.glob("*.md")) if base.is_dir() else []
             if originals:
-                shutil.copy2(originals[0], dest / "project.md")      # keep the original text as it was
+                shutil.copyfile(originals[0], dest / "project.md")      # keep the original text as it was
             else:
                 write_draft_md(dest, meta)
         f = base / i["name"]
         if f.is_file():
             if origin == "uploads":
-                shutil.move(str(f), str(dest / f.name))
+                shutil.move(str(f), str(dest / f.name), copy_function=shutil.copyfile)
             else:
-                shutil.copy2(f, dest / f.name)
+                shutil.copyfile(f, dest / f.name)
             print(f"  moved {f.name} -> {dest.name}/")
         else:
             print(f"  ! original {i['name']} not found (folder {src!r} is gone); website copy removed only")
