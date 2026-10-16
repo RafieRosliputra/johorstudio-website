@@ -1,6 +1,6 @@
 # Tools image: publishes project folders (tools/projects.py) and runs the
-# webmaster panel (tools/admin.py). Built by GitHub Actions and published as
-# ghcr.io/rafierosliputra/johorstudio-tools:latest
+# webmaster panel (tools/admin.py). Built on TrueNAS by deploy/setup-truenas.sh
+# as johorstudio-tools:local
 FROM python:3.12-slim
 RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates \
     && rm -rf /var/lib/apt/lists/* \

@@ -13,3 +13,4 @@ site/img/raya/*.webp
 !site/img/gallery/*-sm.webp
 !site/img/raya/*-sm.webp
 site/img/.watermarked.json
+site/pages/

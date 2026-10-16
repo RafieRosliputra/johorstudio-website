@@ -1,13 +1,13 @@
 # JohorStudio.com as a TrueNAS Custom App
-# TrueNAS: Apps > Discover Apps > ⋮ (top right) > Install via YAML
-# Name: johorstudio
+# Installed by deploy/setup-truenas.sh (or by hand: Apps > Discover Apps > ⋮ > Install via YAML, name johorstudio)
 #
 # Folders on TrueNAS (dataset ssd/website):
 #   /mnt/ssd/website/repo      this GitHub repo (git clone)
 #   /mnt/ssd/website/uploads   project folders you upload (SMB share "website-uploads")
 #   /mnt/ssd/website/silex     Silex editor data
 #
-# Fill in the 2 values marked CHANGE before installing.
+# deploy/setup-truenas.sh fills in the 2 values marked CHANGE and installs this
+# for you. To install by hand, replace them first.
 #
 # Cloudflare Tunnel public hostnames (Zero Trust > Networks > Tunnels):
 #   johorstudio.com            -> http://web:80
@@ -31,8 +31,8 @@ services:
     restart: unless-stopped
 
   admin:
-    image: ghcr.io/rafierosliputra/johorstudio-tools:latest
-    pull_policy: always
+    image: johorstudio-tools:local      # built on TrueNAS by deploy/setup-truenas.sh
+    pull_policy: never
     command: ["tools/admin.py"]
     ports:
       - "8090:8090"
