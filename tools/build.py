@@ -38,16 +38,16 @@ def media(name, alt):
 FEATURED = ['studio-fashion-06', 'photo-corporate-portrait-02', 'studio-fashion-04', 'photo-sports-motocross-01', 'studio-product-01', 'convo-graduation-stage-01', 'studio-fashion-12', 'photo-landscape-pier', 'studio-fashion-18', 'photo-event-award-ceremony']
 HERO = [
  {
-  "name": "hero-01",
-  "caption": "Live camera on stage, Butterfly 22nd Convocation, Trove Hotel",
-  "pos": "72% 40%",
-  "mpos": "82% 40%"
- },
- {
   "name": "hero-02",
   "caption": "Studio fashion photography",
   "pos": "45% 35%",
   "mpos": "55% 30%"
+ },
+ {
+  "name": "hero-01",
+  "caption": "Live camera on stage, Butterfly 22nd Convocation, Trove Hotel",
+  "pos": "72% 40%",
+  "mpos": "82% 40%"
  },
  {
   "name": "hero-03",
