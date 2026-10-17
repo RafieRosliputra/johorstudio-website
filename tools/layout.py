@@ -120,6 +120,7 @@ def render(current, title, desc, body, root="", path=None, og_image=None, body_c
 </footer>
 {LIGHTBOX}
 <a class="wa-float" href="{WA}" aria-label="WhatsApp JohorStudio.com">{WA_ICON}<span>WhatsApp</span></a>
+<script src="{root}js/analytics.js" defer></script>
 <script src="{root}js/main.js" defer></script>
 </body>
 </html>
