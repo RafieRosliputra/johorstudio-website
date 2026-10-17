@@ -24,6 +24,10 @@
   {
    "key": "studio",
    "label": "Studio"
+  },
+  {
+   "key": "nature",
+   "label": "Nature"
   }
  ],
  "items": [
