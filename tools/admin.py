@@ -502,8 +502,8 @@ def render_portfolio():
 
 
 # ---------------- RAYA (studio photoshoot page) ----------------
-# Photos come from site/data/raya-gallery.json. Changes are made by tools/raya.py,
-# which resizes, watermarks and saves a git commit on this server.
+# Photos come from site/data/raya-gallery.json. Ratings and removals are staged in the page,
+# then applied together by tools/raya.py with one git commit when the user presses Commit.
 RAYA_DATA = REPO / "site" / "data" / "raya-gallery.json"
 RAYA_THUMBS = REPO / "site" / "img" / "raya"
 RAYA_TOOL = "tools/raya.py"
@@ -521,32 +521,39 @@ RAYA_PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="robots" content="noindex">
 <style>
 :root{--ink:#1f2629;--muted:#5f6b70;--line:#dde3e5;--bg:#f4f6f6;--teal:#1f6f68;--bad:#a33;--gold:#b98a12}
-*{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:var(--bg)}
-.wrap{max-width:1000px;margin:0 auto;padding:24px 16px 64px}h1{font-size:28px;margin:8px 0 4px}h2{font-size:19px;margin:24px 0 10px}
+*{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:var(--bg);padding-bottom:96px}
+.wrap{max-width:1000px;margin:0 auto;padding:24px 16px 32px}h1{font-size:28px;margin:8px 0 4px}h2{font-size:19px;margin:24px 0 10px}
 .muted{color:var(--muted);font-size:14px}.card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 18px;margin:12px 0}
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 button,.btn{font:600 15px system-ui,sans-serif;border:0;border-radius:6px;padding:10px 15px;background:var(--teal);color:#fff;cursor:pointer}
-button[disabled]{opacity:.5;cursor:wait}
-.btn-danger{background:#fff;color:var(--bad);border:1px solid var(--bad);padding:6px 10px;font-size:13px}
-select{padding:9px 10px;border:1px solid var(--line);border-radius:6px;font:inherit;background:#fff}
+button[disabled]{opacity:.45;cursor:default}
+.btn-line{background:#fff;color:var(--teal);border:1px solid var(--teal)}
+.btn-danger{background:#fff;color:var(--bad);border:1px solid var(--bad);padding:6px 10px;font-size:13px;width:100%}
+input[type=file]{max-width:100%}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-top:8px}
-.pitem{background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:8px}
+.pitem{background:#fff;border:2px solid var(--line);border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:8px}
 .pitem img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;background:#eee}
-.stars{display:flex;justify-content:center;gap:2px}
-.star{background:#fff;color:#c9b27a;border:1px solid #e6dcc0;padding:2px 6px;font-size:20px;line-height:1.2}
-.star.on{background:var(--gold);color:#fff;border-color:var(--gold)}
+.pitem.changed{border-color:var(--gold)}
+.pitem.removed{border-color:var(--bad);background:#fdeaea}
+.pitem.removed img{opacity:.5}
+.pitem.removed .btn-danger{background:var(--bad);color:#fff}
+.rates{display:flex;justify-content:center;gap:2px;flex-wrap:wrap}
+.rate-btn{background:#fff;color:#c9b27a;border:1px solid #e6dcc0;padding:2px 6px;font-size:16px;line-height:1.3;min-width:30px}
+.rate-btn.zero{color:var(--muted);font-size:14px}
+.rate-btn.on{background:var(--gold);color:#fff;border-color:var(--gold)}
 .empty{color:var(--muted);font-size:14px;margin:6px 0}
-pre{background:#14191b;color:#d6e2e0;padding:14px;border-radius:8px;max-height:300px;overflow:auto;font-size:13px;white-space:pre-wrap}
+.bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:12px 16px;box-shadow:0 -4px 14px rgba(0,0,0,.06)}
+.bar .inner{max-width:1000px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+pre{background:#14191b;color:#d6e2e0;padding:14px;border-radius:8px;max-height:260px;overflow:auto;font-size:13px;white-space:pre-wrap}
 a{color:var(--teal)}
 </style></head><body><div class="wrap">
 <p class="muted"><a href="./">&larr; Back to Webmaster</a></p><h1>Raya</h1>
-<p class="muted">Raya studio photos. Give each photo 1 to 5 stars: 5 stars show first on the Raya page, 1 star last. Photos with no stars stay hidden from visitors. Visitors never see the stars. Each change is saved on the server.</p>
+<p class="muted">Give each photo 0 to 5 stars. 5 stars show first on the Raya page, 1 star last. 0 stars keeps the photo hidden from visitors. Visitors never see the stars. Changes wait here until you press Commit changes at the bottom, then they are saved together.</p>
 
 <div class="card">
  <h2 style="margin-top:0">Upload new photos</h2>
- <div class="row"><input type="file" id="files" multiple accept=".jpg,.jpeg,.webp,image/jpeg,image/webp"><select id="urate" aria-label="Stars">
-  <option value="0">No stars (hidden)</option><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option></select></div>
- <p class="muted">JPG or WebP, up to 40 MB each, up to 50 photos at a time. Each photo is resized and watermarked automatically. You can change the stars later.</p>
+ <div class="row"><input type="file" id="files" multiple accept=".jpg,.jpeg,.webp,image/jpeg,image/webp"></div>
+ <p class="muted">JPG or WebP, up to 40 MB each, up to 50 photos at a time. New photos are saved right away with 0 stars (hidden). Each photo is resized and watermarked automatically.</p>
  <div class="row"><button id="ubtn">Upload and process</button><span id="uprog" class="muted"></span></div>
 </div>
 
@@ -555,24 +562,65 @@ a{color:var(--teal)}
 
 {sections}
 </div>
+
+<div class="bar"><div class="inner">
+ <span id="pcount" class="muted">No changes waiting.</span>
+ <div class="row"><button class="btn-line" id="resetbtn" disabled>Reset</button><button id="commitbtn" disabled>Commit changes</button></div>
+</div></div>
+
 <script>
-var wasRunning=false;
+var running=false, wasRunning=false, pending={rates:{}, removes:{}};
+function count(){ return Object.keys(pending.rates).length + Object.keys(pending.removes).length; }
+function refreshBar(){
+ var n=count();
+ document.getElementById("pcount").textContent = n ? (n+" change(s) waiting. Nothing is saved until you press Commit changes.") : "No changes waiting.";
+ document.getElementById("commitbtn").disabled = running || !n;
+ document.getElementById("resetbtn").disabled = running || !n;
+}
+function showCard(card){
+ var f=card.dataset.file, cur=+card.dataset.rating;
+ var val = (f in pending.rates) ? pending.rates[f] : cur;
+ card.querySelectorAll(".rate-btn").forEach(function(b){
+  var v=+b.dataset.value;
+  b.classList.toggle("on", v===0 ? val===0 : v<=val);
+ });
+ card.classList.toggle("changed", f in pending.rates);
+ card.classList.toggle("removed", !!pending.removes[f]);
+ card.querySelector("[data-remove]").textContent = pending.removes[f] ? "Undo remove" : "Remove";
+ refreshBar();
+}
 function poll(){fetch("/status").then(r=>r.json()).then(s=>{
  document.getElementById("log").textContent=s.log||"";
  var st=document.getElementById("status");
  st.textContent=s.running?("Running: "+s.running+" (started "+s.started+")"):(s.finished?((s.ok?"Finished ":"Failed ")+s.finished):"Nothing has run yet.");
- document.querySelectorAll("button,select").forEach(b=>{ b.disabled=!!s.running; });
+ running=!!s.running;
+ document.querySelectorAll("button").forEach(function(b){ if(b.id!=="commitbtn" && b.id!=="resetbtn") b.disabled=running; });
+ refreshBar();
  if(s.running){wasRunning=true;setTimeout(poll,1500);}
  else if(wasRunning){wasRunning=false;location.reload();}});}
-function post(url,msg){
- if(msg && !confirm(msg)) return;
- fetch(url,{method:"POST"}).then(r=>{ if(r.status===409) alert("Another job is running. Wait for it to finish, then try again."); else if(!r.ok) alert("Could not start (" + r.status + ")."); setTimeout(poll,400); });
-}
-document.querySelectorAll(".star").forEach(function(b){ b.onclick=function(){
- var card=b.closest(".pitem"), cur=+card.dataset.rating, v=+b.dataset.star;
- post("/raya/rate?file="+encodeURIComponent(card.dataset.file)+"&rating="+(v===cur?0:v)); };});
+document.querySelectorAll(".rate-btn").forEach(function(b){ b.onclick=function(){
+ var card=b.closest(".pitem"), f=card.dataset.file, cur=+card.dataset.rating, v=+b.dataset.value;
+ if(v===cur) delete pending.rates[f]; else pending.rates[f]=v;
+ showCard(card); }; });
 document.querySelectorAll("button[data-remove]").forEach(function(b){ b.onclick=function(){
- post("/raya/remove?file="+encodeURIComponent(b.dataset.remove), b.dataset.msg); };});
+ var card=b.closest(".pitem"), f=card.dataset.file;
+ if(pending.removes[f]) delete pending.removes[f]; else pending.removes[f]=true;
+ showCard(card); }; });
+document.getElementById("resetbtn").onclick=function(){
+ pending={rates:{}, removes:{}};
+ document.querySelectorAll(".pitem").forEach(showCard);
+ refreshBar(); };
+document.getElementById("commitbtn").onclick=function(){
+ var removes=Object.keys(pending.removes), rates={};
+ Object.keys(pending.rates).forEach(function(k){ if(!pending.removes[k]) rates[k]=pending.rates[k]; });
+ var msg="Save "+Object.keys(rates).length+" rating change(s) and remove "+removes.length+" photo(s)?\\n\\nRemoved photos are moved to media/_Dipadam on the server.";
+ if(!confirm(msg)) return;
+ fetch("/raya/apply",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({rates:rates,removes:removes})}).then(function(r){
+  if(r.status===409) alert("Another job is running. Wait for it to finish, then try again.");
+  else if(!r.ok) alert("Could not save (" + r.status + ").");
+  else pending={rates:{}, removes:{}};
+  setTimeout(poll,400); });
+};
 document.getElementById("ubtn").onclick=async function(){
  var btn=document.getElementById("ubtn"), prog=document.getElementById("uprog");
  var files=[...document.getElementById("files").files];
@@ -580,6 +628,7 @@ document.getElementById("ubtn").onclick=async function(){
  if(files.length>50){alert("Up to 50 photos at a time.");return;}
  if(!files.every(f=>/\\.(jpe?g|webp)$/i.test(f.name))){alert("Only JPG or WebP files.");return;}
  var big=files.find(f=>f.size>40*1024*1024); if(big){alert(big.name+" is bigger than 40 MB.");return;}
+ if(count() && !confirm("You have changes waiting that are not saved yet. Uploading will reload the page and they will be lost. Continue?")) return;
  var batch=Array.from(crypto.getRandomValues(new Uint8Array(8))).map(b=>b.toString(16).padStart(2,"0")).join("");
  btn.disabled=true;
  for(var i=0;i<files.length;i++){
@@ -588,8 +637,7 @@ document.getElementById("ubtn").onclick=async function(){
   if(!r.ok){alert("Could not upload "+files[i].name+" ("+r.status+")."); btn.disabled=false; prog.textContent=""; return;}
  }
  prog.textContent="Processing...";
- var rate=document.getElementById("urate").value;
- var r2=await fetch("/raya/process?batch="+batch+"&rating="+rate,{method:"POST"});
+ var r2=await fetch("/raya/process?batch="+batch+"&rating=0",{method:"POST"});
  if(!r2.ok){alert("Could not start processing ("+r2.status+")."); btn.disabled=false; prog.textContent=""; return;}
  setTimeout(poll,400);
 };
@@ -601,25 +649,27 @@ def render_raya():
     items = raya_items()
     groups = []
     for rating in (5, 4, 3, 2, 1, 0):
-        word = "star" if rating == 1 else "stars"
-        title = (f"{'★' * rating}{'☆' * (5 - rating)} {rating} {word}" if rating else "No stars yet (hidden from visitors)")
         if rating == 5:
-            title += " (shown first)"
-        if rating == 1:
-            title += " (shown last)"
+            title = "★★★★★ 5 stars (shown first)"
+        elif rating == 0:
+            title = "0 stars (hidden from visitors)"
+        elif rating == 1:
+            title = "★☆☆☆☆ 1 star (shown last)"
+        else:
+            title = f"{'★' * rating}{'☆' * (5 - rating)} {rating} stars"
         cards = []
         for item in items:
             if (item.get("rating") or 0) != rating:
                 continue
-            stars = "".join(
-                f"<button class='star{' on' if n <= rating else ''}' data-star='{n}' aria-label='{n} stars'>★</button>"
+            buttons = f"<button class='rate-btn zero{' on' if rating == 0 else ''}' data-value='0' aria-label='0 stars, hidden'>0</button>"
+            buttons += "".join(
+                f"<button class='rate-btn{' on' if n <= rating else ''}' data-value='{n}' aria-label='{n} stars'>★</button>"
                 for n in range(1, 6))
             cards.append(
                 f"<div class='pitem' data-file='{e(item['file'])}' data-rating='{rating}'>"
                 f"<img loading='lazy' src='/raya/thumb?file={e(item['file'])}' alt=''>"
-                f"<div class='stars'>{stars}</div>"
-                f"<button class='btn-danger' data-remove='{e(item['file'])}' "
-                f"data-msg='Remove this photo from the Raya page? The original is moved to media/_Dipadam on the server.'>Remove</button>"
+                f"<div class='rates'>{buttons}</div>"
+                f"<button class='btn-danger' data-remove='{e(item['file'])}'>Remove</button>"
                 f"</div>")
         body = f"<div class='grid'>{''.join(cards)}</div>" if cards else "<p class='empty'>No photos here.</p>"
         groups.append(f"<h2>{title}</h2>{body}")
@@ -727,10 +777,9 @@ class Handler(BaseHTTPRequestHandler):
 
     def handle_raya(self, path, qs):
         tool = [sys.executable, RAYA_TOOL]
-        name = (qs.get("file") or [""])[0]
         if path == "/raya/process":
             batch = (qs.get("batch") or [""])[0]
-            rating = (qs.get("rating") or [""])[0]
+            rating = (qs.get("rating") or ["0"])[0]
             if not BATCH_RE.match(batch) or rating not in {"0", "1", "2", "3", "4", "5"}:
                 return self.send(400, "Bad request", "text/plain")
             folder = STAGE_ROOT / batch
@@ -740,21 +789,33 @@ class Handler(BaseHTTPRequestHandler):
                 ("Resize and watermark photos", tool + ["add", str(folder), rating]),
                 ("Save changes", [sys.executable, RAYA_TOOL, "commit", f"Raya: add photos (rating {rating})"]),
             ])
-        elif path == "/raya/rate":
-            rating = (qs.get("rating") or [""])[0]
-            if not PHOTO_RE.match(name) or rating not in {"0", "1", "2", "3", "4", "5"}:
+        elif path == "/raya/apply":
+            length = int(self.headers.get("Content-Length") or 0)
+            if length <= 0 or length > 200_000:
                 return self.send(400, "Bad request", "text/plain")
-            started = run_job(f"Rate photo {name}", [
-                ("Set stars", tool + ["rate", name, rating]),
-                ("Save changes", [sys.executable, RAYA_TOOL, "commit", f"Raya: {name} rated {rating}"]),
-            ])
-        elif path == "/raya/remove":
-            if not PHOTO_RE.match(name):
+            try:
+                data = json.loads(self.rfile.read(length).decode("utf-8"))
+                rates = data.get("rates") or {}
+                removes = data.get("removes") or []
+                if not isinstance(rates, dict) or not isinstance(removes, list) or len(removes) > 500 or len(rates) > 500:
+                    raise ValueError("shape")
+                for name, value in rates.items():
+                    if not PHOTO_RE.match(name) or type(value) is not int or not 0 <= value <= 5:
+                        raise ValueError("rate")
+                for name in removes:
+                    if not isinstance(name, str) or not PHOTO_RE.match(name):
+                        raise ValueError("remove")
+            except Exception:
                 return self.send(400, "Bad request", "text/plain")
-            started = run_job(f"Remove photo {name}", [
-                ("Remove photo", tool + ["remove", name]),
-                ("Save changes", [sys.executable, RAYA_TOOL, "commit", f"Raya: remove {name}"]),
-            ])
+            drop = set(removes)
+            steps = [(f"Rate {name}", tool + ["rate", name, str(value)])
+                     for name, value in rates.items() if name not in drop]
+            steps += [(f"Remove {name}", tool + ["remove", name]) for name in removes]
+            if not steps:
+                return self.send(400, "Nothing to save", "text/plain")
+            steps.append(("Save changes", [sys.executable, RAYA_TOOL, "commit",
+                                           f"Raya: {len(rates)} rating change(s), {len(removes)} removed"]))
+            started = run_job("Save Raya changes", steps)
         else:
             return self.send(404, "Not found", "text/plain")
         self.send(202 if started else 409, json.dumps({"started": started}), "application/json")
