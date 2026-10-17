@@ -1,0 +1,280 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Website Handover Guide</title>
+<style>
+:root{
+  /* Layout: single reading column, sticky index on wide screens, cards for steps */
+  --bg:#f5f7f6; --surface:#ffffff; --ink:#1d2528; --muted:#5b676b; --line:#dde4e2;
+  --accent:#1f6f68; --accent-soft:#dcefeb; --warn:#8a3b12; --warn-soft:#f8e9df;
+  --code-bg:#14191b; --code-ink:#d6e6e3;
+  --font-display: Georgia, "Times New Roman", serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:#101517; --surface:#182022; --ink:#e6eceb; --muted:#9aa8a6; --line:#2a3538;
+    --accent:#6cc4b9; --accent-soft:#1d3834; --warn:#f0b08a; --warn-soft:#3a2a22;
+    --code-bg:#0a0e10; --code-ink:#d6e6e3; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:#101517; --surface:#182022; --ink:#e6eceb; --muted:#9aa8a6; --line:#2a3538;
+  --accent:#6cc4b9; --accent-soft:#1d3834; --warn:#f0b08a; --warn-soft:#3a2a22;
+  --code-bg:#0a0e10; --code-ink:#d6e6e3; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.6 var(--font-body);
+  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); padding-block:24px 64px; }
+.wrap { max-width: 880px; margin: 0 auto; }
+header.top { border-bottom: 1px solid var(--line); padding-bottom: 24px; margin-bottom: 8px; }
+.kicker { font: 600 12px var(--font-body); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+h1 { font: 700 clamp(30px, 6vw, 42px)/1.15 var(--font-display); margin: 8px 0 12px; text-wrap: balance; }
+h2 { font: 700 26px/1.25 var(--font-display); margin: 48px 0 12px; text-wrap: balance; }
+h3 { font: 600 18px/1.35 var(--font-body); margin: 22px 0 8px; }
+p, li { max-width: 68ch; }
+.lead { font-size: 18px; color: var(--muted); margin: 0; }
+nav.index { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+nav.index a { font-size: 14px; text-decoration: none; color: var(--accent); background: var(--accent-soft);
+  padding: 6px 12px; border-radius: 999px; }
+nav.index a:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+a { color: var(--accent); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; margin: 14px 0; }
+.flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 10px; margin: 16px 0; }
+.flow .node { flex: 1 1 160px; min-width: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+.flow .node b { display: block; font-size: 15px; }
+.flow .node span { font-size: 13px; color: var(--muted); }
+.flow .arrow { align-self: center; color: var(--muted); font-size: 20px; }
+ol.steps { list-style: none; counter-reset: s; padding: 0; margin: 12px 0; }
+ol.steps > li { counter-increment: s; position: relative; padding: 0 0 14px 44px; margin: 0; }
+ol.steps > li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 50%;
+  background: var(--accent); color: #fff; display: grid; place-items: center; font: 600 14px var(--font-body); }
+ol.steps > li::after { content: ""; position: absolute; left: 14px; top: 34px; bottom: 0; width: 2px; background: var(--line); }
+ol.steps > li:last-child::after { display: none; }
+code, .mono { font-family: var(--font-mono); font-size: 13.5px; background: var(--accent-soft); padding: 1px 6px; border-radius: 5px; }
+pre { font: 13px/1.5 var(--font-mono); background: var(--code-bg); color: var(--code-ink); padding: 14px 16px; border-radius: 8px;
+  overflow-x: auto; max-width: 100%; margin: 10px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 15px; margin: 10px 0; display: block; overflow-x: auto; }
+th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.callout { border-left: 4px solid var(--accent); background: var(--accent-soft); padding: 12px 16px; border-radius: 6px; margin: 16px 0; }
+.callout.warn { border-color: var(--warn); background: var(--warn-soft); color: var(--ink); }
+.callout b { display: block; margin-bottom: 4px; }
+.tag { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); margin-right: 6px; }
+.todo { display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.todo:last-child { border-bottom: 0; }
+.box { width: 18px; height: 18px; border: 2px solid var(--muted); border-radius: 4px; flex: none; margin-top: 3px; }
+footer { margin-top: 56px; font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; }
+</style>
+
+<div class="wrap">
+
+<p style="margin:0 0 8px"><a href="./">&larr; Back to Webmaster</a></p>
+
+<header class="top">
+  <div class="kicker">JohorStudio.com · Handover</div>
+  <h1>Website Handover Guide</h1>
+  <p class="lead">Everything you need to keep johorstudio.com running day to day: adding projects, updating the site, and what not to touch. Written for someone who is comfortable with computers but is new to this setup.</p>
+  <nav class="index" aria-label="Sections">
+    <a href="#overview">Overview</a>
+    <a href="#daily">Daily tasks</a>
+    <a href="#photos">Photo rules</a>
+    <a href="#panel">Webmaster panel</a>
+    <a href="#behind">Behind the scenes</a>
+    <a href="#rules">Golden rules</a>
+    <a href="#open">Open items</a>
+    <a href="#glossary">Glossary</a>
+  </nav>
+</header>
+
+<section id="overview">
+  <h2>1. What this is</h2>
+  <p>The website is a set of static pages. Pages are built from a GitHub repository, and then served by a small web server on the home server (TrueNAS). Project photos are added by copying folders to a network share. The <b>Webmaster panel</b> turns those folders into website pages.</p>
+
+  <div class="flow" aria-label="How content moves">
+    <div class="node"><b>1. Project folder</b><span>Photos + project.md, copied to the <code>website-uploads</code> share</span></div>
+    <div class="node"><b>2. Webmaster</b><span>Publish projects turns folders into pages</span></div>
+    <div class="node"><b>3. Website</b><span>johorstudio.com shows the new pages</span></div>
+  </div>
+
+  <div class="flow" aria-label="How code moves">
+    <div class="node"><b>A. Code change</b><span>Made on GitHub or on your Mac, then merged into <code>main</code></span></div>
+    <div class="node"><b>B. Update</b><span>Webmaster pulls <code>main</code> and publishes again</span></div>
+    <div class="node"><b>C. Website</b><span>New design or text goes live</span></div>
+  </div>
+
+  <div class="card">
+    <h3>Where things live</h3>
+    <table>
+      <thead><tr><th>What</th><th>Where</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Website code and pages</td><td>GitHub: <code>RafieRosliputra/johorstudio-website</code>, branch <code>main</code></td><td>The source of truth for code and text</td></tr>
+        <tr><td>Working copy on the server</td><td><code>/mnt/ssd/website/repo</code></td><td>Updated by the Update button. Do not edit it by hand</td></tr>
+        <tr><td>Project folders (new)</td><td>Share <code>website-uploads</code> (on Mac: <code>/Volumes/website-uploads</code>)</td><td>Add new folders here</td></tr>
+        <tr><td>Finished project folders</td><td><code>website-uploads/_DONE</code></td><td>Moved here automatically after Publish</td></tr>
+        <tr><td>Webmaster panel</td><td><code>webmaster.johorstudio.com</code></td><td>Protected by Cloudflare Access. Only approved emails can log in</td></tr>
+        <tr><td>Visual page editor</td><td>Silex, linked from the panel (Open Silex editor)</td><td>For editing the non-project pages</td></tr>
+        <tr><td>Snapshots and backups</td><td>TrueNAS, dataset <code>ssd/website</code></td><td>See section 5</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="daily">
+  <h2>2. Daily tasks</h2>
+
+  <h3>Add a new project</h3>
+  <ol class="steps">
+    <li>On your Mac, open the <b>website-uploads</b> share. Create a folder named <code>YYYYMMDD Event name</code>, for example <code>20261103 Event name</code>. Use the event date.</li>
+    <li>Copy the photos into the folder. Common formats are JPG, PNG, WebP, HEIC and TIF. Keep the originals as they are; the panel makes the web versions.</li>
+    <li>Add a <code>project.md</code> file. It has key-value lines at the top (title, date, client, services, cover photo), then the description in one or more paragraphs. Copy an existing <code>project.md</code> from <code>_DONE</code> as a template.</li>
+    <li>Open the webmaster panel. The folder appears under <b>New folders</b>. Check the photo count and that the project.md is found.</li>
+    <li>Press <b>Publish projects</b>. Wait for the status to show <i>Finished</i> with <i>Done. N project(s) live</i>.</li>
+    <li>Open the website and check the new project page. The folder has moved to <code>_DONE</code>.</li>
+  </ol>
+
+  <div class="callout">
+    <b>If a folder does not show up</b>
+    Folders starting with <code>_</code> or <code>.</code> are ignored on purpose. Rename it so it does not start with <code>_</code>.
+  </div>
+
+  <h3>Update the website after a code change</h3>
+  <ol class="steps">
+    <li>Make the change on a branch (for example <code>webmaster-something</code>), commit it and push the branch to GitHub.</li>
+    <li>Merge the branch into <code>main</code> and push <code>main</code>. Do not skip this, because Update only reads <code>main</code>.</li>
+    <li>If the change touches <code>tools/admin.py</code> (the webmaster itself), restart the <b>webmaster app</b> in TrueNAS (Apps, webmaster, Restart) first. Otherwise the old code keeps running.</li>
+    <li>In the panel, press <b>Update from GitHub and publish</b>. The status should say <i>Already up to date</i> or pull the new commits, then <i>Done</i>.</li>
+    <li>Check the website. If something looks wrong, tell the person who made the change; do not edit files on the server.</li>
+  </ol>
+
+  <h3>Change the home page carousel order</h3>
+  <p>The home page carousel is set in the <code>HERO</code> list in <code>tools/build.py</code>. The first item is shown first. Change the order there, run <code>tools/build.py</code> so that <code>site/index.html</code> is rebuilt, commit both files, merge into <code>main</code>, then Update.</p>
+
+  <h3>Remove a project or one photo</h3>
+  <p>In the panel, under <b>On the website</b>, use <b>Remove project</b> or open <b>Photos</b> and use <b>Remove photo</b>. The original files are moved to a folder named <code>_Project name</code> in <code>website-uploads</code>, so nothing is lost. Those <code>_</code> folders are the originals; keep them unless you have a backup.</p>
+
+  <h3>Edit the other pages</h3>
+  <p>Use <b>Open Silex editor</b> from the panel. Silex is a visual editor for pages that are not project pages. Make the change, publish from Silex, then check the website.</p>
+</section>
+
+<section id="photos">
+  <h2>3. Photo rules</h2>
+  <p>The panel processes photos automatically, so you do not need to resize them yourself.</p>
+  <table>
+    <thead><tr><th>Rule</th><th>What happens</th></tr></thead>
+    <tbody>
+      <tr><td>Format</td><td>Converted to WebP</td></tr>
+      <tr><td>Quality</td><td>WebP quality 50. Smaller files, loads faster, still sharp on screen</td></tr>
+      <tr><td>Size cap</td><td>Photos over 24 megapixels are scaled down to 24 megapixels</td></tr>
+      <tr><td>Watermark</td><td>The logo watermark is added to the full and normal sizes. Thumbnails are not watermarked again</td></tr>
+      <tr><td>Existing photos</td><td>Photos processed with older settings are redone once, the next time the site is published</td></tr>
+    </tbody>
+  </table>
+  <div class="callout warn">
+    <b>Watch out</b>
+    Do not put a watermarked photo in the folder. Use the original photo, or the watermark will be added twice.
+  </div>
+</section>
+
+<section id="panel">
+  <h2>4. Webmaster panel reference</h2>
+  <table>
+    <thead><tr><th>Button or area</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td>Publish projects</td><td>Adds the new folders to the website, then moves each one to <code>_DONE</code>. Existing projects are updated, not duplicated</td></tr>
+      <tr><td>Update from GitHub and publish</td><td>Pulls the latest <code>main</code> from GitHub, then publishes. Use after a code change is merged</td></tr>
+      <tr><td>Open website</td><td>Opens johorstudio.com in a new tab</td></tr>
+      <tr><td>Open Silex editor</td><td>Opens the visual editor for the other pages</td></tr>
+      <tr><td>Guide &amp; commands</td><td>Explains the server commands. Read-only commands have a Run button; server commands have a Copy button and say where to paste them</td></tr>
+      <tr><td>Status and log</td><td>Shows whether a job is running, when it finished, and the full output. If something failed, the log says which step</td></tr>
+      <tr><td>New folders</td><td>Folders in <code>website-uploads</code> not yet published</td></tr>
+      <tr><td>On the website</td><td>Published projects, with Remove project and Remove photo</td></tr>
+    </tbody>
+  </table>
+  <p class="muted">Times in the status and log are in Malaysia time (UTC+8).</p>
+</section>
+
+<section id="behind">
+  <h2>5. Behind the scenes (TrueNAS and backups)</h2>
+  <p>You do not need to run these every day. This section explains what exists, so you know what is safe to touch.</p>
+
+  <h3>Storage layout</h3>
+  <table>
+    <thead><tr><th>Path</th><th>Contents</th><th>Keep?</th></tr></thead>
+    <tbody>
+      <tr><td><code>/mnt/ssd/website/repo</code></td><td>Working copy of the GitHub repo, including the built site and project photos</td><td>Yes. Needed by the site</td></tr>
+      <tr><td><code>/mnt/ssd/website/uploads</code></td><td>The <code>website-uploads</code> share, including <code>_DONE</code></td><td>Yes. Only empty <code>_DONE</code> should be cleaned, and only with a backup</td></tr>
+      <tr><td><code>/mnt/ssd/website/silex</code></td><td>Data for the Silex editor</td><td>Yes</td></tr>
+      <tr><td><code>/mnt/ssd/scripts</code></td><td>Snapshot script <code>snap-website.sh</code></td><td>Yes. Used by the daily cron job</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Snapshots (automatic)</h3>
+  <p>The dataset <code>ssd/website</code> is snapshotted by a script. A cron job runs it every day at 03:00. The script only takes a new snapshot when 14 days have passed since the last one. Once the new snapshot is confirmed, it deletes the older ones and keeps the two newest. That means there are always about one month of snapshots. Snapshots do not include the uploads share, which is its own dataset.</p>
+  <p>To see snapshots: TrueNAS web UI, <b>Datasets, ssd/website, Snapshots</b>. To restore one file from a snapshot, use the Guide page.</p>
+
+  <h3>Full backup (manual)</h3>
+  <p>A full <code>tar</code> copy of <code>repo</code>, <code>uploads</code> and <code>silex</code> is made by hand using the command in the Guide page. Keep copies outside the TrueNAS server. Snapshots are on the same disk, so they do not protect against the disk failing.</p>
+
+  <div class="callout">
+    <b>Git history on the server</b>
+    The repo on the server was made shallow (one commit). Full history is still on GitHub, so nothing is lost.
+  </div>
+</section>
+
+<section id="rules">
+  <h2>6. Golden rules</h2>
+  <ul>
+    <li><b>Do not edit files in <code>repo</code> on the server.</b> Publish rewrites the <code>site</code> folder, so manual changes are lost, and they are not on GitHub.</li>
+    <li><b>Check before you Update.</b> On the Guide page, run <i>Check repo status</i>. If files other than <code>site/</code> have changed, stop and ask.</li>
+    <li><b>Make changes on GitHub, not on the server.</b> Use a branch, then merge into <code>main</code>.</li>
+    <li><b>Restart the webmaster app</b> after a change to <code>tools/admin.py</code>.</li>
+    <li><b>Never delete the newest snapshot.</b> Never run a rollback unless it is an emergency and you have made a fresh copy first.</li>
+    <li><b>Do not delete <code>_</code> folders in <code>website-uploads</code></b> unless you have a backup. They are the originals of removed projects.</li>
+    <li><b>Never share passwords in chat or in this guide.</b> Keep them in a password manager.</li>
+  </ul>
+</section>
+
+<section id="open">
+  <h2>7. Open items</h2>
+  <p>These are known gaps. Tick them off as they are done.</p>
+  <div class="card">
+    <div class="todo"><div class="box" aria-hidden="true"></div><div><b>Off-site copy.</b> Snapshots and tar files are on the same server. Set up a copy of the project folders and <code>repo/media</code> to another disk or cloud storage.</div></div>
+    <div class="todo"><div class="box" aria-hidden="true"></div><div><b>Check that Publish can move folders.</b> The admin container mounts <code>website-uploads</code> as read-only in the compose file. Publish has worked so far, but confirm that folders still move to <code>_DONE</code> after any change to the setup.</div></div>
+    <div class="todo"><div class="box" aria-hidden="true"></div><div><b>Contact page mismatch.</b> The service list in <code>tools/build.py</code> does not match the committed <code>site/contact.html</code>. Decide which one is correct, then rebuild.</div></div>
+    <div class="todo"><div class="box" aria-hidden="true"></div><div><b>Hero images.</b> The photo rules (quality 50, 24 MP cap) apply to project and portfolio photos, not to the hero images on the home page.</div></div>
+    <div class="todo"><div class="box" aria-hidden="true"></div><div><b>Old portfolio thumbnails.</b> Small portfolio thumbnails were made before quality 50 was set. Regenerating them is optional.</div></div>
+    <div class="todo"><div class="box" aria-hidden="true"></div><div><b>Server password.</b> The TrueNAS root password was shared in a chat during setup. Change it, and store the new one in a password manager.</div></div>
+    <div class="todo"><div class="box" aria-hidden="true"></div><div><b>Old branches.</b> <code>webmaster-timezone-kl</code> and <code>webmaster-guide</code> were merged into <code>main</code>. They can be deleted on GitHub.</div></div>
+    <div class="todo"><div class="box" aria-hidden="true"></div><div><b>Access list.</b> Confirm which emails are allowed through Cloudflare Access for the webmaster panel, and give the new person access if needed.</div></div>
+  </div>
+</section>
+
+<section id="glossary">
+  <h2>8. Glossary</h2>
+  <table>
+    <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td>Repository (repo)</td><td>The project folder that holds all the website code and history, on GitHub</td></tr>
+      <tr><td>Branch</td><td>A separate line of work. Changes are made on a branch, then merged into <code>main</code></td></tr>
+      <tr><td>Commit</td><td>A saved set of changes, with a message describing it</td></tr>
+      <tr><td>Push / merge</td><td>Push sends your commits to GitHub. Merge combines a branch into another, here into <code>main</code></td></tr>
+      <tr><td>Container</td><td>A packaged app that runs on the server. The webmaster and the web server each run in one</td></tr>
+      <tr><td>Dataset</td><td>A storage area in TrueNAS with its own snapshots and settings. <code>ssd/website</code> is one</td></tr>
+      <tr><td>Snapshot</td><td>A saved state of a dataset at one moment. Can be used to restore files</td></tr>
+      <tr><td>Cron job</td><td>A scheduled task. The snapshot script runs as one every day</td></tr>
+      <tr><td>SMB share</td><td>A network folder that your Mac can open and copy files into</td></tr>
+      <tr><td>WebP</td><td>A web image format that is smaller than JPG for similar quality</td></tr>
+      <tr><td>Cloudflare Access</td><td>A login check in front of the webmaster panel. Only approved emails get in</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>
+  Prepared from the setup and changes made in October 2026. If something in this guide no longer matches what you see, check the Guide page in the webmaster panel first, then ask.
+</footer>
+
+</div>
+</body></html>

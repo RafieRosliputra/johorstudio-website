@@ -147,6 +147,7 @@ table{width:100%;border-collapse:collapse;font-size:15px}td,th{text-align:left;p
 <a class="btn btn-line" href="https://johorstudio.com" target="_blank" rel="noopener">Open website</a>
 {editor}
 <a class="btn btn-line" href="guide">Guide &amp; commands</a>
+<a class="btn btn-line" href="handover">Handover guide</a>
 </div>
 <p class="muted" style="margin:12px 0 0">Publish: adds the new folders below to the website, then moves each one into <b>_DONE</b>. Update: gets Claude's latest changes, then publishes.</p></div>
 
@@ -357,6 +358,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, render())
         if url.path == "/guide":
             return self.send(200, render_guide())
+        if url.path == "/handover":
+            return self.send(200, (REPO / "tools" / "handover.html").read_text(encoding="utf-8"))
         if url.path == "/run":
             gid = (parse_qs(url.query).get("id") or [""])[0]
             idx = int(gid[1:]) if gid[:1] == "g" and gid[1:].isdigit() else -1
