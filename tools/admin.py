@@ -146,7 +146,7 @@ table{width:100%;border-collapse:collapse;font-size:15px}td,th{text-align:left;p
 <button data-job="update" class="btn-line">Update from GitHub and publish</button>
 <a class="btn btn-line" href="https://johorstudio.com" target="_blank" rel="noopener">Open website</a>
 {editor}
-<a class="btn btn-line" href="guide">Panduan &amp; command</a>
+<a class="btn btn-line" href="guide">Guide &amp; commands</a>
 </div>
 <p class="muted" style="margin:12px 0 0">Publish: adds the new folders below to the website, then moves each one into <b>_DONE</b>. Update: gets Claude's latest changes, then publishes.</p></div>
 
@@ -215,74 +215,74 @@ def render():
 
 
 GUIDE = [
-    {"title": "Semak snapshot website", "where": "TrueNAS Shell",
+    {"title": "Check website snapshots", "where": "TrueNAS Shell",
      "cmd": "zfs list -t snapshot -r ssd/website",
-     "explain": "Tunjuk senarai snapshot website. Nama ssd/website@webauto-... ialah snapshot website. Kalau ada ssd/website/uploads@..., itu bukan dari skrip ni, padam sahaja.",
+     "explain": "Lists the website snapshots. Names like ssd/website@webauto-... are website snapshots. If you see ssd/website/uploads@..., that did not come from this script, so it can be deleted.",
      "run": None},
-    {"title": "Buat snapshot sekarang", "where": "TrueNAS Shell",
+    {"title": "Take a snapshot now", "where": "TrueNAS Shell",
      "cmd": "/mnt/ssd/scripts/snap-website.sh",
-     "explain": "Skrip ni hanya buat snapshot baru kalau dah 14 hari sejak yang terakhir. Lepas snapshot baru disahkan, ia padam yang lama dan simpan 2 yang terbaru. Biasanya tak perlu jalankan manual, cron buat sendiri setiap hari pukul 03:00.",
+     "explain": "The script only takes a new snapshot if 14 days have passed since the last one. Once the new snapshot is verified, it deletes the older ones and keeps the 2 newest. Usually you don't need to run it manually, because the cron job runs it every day at 03:00.",
      "run": None},
-    {"title": "Jadual cron snapshot", "where": "TrueNAS web UI: System, Advanced Settings, Cron Jobs",
+    {"title": "Snapshot cron job", "where": "TrueNAS web UI: System, Advanced Settings, Cron Jobs",
      "cmd": "Command: /mnt/ssd/scripts/snap-website.sh | Run as: root | Daily 03:00 AM",
-     "explain": "Setting untuk jalankan skrip snapshot setiap hari. Semak di sini kalau nak tukar masa atau nak nonaktifkan.",
+     "explain": "The setting that runs the snapshot script every day. Check here if you want to change the time or disable it.",
      "run": None},
-    {"title": "Backup penuh (tar)", "where": "TrueNAS Shell",
+    {"title": "Full backup (tar)", "where": "TrueNAS Shell",
      "cmd": "cd /mnt/ssd/website && tar czf /mnt/ssd/website-backup-$(date +%F-%H%M).tar.gz repo uploads silex",
-     "explain": "Salinan penuh repo, uploads dan silex dalam satu fail. Lambat dan besar. Guna sebelum perubahan besar, dan simpan salinan di luar TrueNAS.",
+     "explain": "A full copy of repo, uploads and silex in one file. It is slow and large. Use it before big changes, and keep a copy outside TrueNAS.",
      "run": None},
-    {"title": "Padam backup tar lama", "where": "TrueNAS Shell",
+    {"title": "Delete old tar backups", "where": "TrueNAS Shell",
      "cmd": "rm -f /mnt/ssd/website-backup-*.tar.gz",
-     "explain": "Padam semua fail backup tar. Tak boleh dibatalkan. Buat hanya bila salinan di luar TrueNAS dah disahkan.",
+     "explain": "Deletes all tar backup files. This cannot be undone. Only do it after you have confirmed a copy outside TrueNAS.",
      "run": None},
-    {"title": "Padam satu snapshot", "where": "TrueNAS Shell",
-     "cmd": "zfs destroy ssd/website@NAMA_SNAPSHOT",
-     "explain": "Padam satu snapshot. Ganti NAMA_SNAPSHOT dengan nama sebenar dari senarai. Jangan padam snapshot yang terbaru.",
+    {"title": "Delete one snapshot", "where": "TrueNAS Shell",
+     "cmd": "zfs destroy ssd/website@NAME_OF_SNAPSHOT",
+     "explain": "Deletes one snapshot. Replace NAME_OF_SNAPSHOT with the real name from the list. Never delete the newest snapshot.",
      "run": None},
-    {"title": "Semak status repo", "where": "Webmaster (Run)",
+    {"title": "Check repo status", "where": "Webmaster (Run)",
      "cmd": "git -C /work status -sb",
-     "explain": "Tunjuk branch dan fail yang berubah. Kalau ada fail berubah selain site/, jangan tekan Update dulu.",
+     "explain": "Shows the branch and any changed files. If there are changed files outside site/, do not press Update yet.",
      "run": ["git", "-C", "/work", "status", "-sb"]},
-    {"title": "Commit terakhir", "where": "Webmaster (Run)",
+    {"title": "Latest commits", "where": "Webmaster (Run)",
      "cmd": "git -C /work log --oneline -3",
-     "explain": "Tiga commit terakhir dalam repo di TrueNAS.",
+     "explain": "The three latest commits in the repo on TrueNAS.",
      "run": ["git", "-C", "/work", "log", "--oneline", "-3"]},
-    {"title": "Saiz website", "where": "Webmaster (Run)",
+    {"title": "Website size", "where": "Webmaster (Run)",
      "cmd": "du -sh --apparent-size /work/site /work/projects /work/media /work/.git /uploads",
-     "explain": "Saiz setiap bahagian website. Bandingkan nombor ini selepas Update.",
+     "explain": "Size of each part of the website. Compare these numbers after an Update.",
      "run": ["du", "-sh", "--apparent-size", "/work/site", "/work/projects", "/work/media", "/work/.git", "/uploads"]},
-    {"title": "Isi website-uploads", "where": "Webmaster (Run)",
+    {"title": "Contents of website-uploads", "where": "Webmaster (Run)",
      "cmd": "ls -A /uploads",
-     "explain": "Senarai folder dalam website-uploads. Folder yang bermula _ ialah gambar asal projek yang dibuang, dan _DONE.",
+     "explain": "Lists the folders in website-uploads. Folders starting with _ are removed project originals, plus _DONE.",
      "run": ["ls", "-A", "/uploads"]},
-    {"section": "Untuk masa depan", "title": "Semak ruang disk", "where": "TrueNAS Shell",
+    {"section": "For later", "title": "Check disk space", "where": "TrueNAS Shell",
      "cmd": "df -h /mnt/ssd && zfs list -o name,used,avail ssd/website",
-     "explain": "Tengok ruang kosong pool ssd dan berapa banyak website guna.",
+     "explain": "Shows free space on the ssd pool and how much the website uses.",
      "run": None},
-    {"section": "Untuk masa depan", "title": "Lihat snapshot dalam folder", "where": "TrueNAS Shell",
+    {"section": "For later", "title": "List snapshots in the folder", "where": "TrueNAS Shell",
      "cmd": "ls /mnt/ssd/website/.zfs/snapshot/",
-     "explain": "Senarai nama snapshot website. Folder ni digunakan untuk ambil satu fail dari snapshot lama.",
+     "explain": "Lists the snapshot names for the website. Use this folder to pick a file from an old snapshot.",
      "run": None},
-    {"section": "Untuk masa depan", "title": "Pulihkan satu fail dari snapshot", "where": "TrueNAS Shell",
-     "cmd": "cp -a /mnt/ssd/website/.zfs/snapshot/NAMA_SNAPSHOT/CONTOH_FAIL /mnt/ssd/website/CONTOH_FAIL",
-     "explain": "Ambil satu fail atau folder dari snapshot lama tanpa rollback seluruh website. Ganti NAMA_SNAPSHOT dan CONTOH_FAIL dengan nama sebenar (contoh: repo/site/index.html). Pastikan ruang laluan betul sebelum tekan Enter.",
+    {"section": "For later", "title": "Restore one file from a snapshot", "where": "TrueNAS Shell",
+     "cmd": "cp -a /mnt/ssd/website/.zfs/snapshot/NAME_OF_SNAPSHOT/ITEM /mnt/ssd/website/ITEM",
+     "explain": "Takes one file or folder from an old snapshot without rolling back the whole website. Replace NAME_OF_SNAPSHOT and ITEM with real names (example: repo/site/index.html). Check the paths before pressing Enter.",
      "run": None},
-    {"section": "Untuk masa depan", "title": "Semak backup tar boleh dibuka", "where": "TrueNAS Shell",
-     "cmd": "tar tzf /mnt/ssd/website-backup-NAMA.tar.gz | head -20",
-     "explain": "Pastikan fail backup tar tak rosak dengan senarai isi pertama. Jalankan sebelum padam backup lama.",
+    {"section": "For later", "title": "Check a tar backup can be read", "where": "TrueNAS Shell",
+     "cmd": "tar tzf /mnt/ssd/website-backup-NAME.tar.gz | head -20",
+     "explain": "Makes sure the tar backup is not corrupted by listing its first contents. Run this before deleting old backups.",
      "run": None},
-    {"section": "Untuk masa depan", "title": "Rollback seluruh website (kecemasan sahaja)", "where": "TrueNAS Shell",
-     "cmd": "zfs rollback ssd/website@NAMA_SNAPSHOT",
-     "explain": "Kembalikan seluruh folder website ke keadaan snapshot. Semua perubahan selepas snapshot tu hilang. Guna hanya dalam kecemasan, dan hanya selepas salinan terkini dah dibuat.",
+    {"section": "For later", "title": "Roll back the whole website (emergency only)", "where": "TrueNAS Shell",
+     "cmd": "zfs rollback ssd/website@NAME_OF_SNAPSHOT",
+     "explain": "Returns the whole website folder to the snapshot state. Every change after that snapshot is lost. Use only in an emergency, and only after you have made a fresh copy.",
      "run": None},
-    {"section": "Untuk masa depan", "title": "Restart webmaster", "where": "TrueNAS web UI: Apps, webmaster",
+    {"section": "For later", "title": "Restart webmaster", "where": "TrueNAS web UI: Apps, webmaster",
      "cmd": "Apps → webmaster → Restart",
-     "explain": "Perlu lepas admin.py berubah di GitHub, supaya kod baru dimuatkan semula. Restart tak padam apa-apa.",
+     "explain": "Needed after admin.py changes on GitHub, so the new code is loaded. A restart does not delete anything.",
      "run": None},
 ]
 
-GUIDE_PAGE = """<!doctype html><html lang="ms"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Panduan | Webmaster</title>
+GUIDE_PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Guide | Webmaster</title>
 <meta name="robots" content="noindex">
 <style>
 :root{--ink:#1f2629;--muted:#5f6b70;--line:#dde3e5;--bg:#f4f6f6;--teal:#1f6f68}
@@ -295,14 +295,14 @@ button{font:600 14px system-ui,sans-serif;border:0;border-radius:6px;padding:9px
 pre{background:#14191b;color:#d6e2e0;padding:12px;border-radius:8px;overflow:auto;font-size:13px;white-space:pre-wrap;word-break:break-all}
 a{color:var(--teal)}
 </style></head><body><div class="wrap">
-<p class="muted"><a href="./">&larr; Kembali ke Webmaster</a></p><h1>Panduan &amp; command</h1>
-<p class="muted">Tekan <b>Terangkan</b> untuk baca penerangan. <b>Run</b> jalankan terus dari webmaster (hanya command semakan). Command TrueNAS Shell tekan <b>Salin</b>, kemudian tampal di shell TrueNAS.</p>
+<p class="muted"><a href="./">&larr; Back to Webmaster</a></p><h1>Guide &amp; commands</h1>
+<p class="muted">Press <b>Explain</b> to read what a command does. <b>Run</b> runs read-only checks directly from the webmaster. For TrueNAS Shell commands, press <b>Copy → TrueNAS Shell</b>, then paste into the TrueNAS Shell.</p>
 {cards}
 </div><script>
 document.querySelectorAll("[data-explain]").forEach(function(b){b.onclick=function(){var d=document.getElementById("ex-"+b.dataset.explain);d.hidden=!d.hidden;};});
 document.querySelectorAll("[data-run]").forEach(function(b){b.onclick=function(){var id=b.dataset.run;document.getElementById("ex-"+id).hidden=false;var o=document.getElementById("out-"+id);o.hidden=false;o.textContent="Running...";
- fetch("run?id="+id).then(function(r){return r.json();}).then(function(j){o.textContent=j.output;}).catch(function(){o.textContent="Gagal";});};});
-document.querySelectorAll("[data-copy]").forEach(function(b){b.onclick=function(){navigator.clipboard.writeText(b.dataset.copy).then(function(){b.textContent="Disalin";});};});
+ fetch("run?id="+id).then(function(r){return r.json();}).then(function(j){o.textContent=j.output;}).catch(function(){o.textContent="Failed";});};});
+document.querySelectorAll("[data-copy]").forEach(function(b){b.onclick=function(){navigator.clipboard.writeText(b.dataset.copy).then(function(){b.textContent="Copied";});};});
 </script></body></html>"""
 
 
@@ -310,19 +310,19 @@ def render_guide():
     cards, section = [], None
     for i, g in enumerate(GUIDE):
         gid = f"g{i}"
-        if g.get("section", "Sekarang") != section:
-            section = g.get("section", "Sekarang")
+        if g.get("section", "Now") != section:
+            section = g.get("section", "Now")
             cards.append(f"<h2 style='font-size:19px;margin:28px 0 4px'>{e(section)}</h2>")
         if g["run"]:
             action = f"<button data-run='{gid}'>Run</button>"
         elif g["where"].startswith("TrueNAS Shell"):
-            action = f"<button class='btn-line' data-copy='{e(g['cmd'])}'>Salin → TrueNAS Shell</button>"
+            action = f"<button class='btn-line' data-copy='{e(g['cmd'])}'>Copy → TrueNAS Shell</button>"
         else:
             action = ""
         cards.append(
             f"<div class='card'><div class='row' style='justify-content:space-between'>"
-            f"<div><b>{e(g['title'])}</b><div class='muted'>Di mana: {e(g['where'])}</div></div>"
-            f"<div class='row'><button class='btn-line' data-explain='{gid}'>Terangkan</button>{action}</div></div>"
+            f"<div><b>{e(g['title'])}</b><div class='muted'>Where: {e(g['where'])}</div></div>"
+            f"<div class='row'><button class='btn-line' data-explain='{gid}'>Explain</button>{action}</div></div>"
             f"<div id='ex-{gid}' hidden style='margin-top:10px'><p style='margin:0 0 8px'>{e(g['explain'])}</p>"
             f"<pre>{e(g['cmd'])}</pre><pre id='out-{gid}' hidden></pre></div></div>")
     return GUIDE_PAGE.replace("{cards}", "".join(cards))
