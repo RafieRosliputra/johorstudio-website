@@ -154,6 +154,20 @@ footer { margin-top: 56px; font-size: 14px; color: var(--muted); border-top: 1px
 
   <h3>Remove a project or one photo</h3>
   <p>In the panel, under <b>On the website</b>, use <b>Remove project</b> or open <b>Photos</b> and use <b>Remove photo</b>. The original files are moved to a folder named <code>_Project name</code> in <code>website-uploads</code>, so nothing is lost. Those <code>_</code> folders are the originals; keep them unless you have a backup.</p>
+  <p>On the Portfolio and Raya pages, <b>Remove</b> only takes effect after <b>Commit changes</b>. The photo leaves the website, and its files are moved to <code>media/_Dipadam</code> on the server (see the table below). Nothing is deleted for good.</p>
+
+  <h3>Portfolio and Raya photos (webmaster pages)</h3>
+  <p>Both pages work the same way. Uploads and new categories are saved right away. Moves, removals and ratings are not saved until you press <b>Commit changes</b> at the bottom of the page.</p>
+  <ol class="steps">
+    <li><b>Upload.</b> Choose the photos and press <b>Upload and process</b>. Each photo is resized and watermarked. On the Raya page, new photos start with <b>0 stars</b>, so they stay hidden.</li>
+    <li><b>Change.</b> On Portfolio, pick a new category in the dropdown. On Raya, press a star (0 to 5). The box turns <b>gold</b>, meaning the change is waiting.</li>
+    <li><b>Remove.</b> Press <b>Remove</b>. The box turns <b>red</b>, meaning it will be removed when you commit. Press <b>Undo remove</b> to cancel.</li>
+    <li><b>Commit or reset.</b> Press <b>Commit changes</b> to apply everything at once, or <b>Reset</b> to throw away the waiting changes. Wait for the status to show <i>Finished</i>.</li>
+  </ol>
+  <div class="callout">
+    <b>Raya ratings</b>
+    5 stars show first on the Raya page, then 4, 3, 2 and 1 stars. 0 stars keeps the photo hidden. Visitors never see the stars, and within one star the photos are mixed portrait and landscape.
+  </div>
 
   <h3>Edit the other pages</h3>
   <p>Use <b>Open Silex editor</b> from the panel. Silex is a visual editor for pages that are not project pages. Make the change, publish from Silex, then check the website.</p>
@@ -170,6 +184,7 @@ footer { margin-top: 56px; font-size: 14px; color: var(--muted); border-top: 1px
       <tr><td>Size cap</td><td>Photos over 24 megapixels are scaled down to 24 megapixels</td></tr>
       <tr><td>Watermark</td><td>The logo watermark is added to the full and normal sizes. Thumbnails are not watermarked again</td></tr>
       <tr><td>Existing photos</td><td>Photos processed with older settings are redone once, the next time the site is published</td></tr>
+      <tr><td>Removed portfolio or Raya photos</td><td>Moved to <code>media/_Dipadam</code> in the repo on the server. Not on GitHub, and not shown on the website. The thumbnail is deleted</td></tr>
     </tbody>
   </table>
   <div class="callout warn">
@@ -184,6 +199,8 @@ footer { margin-top: 56px; font-size: 14px; color: var(--muted); border-top: 1px
     <thead><tr><th>Button or area</th><th>What it does</th></tr></thead>
     <tbody>
       <tr><td>Publish projects</td><td>Adds the new folders to the website, then moves each one to <code>_DONE</code>. Existing projects are updated, not duplicated</td></tr>
+      <tr><td>Portfolio page</td><td>Upload photos, choose categories, move photos between categories, and remove photos. Changes wait until <b>Commit changes</b></td></tr>
+      <tr><td>Raya page</td><td>Upload photos (0 stars by default), give each photo 0 to 5 stars, and remove photos. Changes wait until <b>Commit changes</b></td></tr>
       <tr><td>Update from GitHub and publish</td><td>Pulls the latest <code>main</code> from GitHub, then publishes. Use after a code change is merged</td></tr>
       <tr><td>Open website</td><td>Opens johorstudio.com in a new tab</td></tr>
       <tr><td>Open Silex editor</td><td>Opens the visual editor for the other pages</td></tr>
@@ -237,6 +254,7 @@ footer { margin-top: 56px; font-size: 14px; color: var(--muted); border-top: 1px
     <li><b>Check before you Update.</b> On the Guide page, run <i>Check repo status</i>. If files other than <code>site/</code> have changed, stop and ask.</li>
     <li><b>Make changes on GitHub, not on the server.</b> Use a branch, then merge into <code>main</code>.</li>
     <li><b>Restart the webmaster app</b> after a change to <code>tools/admin.py</code>.</li>
+    <li><b>Purge the Cloudflare cache after a change to <code>site/js/main.js</code>.</b> Cloudflare keeps this file for up to 7 days. In Cloudflare, open zone <i>johorstudio.com</i>, go to <i>Caching</i>, then <i>Purge Cache</i>, choose <i>Custom purge</i> and enter <code>https://johorstudio.com/js/main.js</code>. Without this, visitors can see old behaviour.</li>
     <li><b>Never delete the newest snapshot.</b> Never run a rollback unless it is an emergency and you have made a fresh copy first.</li>
     <li><b>Do not delete <code>_</code> folders in <code>website-uploads</code></b> unless you have a backup. They are the originals of removed projects.</li>
     <li><b>Never share passwords in chat or in this guide.</b> Keep them in a password manager.</li>
@@ -254,6 +272,8 @@ footer { margin-top: 56px; font-size: 14px; color: var(--muted); border-top: 1px
     <div class="todo"><div class="box" aria-hidden="true"></div><div><b>Old portfolio thumbnails.</b> Small portfolio thumbnails were made before quality 50 was set. Regenerating them is optional.</div></div>
     <div class="todo"><div class="box" aria-hidden="true"></div><div><b>Server password.</b> The TrueNAS root password was shared in a chat during setup. Change it, and store the new one in a password manager.</div></div>
     <div class="todo"><div class="box" aria-hidden="true"></div><div><b>Old branches.</b> <code>webmaster-timezone-kl</code> and <code>webmaster-guide</code> were merged into <code>main</code>. They can be deleted on GitHub.</div></div>
+    <div class="todo"><div class="box" aria-hidden="true"></div><div><b>Bring back a removed photo.</b> There is no button yet. A removed photo is still in <code>media/_Dipadam</code>. Ask for a restore button, or move the files back by hand on the server.</div></div>
+    <div class="todo"><div class="box" aria-hidden="true"></div><div><b>Portfolio and Raya commits on the server.</b> Changes made on these pages are committed on the server. Check on GitHub that they are pushed. If they are not, the server has no write access to GitHub yet.</div></div>
     <div class="todo"><div class="box" aria-hidden="true"></div><div><b>Access list.</b> Confirm which emails are allowed through Cloudflare Access for the webmaster panel, and give the new person access if needed.</div></div>
   </div>
 </section>
