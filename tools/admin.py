@@ -542,6 +542,14 @@ input[type=file]{max-width:100%}
 .rate-btn.zero{color:var(--muted);font-size:14px}
 .rate-btn.on{background:var(--gold);color:#fff;border-color:var(--gold)}
 .empty{color:var(--muted);font-size:14px;margin:6px 0}
+/* desktop only: wider page, six rating buttons on one line */
+@media (min-width:1100px){
+ .wrap{max-width:1280px}
+ .grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+ .rates{flex-wrap:nowrap}
+ .rate-btn{flex:1 1 0;min-width:0;padding:4px 0;font-size:17px}
+ .rate-btn.zero{font-size:15px}
+}
 .bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:12px 16px;box-shadow:0 -4px 14px rgba(0,0,0,.06)}
 .bar .inner{max-width:1000px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
 pre{background:#14191b;color:#d6e2e0;padding:14px;border-radius:8px;max-height:260px;overflow:auto;font-size:13px;white-space:pre-wrap}
