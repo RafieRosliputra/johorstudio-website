@@ -120,7 +120,9 @@ def render(current, title, desc, body, root="", path=None, og_image=None, body_c
 </footer>
 {LIGHTBOX}
 <a class="wa-float" href="{WA}" aria-label="WhatsApp JohorStudio.com">{WA_ICON}<span>WhatsApp</span></a>
+<script src="{root}js/meta-pixel.js"></script>
 <script src="{root}js/analytics.js" defer></script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1135640695668913&amp;ev=PageView&amp;noscript=1"/></noscript>
 <script src="{root}js/main.js" defer></script>
 </body>
 </html>

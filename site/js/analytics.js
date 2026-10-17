@@ -2,10 +2,20 @@
 // Umami itself is loaded by the <script> tag in the page head. If it is blocked or not loaded,
 // window.umami is undefined and nothing happens, so the site keeps working.
 (function () {
+  // Meta Pixel standard events, matched to our Umami events (only used if the Pixel loaded)
+  var META_EVENT = {
+    whatsapp_click: "Contact",
+    booking_click: "Schedule",
+    enquiry_submit: "Lead"
+  };
+
   function track(name, data) {
     try {
       if (window.umami && typeof window.umami.track === "function") {
         window.umami.track(name, data || {});
+      }
+      if (META_EVENT[name] && typeof window.fbq === "function") {
+        window.fbq("track", META_EVENT[name]);
       }
     } catch (err) { /* analytics must never break the page */ }
   }
