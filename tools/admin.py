@@ -42,8 +42,11 @@ lock = threading.Lock()
 e = html.escape
 
 
+KL = datetime.timezone(datetime.timedelta(hours=8))  # Asia/Kuala_Lumpur, no DST
+
+
 def now():
-    return datetime.datetime.now().strftime("%d %b %Y, %H:%M:%S")
+    return datetime.datetime.now(KL).strftime("%d %b %Y, %H:%M:%S")
 
 
 def run_job(name, steps):
