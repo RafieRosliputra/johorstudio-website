@@ -22,10 +22,13 @@ import json
 import os
 import pathlib
 import re
+import secrets
+import shutil
 import subprocess
 import sys
+import tempfile
 import threading
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs, unquote
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
@@ -76,7 +79,7 @@ def run_job(name, steps):
 
 
 PUBLISH = ("Publish projects", [sys.executable, "tools/projects.py"])
-PULL = ("Get latest version from GitHub", ["git", "pull", "--ff-only"])
+PULL = ("Get latest version from GitHub", ["git", "pull", "--rebase", "--autostash"])
 
 
 def folders():
@@ -146,6 +149,7 @@ table{width:100%;border-collapse:collapse;font-size:15px}td,th{text-align:left;p
 <button data-job="update" class="btn-line">Update from GitHub and publish</button>
 <a class="btn btn-line" href="https://johorstudio.com" target="_blank" rel="noopener">Open website</a>
 {editor}
+<a class="btn btn-line" href="portfolio">Portfolio</a>
 <a class="btn btn-line" href="guide">Guide &amp; commands</a>
 <a class="btn btn-line" href="handover">Handover guide</a>
 </div>
@@ -337,6 +341,169 @@ def render_guide():
     return GUIDE_PAGE.replace("{cards}", "".join(cards))
 
 
+# ---------------- PORTFOLIO (gallery page) ----------------
+# Photos come from site/data/portfolio.json. Changes are made by tools/portfolio.py,
+# which resizes, watermarks and saves a git commit on this server.
+GALLERY_DATA = REPO / "site" / "data" / "portfolio.json"
+GALLERY_THUMBS = REPO / "site" / "img" / "gallery"
+STAGE_ROOT = pathlib.Path(tempfile.gettempdir()) / "webmaster-staging"
+UPLOAD_MAX = 40 * 1024 * 1024          # per photo
+BATCH_MAX = 50                         # photos per upload
+PHOTO_EXT = {".jpg", ".jpeg", ".webp"}
+BATCH_RE = re.compile(r"^[a-f0-9]{16}$")
+PHOTO_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,80}$")
+PORTFOLIO_TOOL = "tools/portfolio.py"
+
+
+def gallery_data():
+    try:
+        return json.loads(GALLERY_DATA.read_text(encoding="utf-8"))
+    except Exception:
+        return {"categories": [], "items": []}
+
+
+def gallery_categories():
+    return gallery_data().get("categories", [])
+
+
+def valid_category(key):
+    return any(c["key"] == key for c in gallery_categories())
+
+
+def commit_step(message):
+    return ("Save changes", [sys.executable, PORTFOLIO_TOOL, "commit", message])
+
+
+PORTFOLIO_PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Portfolio | Webmaster</title>
+<meta name="robots" content="noindex">
+<style>
+:root{--ink:#1f2629;--muted:#5f6b70;--line:#dde3e5;--bg:#f4f6f6;--teal:#1f6f68;--soft:#dff1ee;--bad:#a33}
+*{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:var(--bg)}
+.wrap{max-width:1000px;margin:0 auto;padding:24px 16px 64px}h1{font-size:28px;margin:8px 0 4px}h2{font-size:19px;margin:24px 0 10px}
+.muted{color:var(--muted);font-size:14px}.card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 18px;margin:12px 0}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+button,.btn{font:600 15px system-ui,sans-serif;border:0;border-radius:6px;padding:10px 15px;background:var(--teal);color:#fff;cursor:pointer}
+.btn-line{background:#fff;color:var(--teal);border:1px solid var(--teal)}button[disabled]{opacity:.5;cursor:wait}
+.btn-danger{background:#fff;color:var(--bad);border:1px solid var(--bad);padding:6px 10px;font-size:13px}
+input[type=text],select{padding:9px 10px;border:1px solid var(--line);border-radius:6px;font:inherit;background:#fff}
+.tab{background:#fff;color:var(--teal);border:1px solid var(--teal);padding:8px 13px;font-size:14px}
+.tab[aria-pressed=true]{background:var(--teal);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-top:12px}
+.pitem{background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:6px}
+.pitem[hidden]{display:none}
+.pitem img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;background:#eee}
+.pitem .cap{font-size:13px;color:var(--muted);min-height:2.6em}
+.pitem select{width:100%}
+pre{background:#14191b;color:#d6e2e0;padding:14px;border-radius:8px;max-height:300px;overflow:auto;font-size:13px;white-space:pre-wrap}
+a{color:var(--teal)}
+</style></head><body><div class="wrap">
+<p class="muted"><a href="./">&larr; Back to Webmaster</a></p><h1>Portfolio</h1>
+<p class="muted">Photos on the Portfolio page. Choose a tab to see its photos. Each change is saved on the server and goes live when it finishes.</p>
+
+<div class="card">
+ <h2 style="margin-top:0">Upload new photos</h2>
+ <div class="row"><input type="file" id="files" multiple accept=".jpg,.jpeg,.webp,image/jpeg,image/webp"><select id="ucat" aria-label="Category">{cat_options}</select></div>
+ <div class="row" style="margin-top:10px"><input type="text" id="ucap" maxlength="200" placeholder="Caption (optional)" style="flex:1;min-width:240px"></div>
+ <p class="muted">JPG or WebP, up to 40 MB each, up to 50 photos at a time. Each photo is resized and watermarked automatically.</p>
+ <div class="row"><button id="ubtn">Upload and process</button><span id="uprog" class="muted"></span></div>
+</div>
+
+<div class="card">
+ <div class="row"><b>New category</b><input type="text" id="cname" maxlength="40" placeholder="Name, e.g. Wedding">
+ <button class="btn-line" id="cbtn">Add category</button></div>
+ <p class="muted" style="margin:8px 0 0">The new category appears as a new tab on the Portfolio page.</p>
+</div>
+
+<h2>Status</h2>
+<div class="card"><p id="status" class="muted" style="margin:0 0 8px">{status}</p><pre id="log">{log}</pre></div>
+
+<h2>Photos</h2>
+<div class="row">{tabs}</div>
+<div class="grid">{items}</div>
+</div>
+<script>
+var wasRunning=false;
+function poll(){fetch("/status").then(r=>r.json()).then(s=>{
+ document.getElementById("log").textContent=s.log||"";
+ var st=document.getElementById("status");
+ st.textContent=s.running?("Running: "+s.running+" (started "+s.started+")"):(s.finished?((s.ok?"Finished ":"Failed ")+s.finished):"Nothing has run yet.");
+ document.querySelectorAll("button,select").forEach(b=>{ if(!b.classList.contains("tab")) b.disabled=!!s.running; });
+ if(s.running){wasRunning=true;setTimeout(poll,1500);}
+ else if(wasRunning){wasRunning=false;location.reload();}});}
+function post(url,msg){
+ if(msg && !confirm(msg)) return;
+ fetch(url,{method:"POST"}).then(r=>{ if(r.status===409) alert("Another job is running. Wait for it to finish, then try again."); else if(!r.ok) alert("Could not start (" + r.status + ")."); setTimeout(poll,400); });
+}
+document.querySelectorAll(".tab").forEach(function(t){ t.onclick=function(){
+ var c=t.dataset.tab;
+ document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-pressed", x===t?"true":"false"));
+ document.querySelectorAll(".pitem").forEach(p=>{ p.hidden = !(c==="all" || p.dataset.cat===c); });
+};});
+document.querySelectorAll("select[data-move]").forEach(function(s){ s.onchange=function(){
+ post("/portfolio/move?file="+encodeURIComponent(s.dataset.move)+"&category="+encodeURIComponent(s.value)); };});
+document.querySelectorAll("button[data-remove]").forEach(function(b){ b.onclick=function(){
+ post("/portfolio/remove?file="+encodeURIComponent(b.dataset.remove), b.dataset.msg); };});
+document.getElementById("cbtn").onclick=function(){
+ var n=document.getElementById("cname").value.trim();
+ if(!n){alert("Type a name first.");return;}
+ post("/portfolio/category?label="+encodeURIComponent(n)); };
+document.getElementById("ubtn").onclick=async function(){
+ var btn=document.getElementById("ubtn"), prog=document.getElementById("uprog");
+ var files=[...document.getElementById("files").files];
+ if(!files.length){alert("Pick at least one photo first.");return;}
+ if(files.length>50){alert("Up to 50 photos at a time.");return;}
+ if(!files.every(f=>/\\.(jpe?g|webp)$/i.test(f.name))){alert("Only JPG or WebP files.");return;}
+ var big=files.find(f=>f.size>40*1024*1024); if(big){alert(big.name+" is bigger than 40 MB.");return;}
+ var batch=Array.from(crypto.getRandomValues(new Uint8Array(8))).map(b=>b.toString(16).padStart(2,"0")).join("");
+ btn.disabled=true;
+ for(var i=0;i<files.length;i++){
+  prog.textContent="Uploading "+(i+1)+" of "+files.length+"...";
+  var r=await fetch("/portfolio/stage?batch="+batch,{method:"POST",headers:{"X-Filename":encodeURIComponent(files[i].name)},body:files[i]});
+  if(!r.ok){alert("Could not upload "+files[i].name+" ("+r.status+")."); btn.disabled=false; prog.textContent=""; return;}
+ }
+ prog.textContent="Processing...";
+ var cat=document.getElementById("ucat").value, cap=document.getElementById("ucap").value;
+ var r2=await fetch("/portfolio/process?batch="+batch+"&category="+encodeURIComponent(cat)+"&caption="+encodeURIComponent(cap),{method:"POST"});
+ if(!r2.ok){alert("Could not start processing ("+r2.status+")."); btn.disabled=false; prog.textContent=""; return;}
+ setTimeout(poll,400);
+};
+poll();
+</script></body></html>"""
+
+
+def render_portfolio():
+    d = gallery_data()
+    cats = d.get("categories", [])
+    items = d.get("items", [])
+    labels = {c["key"]: c["label"] for c in cats}
+    tabs = f"<button class='tab' data-tab='all' aria-pressed='true'>All ({len(items)})</button>" + "".join(
+        f"<button class='tab' data-tab='{e(c['key'])}' aria-pressed='false'>{e(c['label'])} "
+        f"({sum(1 for i in items if i['category'] == c['key'])})</button>" for c in cats)
+    cat_options = "".join(f"<option value='{e(c['key'])}'>{e(c['label'])}</option>" for c in cats)
+    cards = []
+    for item in items:
+        cat = item.get("category", "")
+        opts = "".join(f"<option value='{e(k)}'{' selected' if k == cat else ''}>{e(lab)}</option>"
+                       for k, lab in labels.items())
+        cap = item.get("caption") or "(no caption)"
+        cards.append(
+            f"<div class='pitem' data-cat='{e(cat)}'>"
+            f"<img loading='lazy' src='/portfolio/thumb?file={e(item['file'])}' alt=''>"
+            f"<div class='cap'>{e(cap)}</div>"
+            f"<select data-move='{e(item['file'])}' aria-label='Category'>{opts}</select>"
+            f"<button class='btn-danger' data-remove='{e(item['file'])}' "
+            f"data-msg='Remove this photo from the portfolio? The original is moved to media/_Dipadam on the server.'>Remove</button>"
+            f"</div>")
+    status = "Running: " + state["running"] if state["running"] else "Ready."
+    return (PORTFOLIO_PAGE.replace("{cat_options}", cat_options).replace("{status}", e(status))
+            .replace("{log}", e(state["log"])).replace("{tabs}", tabs).replace("{items}", "".join(cards)))
+
+
+def slug_key(label):
+    return re.sub(r"[^a-z0-9]+", "-", label.lower()).strip("-")[:40]
+
+
 class Handler(BaseHTTPRequestHandler):
     server_version = "webmaster"
 
@@ -356,6 +523,80 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(data)
 
+    def send_bytes(self, code, data, ctype):
+        self.send_response(code)
+        self.send_header("Content-Type", ctype)
+        self.send_header("Content-Length", str(len(data)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(data)
+
+    def handle_stage(self, qs):
+        """One photo per request: the raw file is saved in a staging folder until 'process' runs."""
+        batch = (qs.get("batch") or [""])[0]
+        if not BATCH_RE.match(batch):
+            return self.send(400, "Bad batch", "text/plain")
+        name = pathlib.Path(unquote(self.headers.get("X-Filename") or "")).name[:200]
+        ext = pathlib.Path(name).suffix.lower()
+        if ext not in PHOTO_EXT:
+            return self.send(400, "Only JPG or WebP", "text/plain")
+        length = int(self.headers.get("Content-Length") or 0)
+        if length <= 0 or length > UPLOAD_MAX:
+            return self.send(413, "Empty or larger than 40 MB", "text/plain")
+        folder = STAGE_ROOT / batch
+        if folder.is_dir() and len(list(folder.glob("*.txt"))) >= BATCH_MAX:
+            return self.send(409, "Too many photos in one upload", "text/plain")
+        folder.mkdir(parents=True, exist_ok=True)
+        stem = secrets.token_hex(8)
+        (folder / (stem + ext)).write_bytes(self.rfile.read(length))
+        (folder / (stem + ".txt")).write_text(name, encoding="utf-8")
+        self.send(200, json.dumps({"ok": True}), "application/json")
+
+    def handle_portfolio(self, path, qs):
+        tool = [sys.executable, PORTFOLIO_TOOL]
+        if path == "/portfolio/process":
+            batch = (qs.get("batch") or [""])[0]
+            category = (qs.get("category") or [""])[0]
+            caption = " ".join((qs.get("caption") or [""])[0].split())[:200]
+            if not BATCH_RE.match(batch) or not valid_category(category):
+                return self.send(400, "Bad request", "text/plain")
+            folder = STAGE_ROOT / batch
+            if not folder.is_dir():
+                return self.send(400, "Nothing uploaded", "text/plain")
+            started = run_job("Process photos for the portfolio", [
+                ("Resize and watermark photos", tool + ["add", str(folder), category, caption]),
+                commit_step(f"Portfolio: add photos to {category}"),
+            ])
+        elif path == "/portfolio/move":
+            name = (qs.get("file") or [""])[0]
+            category = (qs.get("category") or [""])[0]
+            if not PHOTO_RE.match(name) or not valid_category(category):
+                return self.send(400, "Bad request", "text/plain")
+            started = run_job(f"Move photo {name}", [
+                ("Move photo", tool + ["move", name, category]),
+                commit_step(f"Portfolio: move {name} to {category}"),
+            ])
+        elif path == "/portfolio/remove":
+            name = (qs.get("file") or [""])[0]
+            if not PHOTO_RE.match(name):
+                return self.send(400, "Bad request", "text/plain")
+            started = run_job(f"Remove photo {name}", [
+                ("Remove photo", tool + ["remove", name]),
+                commit_step(f"Portfolio: remove {name}"),
+            ])
+        elif path == "/portfolio/category":
+            label = " ".join((qs.get("label") or [""])[0].split())[:40]
+            key = slug_key(label)
+            if not key or not re.match(r"^[a-z0-9][a-z0-9-]{0,40}$", key):
+                return self.send(400, "Bad name", "text/plain")
+            started = run_job(f"Add category {label}", [
+                ("Add category", tool + ["category", key, label]),
+                commit_step(f"Portfolio: add category {label}"),
+            ])
+        else:
+            return self.send(404, "Not found", "text/plain")
+        self.send(202 if started else 409, json.dumps({"started": started}), "application/json")
+
     def do_GET(self):
         if not self.allowed():
             return self.send(403, "Forbidden", "text/plain")
@@ -366,6 +607,14 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, render())
         if url.path == "/guide":
             return self.send(200, render_guide())
+        if url.path == "/portfolio":
+            return self.send(200, render_portfolio())
+        if url.path == "/portfolio/thumb":
+            name = (parse_qs(url.query).get("file") or [""])[0]
+            thumb = GALLERY_THUMBS / f"{name}-sm.webp"
+            if not PHOTO_RE.match(name) or not thumb.is_file():
+                return self.send(404, "Not found", "text/plain")
+            return self.send_bytes(200, thumb.read_bytes(), "image/webp")
         if url.path == "/handover":
             return self.send(200, (REPO / "tools" / "handover.html").read_text(encoding="utf-8"))
         if url.path == "/run":
@@ -392,6 +641,10 @@ class Handler(BaseHTTPRequestHandler):
         path, qs = url.path, parse_qs(url.query)
         slug = (qs.get("slug") or [""])[0]
         stem = (qs.get("stem") or [""])[0]
+        if path == "/portfolio/stage":
+            return self.handle_stage(qs)
+        if path.startswith("/portfolio/"):
+            return self.handle_portfolio(path, qs)
         if path == "/publish":
             started = run_job("Publish projects", [PUBLISH])
         elif path == "/update":

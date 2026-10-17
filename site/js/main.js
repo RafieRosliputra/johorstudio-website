@@ -125,7 +125,21 @@
   // Portfolio gallery with filters
   var gallery = document.querySelector(".gallery[data-portfolio]");
   if (gallery) {
+    var box = document.querySelector(".filters");
     getJSON("data/portfolio.json").then(function (data) {
+      if (box && data.categories) {
+        // tabs come from data/portfolio.json, so new categories appear without a rebuild
+        box.innerHTML = "";
+        [{ key: "all", label: "All" }].concat(data.categories).forEach(function (c) {
+          var fb = document.createElement("button");
+          fb.type = "button";
+          fb.dataset.filter = c.key;
+          fb.setAttribute("aria-pressed", c.key === "all" ? "true" : "false");
+          fb.textContent = c.label;
+          box.appendChild(fb);
+        });
+        bindFilters();
+      }
       data.items.forEach(function (it) {
         var b = document.createElement("button");
         b.type = "button";
@@ -147,19 +161,23 @@
       if (start) filter(start);
     });
 
-    var buttons = document.querySelectorAll(".filters button");
+    var buttons = [];
     function filter(cat) {
       buttons.forEach(function (x) { x.setAttribute("aria-pressed", x.dataset.filter === cat ? "true" : "false"); });
       gallery.querySelectorAll("button").forEach(function (g) {
         g.hidden = !(cat === "all" || g.dataset.category === cat);
       });
     }
-    buttons.forEach(function (b) {
-      b.addEventListener("click", function () {
-        filter(b.dataset.filter);
-        history.replaceState(null, "", b.dataset.filter === "all" ? location.pathname : "#" + b.dataset.filter);
+    function bindFilters() {
+      buttons = Array.prototype.slice.call(document.querySelectorAll(".filters button"));
+      buttons.forEach(function (b) {
+        b.addEventListener("click", function () {
+          filter(b.dataset.filter);
+          history.replaceState(null, "", b.dataset.filter === "all" ? location.pathname : "#" + b.dataset.filter);
+        });
       });
-    });
+    }
+    bindFilters();
   }
 
   // Home: recent projects from data/projects.json (made by tools/projects.py)
