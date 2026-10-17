@@ -61,6 +61,7 @@ def render(current, title, desc, body, root="", path=None, og_image=None, body_c
 <link rel="apple-touch-icon" href="{root}img/apple-touch-icon.png">
 <link rel="manifest" href="{root}manifest.webmanifest">
 <meta name="theme-color" content="#cdc6c0">
+<script defer src="https://ana.johorstudio.com/script.js" data-website-id="829b91de-d787-43d1-b711-ee608fcf0d60"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&display=swap" rel="stylesheet">
