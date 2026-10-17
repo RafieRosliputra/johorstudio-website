@@ -163,7 +163,7 @@
   },
   {
    "file": "bts-crew-wireless-rx",
-   "category": "livestream",
+   "category": "multicam",
    "caption": "Wireless video receivers on site"
   },
   {
@@ -252,13 +252,6 @@
    "caption": "Sponsorship presentation",
    "full": true,
    "size": "2048×1365"
-  },
-  {
-   "file": "photo-corporate-portrait-01",
-   "category": "photography",
-   "caption": "Corporate portrait",
-   "full": true,
-   "size": "4000×6000"
   },
   {
    "file": "photo-corporate-portrait-06",
