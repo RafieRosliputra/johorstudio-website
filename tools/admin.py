@@ -128,13 +128,13 @@ PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Webmaster | JohorStudio.com</title>
 <meta name="robots" content="noindex">
 <style>
-:root{--ink:#1f2629;--muted:#5f6b70;--line:#dde3e5;--bg:#f4f6f6;--teal:#1f6f68;--soft:#dff1ee;--bad:#a33}
+:root{--ink:#1f2629;--muted:#5f6b70;--line:#dde3e5;--bg:#f4f6f6;--teal:#1f6f68;--soft:#dff1ee;--bad:#a33;--gold:#b98a12}
 *{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:var(--bg)}
 .wrap{max-width:900px;margin:0 auto;padding:24px 16px 64px}h1{font-size:28px;margin:8px 0 4px}h2{font-size:19px;margin:32px 0 10px}
 .muted{color:var(--muted)}.card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 18px;margin:12px 0}
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 button,.btn{font:600 15px system-ui,sans-serif;border:0;border-radius:6px;padding:11px 16px;background:var(--teal);color:#fff;cursor:pointer;text-decoration:none;display:inline-block}
-.btn-line{background:#fff;color:var(--teal);border:1px solid var(--teal)}button[disabled]{opacity:.5;cursor:wait}
+button[disabled]{opacity:.5;cursor:wait}
 pre{background:#14191b;color:#d6e2e0;padding:14px;border-radius:8px;max-height:420px;overflow:auto;font-size:13px;white-space:pre-wrap}
 table{width:100%;border-collapse:collapse;font-size:15px}td,th{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}
 .photo-list{margin:6px 0 0 0;padding:0;list-style:none}.photo-list li{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px solid var(--line);font-size:14px}
@@ -379,13 +379,13 @@ PORTFOLIO_PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Portfolio | Webmaster</title>
 <meta name="robots" content="noindex">
 <style>
-:root{--ink:#1f2629;--muted:#5f6b70;--line:#dde3e5;--bg:#f4f6f6;--teal:#1f6f68;--soft:#dff1ee;--bad:#a33}
+:root{--ink:#1f2629;--muted:#5f6b70;--line:#dde3e5;--bg:#f4f6f6;--teal:#1f6f68;--soft:#dff1ee;--bad:#a33;--gold:#b98a12}
 *{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:var(--bg)}
 .wrap{max-width:1000px;margin:0 auto;padding:24px 16px 64px}h1{font-size:28px;margin:8px 0 4px}h2{font-size:19px;margin:24px 0 10px}
 .muted{color:var(--muted);font-size:14px}.card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 18px;margin:12px 0}
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 button,.btn{font:600 15px system-ui,sans-serif;border:0;border-radius:6px;padding:10px 15px;background:var(--teal);color:#fff;cursor:pointer}
-.btn-line{background:#fff;color:var(--teal);border:1px solid var(--teal)}button[disabled]{opacity:.5;cursor:wait}
+button[disabled]{opacity:.5;cursor:wait}
 .btn-danger{background:#fff;color:var(--bad);border:1px solid var(--bad);padding:6px 10px;font-size:13px}
 input[type=text],select{padding:9px 10px;border:1px solid var(--line);border-radius:6px;font:inherit;background:#fff}
 .tab{background:#fff;color:var(--teal);border:1px solid var(--teal);padding:8px 13px;font-size:14px}
@@ -396,6 +396,15 @@ input[type=text],select{padding:9px 10px;border:1px solid var(--line);border-rad
 .pitem img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;background:#eee}
 .pitem .cap{font-size:13px;color:var(--muted);min-height:2.6em}
 .pitem select{width:100%}
+.pitem.changed{border-color:var(--gold)}
+.pitem.removed{border-color:var(--bad);background:#fdeaea}
+.pitem.removed img{opacity:.5}
+.pitem.removed .btn-danger{background:var(--bad);color:#fff}
+.btn-danger{width:100%}
+.bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:12px 16px;box-shadow:0 -4px 14px rgba(0,0,0,.06)}
+.bar .inner{max-width:1000px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.btn-line{background:#fff;color:var(--teal);border:1px solid var(--teal)}
+button[disabled]{opacity:.45;cursor:default}
 pre{background:#14191b;color:#d6e2e0;padding:14px;border-radius:8px;max-height:300px;overflow:auto;font-size:13px;white-space:pre-wrap}
 a{color:var(--teal)}
 </style></head><body><div class="wrap">
@@ -423,28 +432,69 @@ a{color:var(--teal)}
 <div class="row">{tabs}</div>
 <div class="grid">{items}</div>
 </div>
+<div class="bar"><div class="inner">
+ <span id="pcount" class="muted">No changes waiting.</span>
+ <div class="row"><button class="btn-line" id="resetbtn" disabled>Reset</button><button id="commitbtn" disabled>Commit changes</button></div>
+</div></div>
 <script>
-var wasRunning=false;
-function poll(){fetch("/status").then(r=>r.json()).then(s=>{
- document.getElementById("log").textContent=s.log||"";
- var st=document.getElementById("status");
- st.textContent=s.running?("Running: "+s.running+" (started "+s.started+")"):(s.finished?((s.ok?"Finished ":"Failed ")+s.finished):"Nothing has run yet.");
- document.querySelectorAll("button,select").forEach(b=>{ if(!b.classList.contains("tab")) b.disabled=!!s.running; });
- if(s.running){wasRunning=true;setTimeout(poll,1500);}
- else if(wasRunning){wasRunning=false;location.reload();}});}
+var running=false, wasRunning=false, pending={moves:{}, removes:{}};
 function post(url,msg){
  if(msg && !confirm(msg)) return;
  fetch(url,{method:"POST"}).then(r=>{ if(r.status===409) alert("Another job is running. Wait for it to finish, then try again."); else if(!r.ok) alert("Could not start (" + r.status + ")."); setTimeout(poll,400); });
 }
+function count(){ return Object.keys(pending.moves).length + Object.keys(pending.removes).length; }
+function refreshBar(){
+ var n=count();
+ document.getElementById("pcount").textContent = n ? (n+" change(s) waiting. Nothing is saved until you press Commit changes.") : "No changes waiting.";
+ document.getElementById("commitbtn").disabled = running || !n;
+ document.getElementById("resetbtn").disabled = running || !n;
+}
+function showCard(card){
+ var f=card.dataset.file, cur=card.dataset.cat;
+ var sel=card.querySelector("select[data-move]");
+ sel.value = (f in pending.moves) ? pending.moves[f] : cur;
+ card.classList.toggle("changed", f in pending.moves);
+ card.classList.toggle("removed", !!pending.removes[f]);
+ card.querySelector("[data-remove]").textContent = pending.removes[f] ? "Undo remove" : "Remove";
+ refreshBar();
+}
+function poll(){fetch("/status").then(r=>r.json()).then(s=>{
+ document.getElementById("log").textContent=s.log||"";
+ var st=document.getElementById("status");
+ st.textContent=s.running?("Running: "+s.running+" (started "+s.started+")"):(s.finished?((s.ok?"Finished ":"Failed ")+s.finished):"Nothing has run yet.");
+ running=!!s.running;
+ document.querySelectorAll("button,select").forEach(function(b){ if(b.id!=="commitbtn" && b.id!=="resetbtn") b.disabled=running; });
+ refreshBar();
+ if(s.running){wasRunning=true;setTimeout(poll,1500);}
+ else if(wasRunning){wasRunning=false;location.reload();}});}
 document.querySelectorAll(".tab").forEach(function(t){ t.onclick=function(){
  var c=t.dataset.tab;
  document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-pressed", x===t?"true":"false"));
  document.querySelectorAll(".pitem").forEach(p=>{ p.hidden = !(c==="all" || p.dataset.cat===c); });
 };});
 document.querySelectorAll("select[data-move]").forEach(function(s){ s.onchange=function(){
- post("/portfolio/move?file="+encodeURIComponent(s.dataset.move)+"&category="+encodeURIComponent(s.value)); };});
+ var card=s.closest(".pitem"), f=card.dataset.file;
+ if(s.value===card.dataset.cat) delete pending.moves[f]; else pending.moves[f]=s.value;
+ showCard(card); };});
 document.querySelectorAll("button[data-remove]").forEach(function(b){ b.onclick=function(){
- post("/portfolio/remove?file="+encodeURIComponent(b.dataset.remove), b.dataset.msg); };});
+ var card=b.closest(".pitem"), f=card.dataset.file;
+ if(pending.removes[f]) delete pending.removes[f]; else pending.removes[f]=true;
+ showCard(card); };});
+document.getElementById("resetbtn").onclick=function(){
+ pending={moves:{}, removes:{}};
+ document.querySelectorAll(".pitem").forEach(showCard);
+ refreshBar(); };
+document.getElementById("commitbtn").onclick=function(){
+ var removes=Object.keys(pending.removes), moves={};
+ Object.keys(pending.moves).forEach(function(k){ if(!pending.removes[k]) moves[k]=pending.moves[k]; });
+ var msg="Move "+Object.keys(moves).length+" photo(s) and remove "+removes.length+" photo(s)?\\n\\nRemoved photos are moved to media/_Dipadam on the server.";
+ if(!confirm(msg)) return;
+ fetch("/portfolio/apply",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({moves:moves,removes:removes})}).then(function(r){
+  if(r.status===409) alert("Another job is running. Wait for it to finish, then try again.");
+  else if(!r.ok) alert("Could not save (" + r.status + ").");
+  else pending={moves:{}, removes:{}};
+  setTimeout(poll,400); });
+};
 document.getElementById("cbtn").onclick=function(){
  var n=document.getElementById("cname").value.trim();
  if(!n){alert("Type a name first.");return;}
@@ -489,7 +539,7 @@ def render_portfolio():
                        for k, lab in labels.items())
         cap = item.get("caption") or "(no caption)"
         cards.append(
-            f"<div class='pitem' data-cat='{e(cat)}'>"
+            f"<div class='pitem' data-file='{e(item['file'])}' data-cat='{e(cat)}'>"
             f"<img loading='lazy' src='/portfolio/thumb?file={e(item['file'])}' alt=''>"
             f"<div class='cap'>{e(cap)}</div>"
             f"<select data-move='{e(item['file'])}' aria-label='Category'>{opts}</select>"
@@ -738,6 +788,36 @@ class Handler(BaseHTTPRequestHandler):
         (folder / (stem + ".txt")).write_text(name, encoding="utf-8")
         self.send(200, json.dumps({"ok": True}), "application/json")
 
+    def handle_portfolio_apply(self):
+        """Save the staged moves and removes from the Portfolio page, as one job with one commit."""
+        length = int(self.headers.get("Content-Length") or 0)
+        if length <= 0 or length > 200_000:
+            return self.send(400, "Bad request", "text/plain")
+        try:
+            data = json.loads(self.rfile.read(length).decode("utf-8"))
+            moves = data.get("moves") or {}
+            removes = data.get("removes") or []
+            if not isinstance(moves, dict) or not isinstance(removes, list) or len(moves) > 500 or len(removes) > 500:
+                raise ValueError("shape")
+            valid = {c["key"] for c in gallery_categories()}
+            for name, cat in moves.items():
+                if not PHOTO_RE.match(name) or cat not in valid:
+                    raise ValueError("move")
+            for name in removes:
+                if not isinstance(name, str) or not PHOTO_RE.match(name):
+                    raise ValueError("remove")
+        except Exception:
+            return self.send(400, "Bad request", "text/plain")
+        drop = set(removes)
+        steps = [(f"Move {name}", [sys.executable, PORTFOLIO_TOOL, "move", name, cat])
+                 for name, cat in moves.items() if name not in drop]
+        steps += [(f"Remove {name}", [sys.executable, PORTFOLIO_TOOL, "remove", name]) for name in removes]
+        if not steps:
+            return self.send(400, "Nothing to save", "text/plain")
+        steps.append(commit_step(f"Portfolio: {len(moves)} move(s), {len(removes)} removed"))
+        started = run_job("Save Portfolio changes", steps)
+        self.send(202 if started else 409, json.dumps({"started": started}), "application/json")
+
     def handle_portfolio(self, path, qs):
         tool = [sys.executable, PORTFOLIO_TOOL]
         if path == "/portfolio/process":
@@ -880,6 +960,8 @@ class Handler(BaseHTTPRequestHandler):
         path, qs = url.path, parse_qs(url.query)
         slug = (qs.get("slug") or [""])[0]
         stem = (qs.get("stem") or [""])[0]
+        if path == "/portfolio/apply":
+            return self.handle_portfolio_apply()
         if path in ("/portfolio/stage", "/raya/stage"):
             return self.handle_stage(qs)
         if path.startswith("/portfolio/"):
