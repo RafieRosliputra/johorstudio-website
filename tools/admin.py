@@ -255,6 +255,30 @@ GUIDE = [
      "cmd": "ls -A /uploads",
      "explain": "Senarai folder dalam website-uploads. Folder yang bermula _ ialah gambar asal projek yang dibuang, dan _DONE.",
      "run": ["ls", "-A", "/uploads"]},
+    {"section": "Untuk masa depan", "title": "Semak ruang disk", "where": "TrueNAS Shell",
+     "cmd": "df -h /mnt/ssd && zfs list -o name,used,avail ssd/website",
+     "explain": "Tengok ruang kosong pool ssd dan berapa banyak website guna.",
+     "run": None},
+    {"section": "Untuk masa depan", "title": "Lihat snapshot dalam folder", "where": "TrueNAS Shell",
+     "cmd": "ls /mnt/ssd/website/.zfs/snapshot/",
+     "explain": "Senarai nama snapshot website. Folder ni digunakan untuk ambil satu fail dari snapshot lama.",
+     "run": None},
+    {"section": "Untuk masa depan", "title": "Pulihkan satu fail dari snapshot", "where": "TrueNAS Shell",
+     "cmd": "cp -a /mnt/ssd/website/.zfs/snapshot/NAMA_SNAPSHOT/CONTOH_FAIL /mnt/ssd/website/CONTOH_FAIL",
+     "explain": "Ambil satu fail atau folder dari snapshot lama tanpa rollback seluruh website. Ganti NAMA_SNAPSHOT dan CONTOH_FAIL dengan nama sebenar (contoh: repo/site/index.html). Pastikan ruang laluan betul sebelum tekan Enter.",
+     "run": None},
+    {"section": "Untuk masa depan", "title": "Semak backup tar boleh dibuka", "where": "TrueNAS Shell",
+     "cmd": "tar tzf /mnt/ssd/website-backup-NAMA.tar.gz | head -20",
+     "explain": "Pastikan fail backup tar tak rosak dengan senarai isi pertama. Jalankan sebelum padam backup lama.",
+     "run": None},
+    {"section": "Untuk masa depan", "title": "Rollback seluruh website (kecemasan sahaja)", "where": "TrueNAS Shell",
+     "cmd": "zfs rollback ssd/website@NAMA_SNAPSHOT",
+     "explain": "Kembalikan seluruh folder website ke keadaan snapshot. Semua perubahan selepas snapshot tu hilang. Guna hanya dalam kecemasan, dan hanya selepas salinan terkini dah dibuat.",
+     "run": None},
+    {"section": "Untuk masa depan", "title": "Restart webmaster", "where": "TrueNAS web UI: Apps, webmaster",
+     "cmd": "Apps → webmaster → Restart",
+     "explain": "Perlu lepas admin.py berubah di GitHub, supaya kod baru dimuatkan semula. Restart tak padam apa-apa.",
+     "run": None},
 ]
 
 GUIDE_PAGE = """<!doctype html><html lang="ms"><head><meta charset="utf-8">
@@ -283,13 +307,18 @@ document.querySelectorAll("[data-copy]").forEach(function(b){b.onclick=function(
 
 
 def render_guide():
-    cards = []
+    cards, section = [], None
     for i, g in enumerate(GUIDE):
         gid = f"g{i}"
+        if g.get("section", "Sekarang") != section:
+            section = g.get("section", "Sekarang")
+            cards.append(f"<h2 style='font-size:19px;margin:28px 0 4px'>{e(section)}</h2>")
         if g["run"]:
             action = f"<button data-run='{gid}'>Run</button>"
+        elif g["where"].startswith("TrueNAS Shell"):
+            action = f"<button class='btn-line' data-copy='{e(g['cmd'])}'>Salin → TrueNAS Shell</button>"
         else:
-            action = f"<button class='btn-line' data-copy='{e(g['cmd'])}'>Salin</button>"
+            action = ""
         cards.append(
             f"<div class='card'><div class='row' style='justify-content:space-between'>"
             f"<div><b>{e(g['title'])}</b><div class='muted'>Di mana: {e(g['where'])}</div></div>"
