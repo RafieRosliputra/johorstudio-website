@@ -146,6 +146,7 @@ table{width:100%;border-collapse:collapse;font-size:15px}td,th{text-align:left;p
 <button data-job="update" class="btn-line">Update from GitHub and publish</button>
 <a class="btn btn-line" href="https://johorstudio.com" target="_blank" rel="noopener">Open website</a>
 {editor}
+<a class="btn btn-line" href="guide">Panduan &amp; command</a>
 </div>
 <p class="muted" style="margin:12px 0 0">Publish: adds the new folders below to the website, then moves each one into <b>_DONE</b>. Update: gets Claude's latest changes, then publishes.</p></div>
 
@@ -213,6 +214,91 @@ def render():
             .replace("{log}", e(state["log"])).replace("{rows}", rows).replace("{published}", render_published()))
 
 
+GUIDE = [
+    {"title": "Semak snapshot website", "where": "TrueNAS Shell",
+     "cmd": "zfs list -t snapshot -r ssd/website",
+     "explain": "Tunjuk senarai snapshot website. Nama ssd/website@webauto-... ialah snapshot website. Kalau ada ssd/website/uploads@..., itu bukan dari skrip ni, padam sahaja.",
+     "run": None},
+    {"title": "Buat snapshot sekarang", "where": "TrueNAS Shell",
+     "cmd": "/mnt/ssd/scripts/snap-website.sh",
+     "explain": "Skrip ni hanya buat snapshot baru kalau dah 14 hari sejak yang terakhir. Lepas snapshot baru disahkan, ia padam yang lama dan simpan 2 yang terbaru. Biasanya tak perlu jalankan manual, cron buat sendiri setiap hari pukul 03:00.",
+     "run": None},
+    {"title": "Jadual cron snapshot", "where": "TrueNAS web UI: System, Advanced Settings, Cron Jobs",
+     "cmd": "Command: /mnt/ssd/scripts/snap-website.sh | Run as: root | Daily 03:00 AM",
+     "explain": "Setting untuk jalankan skrip snapshot setiap hari. Semak di sini kalau nak tukar masa atau nak nonaktifkan.",
+     "run": None},
+    {"title": "Backup penuh (tar)", "where": "TrueNAS Shell",
+     "cmd": "cd /mnt/ssd/website && tar czf /mnt/ssd/website-backup-$(date +%F-%H%M).tar.gz repo uploads silex",
+     "explain": "Salinan penuh repo, uploads dan silex dalam satu fail. Lambat dan besar. Guna sebelum perubahan besar, dan simpan salinan di luar TrueNAS.",
+     "run": None},
+    {"title": "Padam backup tar lama", "where": "TrueNAS Shell",
+     "cmd": "rm -f /mnt/ssd/website-backup-*.tar.gz",
+     "explain": "Padam semua fail backup tar. Tak boleh dibatalkan. Buat hanya bila salinan di luar TrueNAS dah disahkan.",
+     "run": None},
+    {"title": "Padam satu snapshot", "where": "TrueNAS Shell",
+     "cmd": "zfs destroy ssd/website@NAMA_SNAPSHOT",
+     "explain": "Padam satu snapshot. Ganti NAMA_SNAPSHOT dengan nama sebenar dari senarai. Jangan padam snapshot yang terbaru.",
+     "run": None},
+    {"title": "Semak status repo", "where": "Webmaster (Run)",
+     "cmd": "git -C /work status -sb",
+     "explain": "Tunjuk branch dan fail yang berubah. Kalau ada fail berubah selain site/, jangan tekan Update dulu.",
+     "run": ["git", "-C", "/work", "status", "-sb"]},
+    {"title": "Commit terakhir", "where": "Webmaster (Run)",
+     "cmd": "git -C /work log --oneline -3",
+     "explain": "Tiga commit terakhir dalam repo di TrueNAS.",
+     "run": ["git", "-C", "/work", "log", "--oneline", "-3"]},
+    {"title": "Saiz website", "where": "Webmaster (Run)",
+     "cmd": "du -sh --apparent-size /work/site /work/projects /work/media /work/.git /uploads",
+     "explain": "Saiz setiap bahagian website. Bandingkan nombor ini selepas Update.",
+     "run": ["du", "-sh", "--apparent-size", "/work/site", "/work/projects", "/work/media", "/work/.git", "/uploads"]},
+    {"title": "Isi website-uploads", "where": "Webmaster (Run)",
+     "cmd": "ls -A /uploads",
+     "explain": "Senarai folder dalam website-uploads. Folder yang bermula _ ialah gambar asal projek yang dibuang, dan _DONE.",
+     "run": ["ls", "-A", "/uploads"]},
+]
+
+GUIDE_PAGE = """<!doctype html><html lang="ms"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Panduan | Webmaster</title>
+<meta name="robots" content="noindex">
+<style>
+:root{--ink:#1f2629;--muted:#5f6b70;--line:#dde3e5;--bg:#f4f6f6;--teal:#1f6f68}
+*{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:var(--bg)}
+.wrap{max-width:900px;margin:0 auto;padding:24px 16px 64px}h1{font-size:28px;margin:8px 0 4px}
+.muted{color:var(--muted);font-size:14px}.card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:12px 0}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{font:600 14px system-ui,sans-serif;border:0;border-radius:6px;padding:9px 14px;background:var(--teal);color:#fff;cursor:pointer}
+.btn-line{background:#fff;color:var(--teal);border:1px solid var(--teal)}
+pre{background:#14191b;color:#d6e2e0;padding:12px;border-radius:8px;overflow:auto;font-size:13px;white-space:pre-wrap;word-break:break-all}
+a{color:var(--teal)}
+</style></head><body><div class="wrap">
+<p class="muted"><a href="./">&larr; Kembali ke Webmaster</a></p><h1>Panduan &amp; command</h1>
+<p class="muted">Tekan <b>Terangkan</b> untuk baca penerangan. <b>Run</b> jalankan terus dari webmaster (hanya command semakan). Command TrueNAS Shell tekan <b>Salin</b>, kemudian tampal di shell TrueNAS.</p>
+{cards}
+</div><script>
+document.querySelectorAll("[data-explain]").forEach(function(b){b.onclick=function(){var d=document.getElementById("ex-"+b.dataset.explain);d.hidden=!d.hidden;};});
+document.querySelectorAll("[data-run]").forEach(function(b){b.onclick=function(){var id=b.dataset.run;document.getElementById("ex-"+id).hidden=false;var o=document.getElementById("out-"+id);o.hidden=false;o.textContent="Running...";
+ fetch("run?id="+id).then(function(r){return r.json();}).then(function(j){o.textContent=j.output;}).catch(function(){o.textContent="Gagal";});};});
+document.querySelectorAll("[data-copy]").forEach(function(b){b.onclick=function(){navigator.clipboard.writeText(b.dataset.copy).then(function(){b.textContent="Disalin";});};});
+</script></body></html>"""
+
+
+def render_guide():
+    cards = []
+    for i, g in enumerate(GUIDE):
+        gid = f"g{i}"
+        if g["run"]:
+            action = f"<button data-run='{gid}'>Run</button>"
+        else:
+            action = f"<button class='btn-line' data-copy='{e(g['cmd'])}'>Salin</button>"
+        cards.append(
+            f"<div class='card'><div class='row' style='justify-content:space-between'>"
+            f"<div><b>{e(g['title'])}</b><div class='muted'>Di mana: {e(g['where'])}</div></div>"
+            f"<div class='row'><button class='btn-line' data-explain='{gid}'>Terangkan</button>{action}</div></div>"
+            f"<div id='ex-{gid}' hidden style='margin-top:10px'><p style='margin:0 0 8px'>{e(g['explain'])}</p>"
+            f"<pre>{e(g['cmd'])}</pre><pre id='out-{gid}' hidden></pre></div></div>")
+    return GUIDE_PAGE.replace("{cards}", "".join(cards))
+
+
 class Handler(BaseHTTPRequestHandler):
     server_version = "webmaster"
 
@@ -235,10 +321,24 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         if not self.allowed():
             return self.send(403, "Forbidden", "text/plain")
-        if self.path.split("?")[0] == "/status":
+        url = urlparse(self.path)
+        if url.path == "/status":
             return self.send(200, json.dumps({**state, "git": git_info()}), "application/json")
-        if self.path.split("?")[0] == "/":
+        if url.path == "/":
             return self.send(200, render())
+        if url.path == "/guide":
+            return self.send(200, render_guide())
+        if url.path == "/run":
+            gid = (parse_qs(url.query).get("id") or [""])[0]
+            idx = int(gid[1:]) if gid[:1] == "g" and gid[1:].isdigit() else -1
+            if not 0 <= idx < len(GUIDE) or not GUIDE[idx]["run"]:
+                return self.send(404, "Not found", "text/plain")
+            try:
+                r = subprocess.run(GUIDE[idx]["run"], cwd=REPO, capture_output=True, text=True, timeout=120)
+                out = (r.stdout + r.stderr).strip() or "(tiada output)"
+            except Exception as err:
+                out = str(err)
+            return self.send(200, json.dumps({"output": out}), "application/json")
         self.send(404, "Not found", "text/plain")
 
     def do_POST(self):
