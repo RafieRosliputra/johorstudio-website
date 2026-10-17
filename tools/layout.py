@@ -57,6 +57,10 @@ def render(current, title, desc, body, root="", path=None, og_image=None, body_c
 <meta property="og:image" content="{og}">
 <meta property="og:type" content="website">
 <link rel="icon" href="{root}img/favicon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="{root}img/icon-192.png">
+<link rel="apple-touch-icon" href="{root}img/apple-touch-icon.png">
+<link rel="manifest" href="{root}manifest.webmanifest">
+<meta name="theme-color" content="#cdc6c0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&display=swap" rel="stylesheet">
