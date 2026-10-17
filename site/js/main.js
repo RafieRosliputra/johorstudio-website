@@ -122,6 +122,48 @@
     });
   }
 
+  // Raya studio gallery: only rated photos, 5 stars first, portrait and landscape mixed.
+  // Ratings are set in the webmaster and never shown to visitors.
+  var rayaGallery = document.querySelector("[data-raya-gallery]");
+  if (rayaGallery) {
+    getJSON("data/raya-gallery.json").then(function (items) {
+      var shuffle = function (a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; };
+      var isLandscape = function (it) { var p = it.size.split(/[x\u00d7]/).map(Number); return p[0] >= p[1]; };
+      var out = [];
+      for (var r = 5; r >= 1; r--) {
+        var group = shuffle(items.filter(function (it) { return (it.rating || 0) === r; }));
+        var land = group.filter(isLandscape);
+        var port = group.filter(function (it) { return !isLandscape(it); });
+        while (land.length || port.length) {
+          var wantLand = !(out.length && isLandscape(out[out.length - 1]));
+          var pool = wantLand ? land : port;
+          var other = wantLand ? port : land;
+          out.push(pool.length ? pool.pop() : other.pop());
+        }
+      }
+      out.forEach(function (it) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "lb-thumb";
+        b.dataset.lightbox = "";
+        b.dataset.src = "img/raya/" + it.file + ".webp";
+        b.dataset.full = "img/raya/" + it.file + "-full.webp";
+        b.dataset.size = it.size;
+        b.dataset.caption = "Raya family photoshoot at our Bandar Putra studio";
+        b.setAttribute("aria-label", "Open photo from our Raya photoshoot");
+        var img = document.createElement("img");
+        img.src = "img/raya/" + it.file + "-sm.webp";
+        img.width = it.sm[0];
+        img.height = it.sm[1];
+        img.alt = "Raya family portrait in the JohorStudio.com studio";
+        img.loading = "lazy";
+        img.decoding = "async";
+        b.appendChild(img);
+        rayaGallery.appendChild(b);
+      });
+    }).catch(function () {});
+  }
+
   // Portfolio gallery with filters
   var gallery = document.querySelector(".gallery[data-portfolio]");
   if (gallery) {

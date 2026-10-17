@@ -150,6 +150,7 @@ table{width:100%;border-collapse:collapse;font-size:15px}td,th{text-align:left;p
 <a class="btn btn-line" href="https://johorstudio.com" target="_blank" rel="noopener">Open website</a>
 {editor}
 <a class="btn btn-line" href="portfolio">Portfolio</a>
+<a class="btn btn-line" href="raya">Raya</a>
 <a class="btn btn-line" href="guide">Guide &amp; commands</a>
 <a class="btn btn-line" href="handover">Handover guide</a>
 </div>
@@ -500,6 +501,133 @@ def render_portfolio():
             .replace("{log}", e(state["log"])).replace("{tabs}", tabs).replace("{items}", "".join(cards)))
 
 
+# ---------------- RAYA (studio photoshoot page) ----------------
+# Photos come from site/data/raya-gallery.json. Changes are made by tools/raya.py,
+# which resizes, watermarks and saves a git commit on this server.
+RAYA_DATA = REPO / "site" / "data" / "raya-gallery.json"
+RAYA_THUMBS = REPO / "site" / "img" / "raya"
+RAYA_TOOL = "tools/raya.py"
+
+
+def raya_items():
+    try:
+        return json.loads(RAYA_DATA.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+
+
+RAYA_PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Raya | Webmaster</title>
+<meta name="robots" content="noindex">
+<style>
+:root{--ink:#1f2629;--muted:#5f6b70;--line:#dde3e5;--bg:#f4f6f6;--teal:#1f6f68;--bad:#a33;--gold:#b98a12}
+*{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:var(--bg)}
+.wrap{max-width:1000px;margin:0 auto;padding:24px 16px 64px}h1{font-size:28px;margin:8px 0 4px}h2{font-size:19px;margin:24px 0 10px}
+.muted{color:var(--muted);font-size:14px}.card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 18px;margin:12px 0}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+button,.btn{font:600 15px system-ui,sans-serif;border:0;border-radius:6px;padding:10px 15px;background:var(--teal);color:#fff;cursor:pointer}
+button[disabled]{opacity:.5;cursor:wait}
+.btn-danger{background:#fff;color:var(--bad);border:1px solid var(--bad);padding:6px 10px;font-size:13px}
+select{padding:9px 10px;border:1px solid var(--line);border-radius:6px;font:inherit;background:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-top:8px}
+.pitem{background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:8px}
+.pitem img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;background:#eee}
+.stars{display:flex;justify-content:center;gap:2px}
+.star{background:#fff;color:#c9b27a;border:1px solid #e6dcc0;padding:2px 6px;font-size:20px;line-height:1.2}
+.star.on{background:var(--gold);color:#fff;border-color:var(--gold)}
+.empty{color:var(--muted);font-size:14px;margin:6px 0}
+pre{background:#14191b;color:#d6e2e0;padding:14px;border-radius:8px;max-height:300px;overflow:auto;font-size:13px;white-space:pre-wrap}
+a{color:var(--teal)}
+</style></head><body><div class="wrap">
+<p class="muted"><a href="./">&larr; Back to Webmaster</a></p><h1>Raya</h1>
+<p class="muted">Raya studio photos. Give each photo 1 to 5 stars: 5 stars show first on the Raya page, 1 star last. Photos with no stars stay hidden from visitors. Visitors never see the stars. Each change is saved on the server.</p>
+
+<div class="card">
+ <h2 style="margin-top:0">Upload new photos</h2>
+ <div class="row"><input type="file" id="files" multiple accept=".jpg,.jpeg,.webp,image/jpeg,image/webp"><select id="urate" aria-label="Stars">
+  <option value="0">No stars (hidden)</option><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option></select></div>
+ <p class="muted">JPG or WebP, up to 40 MB each, up to 50 photos at a time. Each photo is resized and watermarked automatically. You can change the stars later.</p>
+ <div class="row"><button id="ubtn">Upload and process</button><span id="uprog" class="muted"></span></div>
+</div>
+
+<h2>Status</h2>
+<div class="card"><p id="status" class="muted" style="margin:0 0 8px">{status}</p><pre id="log">{log}</pre></div>
+
+{sections}
+</div>
+<script>
+var wasRunning=false;
+function poll(){fetch("/status").then(r=>r.json()).then(s=>{
+ document.getElementById("log").textContent=s.log||"";
+ var st=document.getElementById("status");
+ st.textContent=s.running?("Running: "+s.running+" (started "+s.started+")"):(s.finished?((s.ok?"Finished ":"Failed ")+s.finished):"Nothing has run yet.");
+ document.querySelectorAll("button,select").forEach(b=>{ b.disabled=!!s.running; });
+ if(s.running){wasRunning=true;setTimeout(poll,1500);}
+ else if(wasRunning){wasRunning=false;location.reload();}});}
+function post(url,msg){
+ if(msg && !confirm(msg)) return;
+ fetch(url,{method:"POST"}).then(r=>{ if(r.status===409) alert("Another job is running. Wait for it to finish, then try again."); else if(!r.ok) alert("Could not start (" + r.status + ")."); setTimeout(poll,400); });
+}
+document.querySelectorAll(".star").forEach(function(b){ b.onclick=function(){
+ var card=b.closest(".pitem"), cur=+card.dataset.rating, v=+b.dataset.star;
+ post("/raya/rate?file="+encodeURIComponent(card.dataset.file)+"&rating="+(v===cur?0:v)); };});
+document.querySelectorAll("button[data-remove]").forEach(function(b){ b.onclick=function(){
+ post("/raya/remove?file="+encodeURIComponent(b.dataset.remove), b.dataset.msg); };});
+document.getElementById("ubtn").onclick=async function(){
+ var btn=document.getElementById("ubtn"), prog=document.getElementById("uprog");
+ var files=[...document.getElementById("files").files];
+ if(!files.length){alert("Pick at least one photo first.");return;}
+ if(files.length>50){alert("Up to 50 photos at a time.");return;}
+ if(!files.every(f=>/\\.(jpe?g|webp)$/i.test(f.name))){alert("Only JPG or WebP files.");return;}
+ var big=files.find(f=>f.size>40*1024*1024); if(big){alert(big.name+" is bigger than 40 MB.");return;}
+ var batch=Array.from(crypto.getRandomValues(new Uint8Array(8))).map(b=>b.toString(16).padStart(2,"0")).join("");
+ btn.disabled=true;
+ for(var i=0;i<files.length;i++){
+  prog.textContent="Uploading "+(i+1)+" of "+files.length+"...";
+  var r=await fetch("/raya/stage?batch="+batch,{method:"POST",headers:{"X-Filename":encodeURIComponent(files[i].name)},body:files[i]});
+  if(!r.ok){alert("Could not upload "+files[i].name+" ("+r.status+")."); btn.disabled=false; prog.textContent=""; return;}
+ }
+ prog.textContent="Processing...";
+ var rate=document.getElementById("urate").value;
+ var r2=await fetch("/raya/process?batch="+batch+"&rating="+rate,{method:"POST"});
+ if(!r2.ok){alert("Could not start processing ("+r2.status+")."); btn.disabled=false; prog.textContent=""; return;}
+ setTimeout(poll,400);
+};
+poll();
+</script></body></html>"""
+
+
+def render_raya():
+    items = raya_items()
+    groups = []
+    for rating in (5, 4, 3, 2, 1, 0):
+        word = "star" if rating == 1 else "stars"
+        title = (f"{'★' * rating}{'☆' * (5 - rating)} {rating} {word}" if rating else "No stars yet (hidden from visitors)")
+        if rating == 5:
+            title += " (shown first)"
+        if rating == 1:
+            title += " (shown last)"
+        cards = []
+        for item in items:
+            if (item.get("rating") or 0) != rating:
+                continue
+            stars = "".join(
+                f"<button class='star{' on' if n <= rating else ''}' data-star='{n}' aria-label='{n} stars'>★</button>"
+                for n in range(1, 6))
+            cards.append(
+                f"<div class='pitem' data-file='{e(item['file'])}' data-rating='{rating}'>"
+                f"<img loading='lazy' src='/raya/thumb?file={e(item['file'])}' alt=''>"
+                f"<div class='stars'>{stars}</div>"
+                f"<button class='btn-danger' data-remove='{e(item['file'])}' "
+                f"data-msg='Remove this photo from the Raya page? The original is moved to media/_Dipadam on the server.'>Remove</button>"
+                f"</div>")
+        body = f"<div class='grid'>{''.join(cards)}</div>" if cards else "<p class='empty'>No photos here.</p>"
+        groups.append(f"<h2>{title}</h2>{body}")
+    status = "Running: " + state["running"] if state["running"] else "Ready."
+    return (RAYA_PAGE.replace("{sections}", "".join(groups)).replace("{status}", e(status))
+            .replace("{log}", e(state["log"])))
+
+
 def slug_key(label):
     return re.sub(r"[^a-z0-9]+", "-", label.lower()).strip("-")[:40]
 
@@ -597,6 +725,40 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(404, "Not found", "text/plain")
         self.send(202 if started else 409, json.dumps({"started": started}), "application/json")
 
+    def handle_raya(self, path, qs):
+        tool = [sys.executable, RAYA_TOOL]
+        name = (qs.get("file") or [""])[0]
+        if path == "/raya/process":
+            batch = (qs.get("batch") or [""])[0]
+            rating = (qs.get("rating") or [""])[0]
+            if not BATCH_RE.match(batch) or rating not in {"0", "1", "2", "3", "4", "5"}:
+                return self.send(400, "Bad request", "text/plain")
+            folder = STAGE_ROOT / batch
+            if not folder.is_dir():
+                return self.send(400, "Nothing uploaded", "text/plain")
+            started = run_job("Process photos for Raya", [
+                ("Resize and watermark photos", tool + ["add", str(folder), rating]),
+                ("Save changes", [sys.executable, RAYA_TOOL, "commit", f"Raya: add photos (rating {rating})"]),
+            ])
+        elif path == "/raya/rate":
+            rating = (qs.get("rating") or [""])[0]
+            if not PHOTO_RE.match(name) or rating not in {"0", "1", "2", "3", "4", "5"}:
+                return self.send(400, "Bad request", "text/plain")
+            started = run_job(f"Rate photo {name}", [
+                ("Set stars", tool + ["rate", name, rating]),
+                ("Save changes", [sys.executable, RAYA_TOOL, "commit", f"Raya: {name} rated {rating}"]),
+            ])
+        elif path == "/raya/remove":
+            if not PHOTO_RE.match(name):
+                return self.send(400, "Bad request", "text/plain")
+            started = run_job(f"Remove photo {name}", [
+                ("Remove photo", tool + ["remove", name]),
+                ("Save changes", [sys.executable, RAYA_TOOL, "commit", f"Raya: remove {name}"]),
+            ])
+        else:
+            return self.send(404, "Not found", "text/plain")
+        self.send(202 if started else 409, json.dumps({"started": started}), "application/json")
+
     def do_GET(self):
         if not self.allowed():
             return self.send(403, "Forbidden", "text/plain")
@@ -609,6 +771,14 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, render_guide())
         if url.path == "/portfolio":
             return self.send(200, render_portfolio())
+        if url.path == "/raya":
+            return self.send(200, render_raya())
+        if url.path == "/raya/thumb":
+            name = (parse_qs(url.query).get("file") or [""])[0]
+            thumb = RAYA_THUMBS / f"{name}-sm.webp"
+            if not PHOTO_RE.match(name) or not thumb.is_file():
+                return self.send(404, "Not found", "text/plain")
+            return self.send_bytes(200, thumb.read_bytes(), "image/webp")
         if url.path == "/portfolio/thumb":
             name = (parse_qs(url.query).get("file") or [""])[0]
             thumb = GALLERY_THUMBS / f"{name}-sm.webp"
@@ -641,10 +811,12 @@ class Handler(BaseHTTPRequestHandler):
         path, qs = url.path, parse_qs(url.query)
         slug = (qs.get("slug") or [""])[0]
         stem = (qs.get("stem") or [""])[0]
-        if path == "/portfolio/stage":
+        if path in ("/portfolio/stage", "/raya/stage"):
             return self.handle_stage(qs)
         if path.startswith("/portfolio/"):
             return self.handle_portfolio(path, qs)
+        if path.startswith("/raya/"):
+            return self.handle_raya(path, qs)
         if path == "/publish":
             started = run_job("Publish projects", [PUBLISH])
         elif path == "/update":

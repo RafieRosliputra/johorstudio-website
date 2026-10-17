@@ -331,13 +331,8 @@ page("portfolio.html",
 
 # ---------------- RAYA ----------------
 # Photos: site/img/raya/<file>-sm.webp, <file>.webp, <file>-full.webp, listed in site/data/raya-gallery.json
-RAYA_GALLERY = json.load(open(ROOT / "data" / "raya-gallery.json"))
-raya_thumbs = "\n".join(
-    f'<button type="button" class="lb-thumb" data-lightbox data-src="img/raya/{r["file"]}.webp" '
-    f'data-full="img/raya/{r["file"]}-full.webp" data-size="{r["size"]}" data-caption="Raya family photoshoot at our Bandar Putra studio">'
-    f'<img src="img/raya/{r["file"]}-sm.webp" width="{r["sm"][0]}" height="{r["sm"][1]}" alt="Raya family portrait in the JohorStudio.com studio"'
-    f'{" loading=\"lazy\"" if i > 5 else ""} decoding="async"></button>'
-    for i, r in enumerate(RAYA_GALLERY))
+# The photos are drawn by js/main.js from data/raya-gallery.json (rated photos only), so changes need no rebuild.
+raya_thumbs = '<div class="gallery" data-raya-gallery></div>'
 page("raya.html",
      "Raya Photoshoot Studio in Kulai, Johor | JohorStudio.com",
      "Hari Raya family, couple and group photoshoots at the JohorStudio.com studio in Bandar Putra, Kulai. Book your Raya slot online.",
