@@ -1,39 +1,6 @@
 {
- "_help": "Tambah gambar: letak name-sm.webp (720px), name.webp (1600px) dan name-full.webp (resolusi asal) dalam img/gallery, kemudian tambah satu baris di sini. 'full': true bila ada versi -full. Kategori (tab) ada dalam senarai 'categories' di bawah. Gambar baru diurus dari halaman Portfolio di webmaster.",
- "categories": [
-  {
-   "key": "multicam",
-   "label": "Multicam"
-  },
-  {
-   "key": "livestream",
-   "label": "Livestream"
-  },
-  {
-   "key": "videography",
-   "label": "Videography"
-  },
-  {
-   "key": "photography",
-   "label": "Photography"
-  },
-  {
-   "key": "convocation",
-   "label": "Convocation"
-  },
-  {
-   "key": "studio",
-   "label": "Studio"
-  }
- ],
+ "_help": "Tambah gambar: letak name-sm.webp (720px), name.webp (1600px) dan name-full.webp (resolusi asal) dalam img/gallery, kemudian tambah satu baris di sini. 'full': true bila ada versi -full. category: multicam, livestream, videography, photography, studio, convocation",
  "items": [
-  {
-   "file": "test-wedding-photo-20261017215910-33e4",
-   "category": "studio",
-   "caption": "Test caption",
-   "full": true,
-   "size": "3000×2000"
-  },
   {
    "file": "bts-butterfly-operator-crowd",
    "category": "multicam",
