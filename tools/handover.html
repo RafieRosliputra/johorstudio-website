@@ -222,7 +222,7 @@ footer { margin-top: 56px; font-size: 14px; color: var(--muted); border-top: 1px
   <h3>Analytics (Umami)</h3>
   <p>Visitor stats run on Umami, self-hosted on TrueNAS at <code>https://ana.johorstudio.com</code>. The tracking script is in every page head, and <code>site/js/analytics.js</code> records clicks on WhatsApp, booking, email, phone and the enquiry form. Nothing is sent to Google, and the tracker does not use cookies.</p>
   <p>To check numbers, log in at <code>ana.johorstudio.com</code>. The admin password must not be the default one. If the dashboard stops loading, check the <b>umami</b> app in TrueNAS Apps. The app should show RUNNING.</p>
-  <p>Umami data is in <code>/mnt/ssd/umami/db</code> and is covered by the same snapshot script. Umami is not part of the website files, so an Update from GitHub does not touch it.</p>
+  <p>Umami data is in <code>/mnt/ssd/umami/db</code>. A separate script, <code>/mnt/ssd/scripts/snap-umami.sh</code>, takes a snapshot of <code>ssd/umami</code> every day at 03:30 and keeps the 7 newest. It is a cron job in TrueNAS, named <b>snapshot umami</b>. Umami is not part of the website files, so an Update from GitHub does not touch it.</p>
 
   <div class="callout">
     <b>Git history on the server</b>
