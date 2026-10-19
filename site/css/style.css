@@ -343,4 +343,5 @@ p { margin: 0 0 1em; max-width: 66ch; }
 .qr-log .qr-t { color: var(--steel); }
 .qr-log .qr-ok { color: var(--teal-ink); font-weight: 600; }
 .qr-log .qr-err { color: var(--tally); font-weight: 600; }
+.qr-legal { max-width: 80ch; margin: 28px 0 0; font-size: 13px; line-height: 1.55; color: var(--steel); }
 @media (max-width: 860px) { .qr-app { grid-template-columns: 1fr; } }

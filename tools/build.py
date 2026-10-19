@@ -391,6 +391,7 @@ page("qr.html",
       <div class="qr-log" aria-live="polite"></div>
     </div>
   </div>
+    <p class="qr-legal">QR Creator is a free service provided by JohorStudio.com on an &ldquo;as is&rdquo; basis, without warranty of any kind. You are solely responsible for the links and content you encode and for how the QR codes you create are used. JohorStudio.com and PROMEDIA CREATIVE SOLUTIONS (JR0113470-V) accept no liability for any loss, damage or misuse arising from the use of this service. Free to use, have fun.</p>
 </section>
 """,
      extra_head='<script src="js/vendor/qrcode.min.js" defer></script>\n<script src="js/vendor/jsQR.min.js" defer></script>\n<script src="js/qr.js" defer></script>')
