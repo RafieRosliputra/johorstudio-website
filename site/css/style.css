@@ -1,5 +1,6 @@
 /* JohorStudio.com — main stylesheet
-   Colours and fonts are set once here. Change a value in :root to restyle the whole site. */
+   Colours and fonts are set once here. Change a value in :root to restyle the whole site.
+   After editing, bump ?v= on the style.css link (tools/layout.py and site/*.html) so Cloudflare serves the new file. */
 
 :root {
   --white: #ffffff;
@@ -329,9 +330,9 @@ p { margin: 0 0 1em; max-width: 66ch; }
 @media (max-width: 600px) { .pj-pager { grid-template-columns: 1fr; } .pj-next { text-align: left; } }
 
 /* ---------- QR Creator (qr.html) ---------- */
-.qr-app { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 48px); align-items: start; }
-.qr-preview { background: var(--white); border: 1px solid var(--mist); border-radius: 10px; padding: clamp(12px, 2vw, 24px); }
-.qr-preview canvas { width: 100%; height: auto; display: block; }
+.qr-app { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 48px); align-items: start; }
+.qr-preview { background: var(--white); border: 1px solid var(--mist); border-radius: 10px; padding: clamp(10px, 2vw, 24px); position: sticky; top: 92px; display: flex; justify-content: center; }
+.qr-preview canvas { width: 100%; height: auto; display: block; max-width: calc((100vh - 150px) * 2000 / 2263); max-width: calc((100svh - 150px) * 2000 / 2263); }
 .qr-app .form { align-content: start; }
 .qr-logo-pick { display: flex; align-items: center; justify-content: center; min-height: 104px; padding: 12px; border: 1.5px dashed #c9d2d4; border-radius: var(--radius); background: var(--paper); color: var(--steel); font: 400 15px var(--font); cursor: pointer; width: 100%; }
 .qr-logo-pick:hover { border-color: var(--teal-ink); background: var(--teal-soft); }
@@ -344,4 +345,4 @@ p { margin: 0 0 1em; max-width: 66ch; }
 .qr-log .qr-ok { color: var(--teal-ink); font-weight: 600; }
 .qr-log .qr-err { color: var(--tally); font-weight: 600; }
 .qr-legal { max-width: 80ch; margin: 28px 0 0; font-size: 13px; line-height: 1.55; color: var(--steel); }
-@media (max-width: 860px) { .qr-app { grid-template-columns: 1fr; } }
+@media (max-width: 860px) { .qr-app { grid-template-columns: 1fr; } .qr-preview { position: static; } }
