@@ -362,6 +362,39 @@ page("raya.html",
 </div></section>
 """)
 
+# ---------------- QR CREATOR ----------------
+# Runs in the browser only (js/qr.js). Nothing is uploaded to the server.
+page("qr.html",
+     "Free QR Code Creator with Logo | JohorStudio.com",
+     "Make a QR code with your own logo in the middle, a title above and the link below. Download a high resolution PNG, free.",
+     """
+<section class="page-head"><div class="wrap">
+  <h1>QR Creator</h1>
+  <p class="lead">Turn any link into a QR code with your logo in the middle. Download a high resolution PNG for print or screen. Everything runs in your browser, nothing is uploaded.</p>
+</div></section>
+<section class="wrap" style="padding-bottom:72px">
+  <div class="qr-app" data-qr>
+    <div class="qr-preview"><canvas aria-label="QR code preview" role="img"></canvas></div>
+    <div class="form">
+      <label>Link<input id="qr-link" type="url" inputmode="url" spellcheck="false" placeholder="https://" value="https://johorstudio.com"></label>
+      <label>Title<input id="qr-title" type="text" value="SOFTCOPY DOWNLOAD"></label>
+      <div style="display:grid;gap:6px">
+        <span style="font-weight:500;font-size:15px">Logo</span>
+        <button class="qr-logo-pick" type="button">Choose a logo (PNG, JPG or SVG)</button>
+        <input id="qr-logo" type="file" accept="image/*" hidden>
+        <button class="qr-clear" type="button" data-qr-clear hidden>Remove logo</button>
+      </div>
+      <div class="qr-actions">
+        <button class="btn btn-line" type="button" data-qr-update>Update QR</button>
+        <button class="btn" type="button" data-qr-save>Save QR</button>
+      </div>
+      <div class="qr-log" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+""",
+     extra_head='<script src="js/vendor/qrcode.min.js" defer></script>\n<script src="js/vendor/jsQR.min.js" defer></script>\n<script src="js/qr.js" defer></script>')
+
 # ---------------- ABOUT ----------------
 page("about.html",
      "About | JohorStudio.com",

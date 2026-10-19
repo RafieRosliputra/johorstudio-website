@@ -75,7 +75,7 @@ PREVIEW_SIDE = 600                                  # grid thumbnail
 PHOTO_VER = f"24mp-q{PHOTO_Q}"                      # change this and every photo is redone
 MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August",
           "September", "October", "November", "December"]
-MAIN_PAGES = ["", "services.html", "portfolio.html", "projects/", "raya.html", "about.html", "contact.html"]
+MAIN_PAGES = ["", "services.html", "portfolio.html", "projects/", "raya.html", "qr.html", "about.html", "contact.html"]
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,80}$")
 
 e = html.escape
