@@ -12,6 +12,7 @@
   var INK = "#20272b";
   var FONT = '"Archivo", system-ui, sans-serif';
   var STORE = "js-qr-creator";
+  var DEFAULT_LOGO = (document.body.dataset.root || "") + "img/logo-dark.png";
 
   var canvas = app.querySelector("canvas");
   var ctx = canvas.getContext("2d");
@@ -46,7 +47,10 @@
   function restore() {
     var s = null;
     try { s = JSON.parse(localStorage.getItem(STORE) || "null"); } catch (e) {}
-    if (!s) return Promise.resolve();
+    // First visit: start with the JohorStudio logo. A removed logo stays removed.
+    if (!s) return fetch(DEFAULT_LOGO).then(function (r) { return r.blob(); }).then(function (b) {
+      return new Promise(function (res) { var rd = new FileReader(); rd.onload = function () { res(rd.result); }; rd.readAsDataURL(b); });
+    }).then(function (d) { return setLogo(d, true); }).catch(function () {});
     if (s.link) linkEl.value = s.link;
     if (s.title != null) titleEl.value = s.title;
     return s.logo ? setLogo(s.logo, true) : Promise.resolve();
