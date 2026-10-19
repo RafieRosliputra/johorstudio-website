@@ -155,6 +155,13 @@
     fitFont(shown, 80, QR_SIZE * 1.05);
     ctx.fillText(shown, W / 2, y0 + QR_SIZE + 110);
 
+    // Small credit line at the bottom of every saved image.
+    ctx.fillStyle = "#66737a";
+    ctx.font = "500 40px " + FONT;
+    ctx.fillText("Created using johorstudio.com/qr", W / 2, H - 118);
+    ctx.font = "400 34px " + FONT;
+    ctx.fillText("It's free, have some fun!", W / 2, H - 68);
+
     log("QR made: " + n + "×" + n + " modules, " + link.length + " characters");
     verify(link);
     persist();
