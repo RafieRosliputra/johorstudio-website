@@ -199,6 +199,10 @@
       setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
       log("Saved " + name + " (" + W + "×" + H + "px)", "qr-ok");
     }, "image/png");
+    // Umami: record the link only (not the image). Does nothing if Umami is blocked.
+    try {
+      if (window.umami && typeof window.umami.track === "function") window.umami.track("qr_save", { link: linkEl.value.trim().slice(0, 500) });
+    } catch (e) {}
   }
 
   pick.addEventListener("click", function () { fileEl.click(); });

@@ -363,14 +363,14 @@ page("raya.html",
 """)
 
 # ---------------- QR CREATOR ----------------
-# Runs in the browser only (js/qr.js). Nothing is uploaded to the server.
+# Runs in the browser (js/qr.js). Only the saved link is sent to Umami (event qr_save).
 page("qr.html",
      "Free QR Code Creator with Logo | JohorStudio.com",
      "Make a QR code with your own logo in the middle, a title above and the link below. Download a high resolution PNG, free.",
      """
 <section class="page-head"><div class="wrap">
   <h1>QR Creator</h1>
-  <p class="lead">Turn any link into a QR code with your logo in the middle. Download a high resolution PNG for print or screen. Everything runs in your browser, nothing is uploaded.</p>
+  <p class="lead">Turn any link into a QR code with your logo in the middle. Download a high resolution PNG for print or screen. The image is made in your browser and is never uploaded.</p>
 </div></section>
 <section class="wrap" style="padding-bottom:72px">
   <div class="qr-app" data-qr>
@@ -391,7 +391,7 @@ page("qr.html",
       <div class="qr-log" aria-live="polite"></div>
     </div>
   </div>
-    <p class="qr-legal">QR Creator is a free service provided by JohorStudio.com on an &ldquo;as is&rdquo; basis, without warranty of any kind. You are solely responsible for the links and content you encode and for how the QR codes you create are used. JohorStudio.com and PROMEDIA CREATIVE SOLUTIONS (JR0113470-V) accept no liability for any loss, damage or misuse arising from the use of this service. Free to use, have fun.</p>
+    <p class="qr-legal">QR Creator is a free service provided by JohorStudio.com on an &ldquo;as is&rdquo; basis, without warranty of any kind. You are solely responsible for the links and content you encode and for how the QR codes you create are used. When you save a QR code, the link it contains is recorded in our anonymous usage statistics, so please do not use this service for private or confidential links. JohorStudio.com and PROMEDIA CREATIVE SOLUTIONS (JR0113470-V) accept no liability for any loss, damage or misuse arising from the use of this service. Free to use, have fun.</p>
 </section>
 """,
      extra_head='<script src="js/vendor/qrcode.min.js" defer></script>\n<script src="js/vendor/jsQR.min.js" defer></script>\n<script src="js/qr.js" defer></script>')
