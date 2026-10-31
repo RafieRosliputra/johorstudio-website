@@ -299,3 +299,25 @@
     });
   }
 })();
+
+// LIVEPHOTO tab: ask live.johorstudio.com whether an event is live (every 60 s) and make the tab pulse red.
+(function () {
+  var links = document.querySelectorAll(".nav-live");
+  if (!links.length || !window.fetch) return;
+  function check() {
+    fetch("https://live.johorstudio.com/api/live-status", { mode: "cors" })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        var on = d && d.count > 0;
+        var names = on ? d.live.map(function (e) { return e.name; }).join(", ") : "";
+        links.forEach(function (a) {
+          a.classList.toggle("is-live", on);
+          a.title = on ? "Live now: " + names : "Live event photos";
+          a.setAttribute("aria-label", on ? "LIVEPHOTO, live now: " + names : "LIVEPHOTO");
+        });
+      })
+      .catch(function () {});
+  }
+  check();
+  setInterval(function () { if (!document.hidden) check(); }, 60000);
+})();
