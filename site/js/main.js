@@ -300,7 +300,7 @@
   }
 })();
 
-// LIVEPHOTO tab: ask live.johorstudio.com whether an event is live (every 60 s) and make the tab pulse red.
+// LIVE EVENTS tab: ask live.johorstudio.com whether an event is live (every 60 s) and make the tab pulse red.
 (function () {
   var links = document.querySelectorAll(".nav-live");
   if (!links.length || !window.fetch) return;
@@ -313,7 +313,7 @@
         links.forEach(function (a) {
           a.classList.toggle("is-live", on);
           a.title = on ? "Live now: " + names : "Live event photos";
-          a.setAttribute("aria-label", on ? "LIVEPHOTO, live now: " + names : "LIVEPHOTO");
+          a.setAttribute("aria-label", on ? "LIVE EVENTS, live now: " + names : "LIVE EVENTS");
         });
       })
       .catch(function () {});

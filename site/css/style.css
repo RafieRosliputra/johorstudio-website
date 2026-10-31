@@ -347,11 +347,10 @@ p { margin: 0 0 1em; max-width: 66ch; }
 .qr-legal { max-width: 80ch; margin: 28px 0 0; font-size: 13px; line-height: 1.55; color: var(--steel); }
 @media (max-width: 860px) { .qr-app { grid-template-columns: 1fr; } .qr-preview { position: static; } }
 
-/* LIVEPHOTO tab: red and pulsing while an event is live on live.johorstudio.com */
-.nav a.nav-live { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; letter-spacing: .04em; }
-.nav a.nav-live::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--steel); flex: none; }
-.nav a.nav-live.is-live { color: var(--tally) !important; }
-.nav a.nav-live.is-live::before { background: var(--tally); }
+/* LIVE EVENTS tab: plain text normally; red and pulsing while an event is live on live.johorstudio.com */
+.nav a.nav-live { display: inline-flex; align-items: center; gap: 7px; }
+.nav a.nav-live.is-live { color: var(--tally) !important; font-weight: 700; }
+.nav a.nav-live.is-live::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--tally); flex: none; }
 @media (prefers-reduced-motion: no-preference) {
   .nav a.nav-live.is-live::before { animation: live-dot 1.4s ease-in-out infinite; }
   .nav a.nav-live.is-live { animation: live-text 1.4s ease-in-out infinite; }
