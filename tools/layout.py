@@ -19,7 +19,7 @@ RAYA_URL = "https://bookings.johorstudio.cc/public"   # used only on raya.html
 WA_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7a2.8 2.8 0 0 0 1.8-1.3 2.3 2.3 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg>'
 
 NAV = [("index.html", "Home"), ("services.html", "Services"), ("portfolio.html", "Portfolio"),
-       ("projects/", "Projects"), ("raya.html", "Raya"), ("qr.html", "QR Creator"), ("about.html", "About"), ("contact.html", "Contact")]
+       ("projects/", "Projects"), ("https://live.johorstudio.com", "LIVE EVENTS"), ("raya.html", "Raya"), ("qr.html", "QR Creator"), ("about.html", "About"), ("contact.html", "Contact")]
 
 LEGAL = ("© PROMEDIA CREATIVE SOLUTIONS (JR0113470-V). All photos on this website are our property and are "
          "protected under the Copyright Act 1987. Copying, editing, reposting or using them without written "
@@ -38,8 +38,11 @@ def render(current, title, desc, body, root="", path=None, og_image=None, body_c
     path:    canonical path from the site root (defaults to current)
     """
     e = html.escape
-    nav = "\n".join(
-        f'<a href="{root}{h}"{" aria-current=\"page\"" if h == current else ""}>{t}</a>' for h, t in NAV)
+    def nav_link(h, t):
+        if h.startswith("http"):  # LIVE EVENTS: pulses red while an event is live (js/main.js)
+            return f'<a class="nav-live" href="{h}">{t}</a>'
+        return f'<a href="{root}{h}"{" aria-current=\"page\"" if h == current else ""}>{t}</a>'
+    nav = "\n".join(nav_link(h, t) for h, t in NAV)
     path = current if path is None else path
     canonical = SITE + "/" + ("" if path == "index.html" else path)
     og = og_image or f"{SITE}/img/hero/hero-01.webp"
@@ -65,7 +68,7 @@ def render(current, title, desc, body, root="", path=None, og_image=None, body_c
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{root}css/style.css?v=20261019">
+<link rel="stylesheet" href="{root}css/style.css?v=20261101">
 {extra_head}
 </head>
 <body class="{cls}" data-root="{root}">
@@ -123,7 +126,7 @@ def render(current, title, desc, body, root="", path=None, og_image=None, body_c
 <script src="{root}js/meta-pixel.js"></script>
 <script src="{root}js/analytics.js" defer></script>
 <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1135640695668913&amp;ev=PageView&amp;noscript=1"/></noscript>
-<script src="{root}js/main.js" defer></script>
+<script src="{root}js/main.js?v=20261101" defer></script>
 </body>
 </html>
 """

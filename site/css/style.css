@@ -346,3 +346,14 @@ p { margin: 0 0 1em; max-width: 66ch; }
 .qr-log .qr-err { color: var(--tally); font-weight: 600; }
 .qr-legal { max-width: 80ch; margin: 28px 0 0; font-size: 13px; line-height: 1.55; color: var(--steel); }
 @media (max-width: 860px) { .qr-app { grid-template-columns: 1fr; } .qr-preview { position: static; } }
+
+/* LIVE EVENTS tab: plain text normally; red and pulsing while an event is live on live.johorstudio.com */
+.nav a.nav-live { display: inline-flex; align-items: center; gap: 7px; }
+.nav a.nav-live.is-live { color: var(--tally) !important; font-weight: 700; }
+.nav a.nav-live.is-live::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--tally); flex: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .nav a.nav-live.is-live::before { animation: live-dot 1.4s ease-in-out infinite; }
+  .nav a.nav-live.is-live { animation: live-text 1.4s ease-in-out infinite; }
+}
+@keyframes live-dot { 0%, 100% { box-shadow: 0 0 0 0 rgba(214,69,61,.6); } 50% { box-shadow: 0 0 0 7px rgba(214,69,61,0); } }
+@keyframes live-text { 50% { opacity: .65; } }
